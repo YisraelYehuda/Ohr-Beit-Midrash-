@@ -1,234 +1,175 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Entrar — Ohr Beit Midrash</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar — Ohr</title>
+
   <style>
-    :root{
-      --gold:#C8A84B;
-      --gold-light:#E8CC7A;
-      --parchment:#F5EDD6;
-      --parchment-dark:#E8D9B5;
-      --ink:#1A1208;
-      --deep:#0D0A04;
-      --border:rgba(200,168,75,0.3);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      background:var(--deep);
-      color:var(--parchment);
+    body {
+      margin: 0;
+      background: #0d0a04;
+      color: #f5edd6;
       font-family: Georgia, serif;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-    .wrap{
-      width:100%;
-      max-width:460px;
-      background:rgba(255,255,255,0.03);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:28px 22px;
+
+    .box {
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255,255,255,0.03);
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid rgba(200,168,75,0.3);
+      text-align: center;
     }
-    h1{
-      margin:0 0 8px;
-      color:var(--gold-light);
-      font-size:30px;
-      text-align:center;
+
+    h1 {
+      color: #e8cc7a;
     }
-    p.sub{
-      margin:0 0 24px;
-      text-align:center;
-      color:var(--parchment-dark);
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
     }
-    label{
-      display:block;
-      margin:14px 0 6px;
-      color:var(--gold-light);
-      font-size:14px;
-      text-transform:uppercase;
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
     }
-    input{
-      width:100%;
-      padding:14px;
-      border-radius:10px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,0.04);
-      color:var(--parchment);
-      outline:none;
-      font-size:16px;
+
+    .gold {
+      background: #c8a84b;
+      color: black;
     }
-    .row{
-      display:flex;
-      gap:10px;
-      margin-top:18px;
-      flex-wrap:wrap;
+
+    .google {
+      background: white;
+      color: black;
     }
-    button{
-      flex:1;
-      min-width:130px;
-      padding:14px 16px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
-      font-weight:700;
-      font-size:15px;
+
+    .msg {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+      white-space: pre-wrap;
     }
-    .primary{
-      background:var(--gold);
-      color:var(--ink);
+
+    .error {
+      background: #3a0000;
+      color: #ffcccc;
+      display: block;
     }
-    .secondary{
-      background:rgba(255,255,255,0.08);
-      color:var(--parchment);
-      border:1px solid rgba(255,255,255,0.12);
-    }
-    .google{
-      width:100%;
-      margin-top:18px;
-      background:#fff;
-      color:#111;
-    }
-    .msg{
-      margin-top:18px;
-      padding:12px 14px;
-      border-radius:10px;
-      display:none;
-      font-size:14px;
-      line-height:1.5;
-      white-space:pre-wrap;
-    }
-    .msg.show{display:block}
-    .msg.error{
-      background:rgba(180,40,40,0.18);
-      border:1px solid rgba(180,40,40,0.38);
-      color:#ffd9d9;
-    }
-    .msg.ok{
-      background:rgba(40,140,90,0.18);
-      border:1px solid rgba(40,140,90,0.38);
-      color:#d9ffe8;
-    }
-    .links{
-      margin-top:18px;
-      text-align:center;
-    }
-    .links a{
-      color:var(--gold-light);
-      text-decoration:none;
+
+    .ok {
+      background: #003a1f;
+      color: #b8ffdc;
+      display: block;
     }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <h1>Entrar no Ohr</h1>
-    <p class="sub">Acesse sua conta e continue seus estudos</p>
 
-    <label for="email">Email</label>
-    <input id="email" type="email" placeholder="seu@email.com" />
+<div class="box">
+  <h1>Entrar no Ohr</h1>
 
-    <label for="senha">Senha</label>
-    <input id="senha" type="password" placeholder="Sua senha" />
+  <input id="email" type="email" placeholder="Email">
+  <input id="senha" type="password" placeholder="Senha">
 
-    <div class="row">
-      <button class="primary" onclick="entrar()">Entrar</button>
-      <button class="secondary" onclick="criarConta()">Criar conta</button>
-    </div>
+  <button class="gold" onclick="entrar()">Entrar</button>
+  <button onclick="criarConta()">Criar conta</button>
 
-    <button class="google" onclick="loginGoogle()">Entrar com Google</button>
+  <button class="google" onclick="loginGoogle()">Entrar com Google</button>
 
-    <div id="msg" class="msg"></div>
+  <div id="msg" class="msg"></div>
+</div>
 
-    <div class="links">
-      <a href="index.html">← Voltar ao início</a>
-    </div>
-  </div>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
+    authDomain: "ohr-beit-midrash.firebaseapp.com",
+    projectId: "ohr-beit-midrash",
+    storageBucket: "ohr-beit-midrash.firebasestorage.app",
+    messagingSenderId: "173478100824",
+    appId: "1:173478100824:web:56e32e06f300bf28ccef2d"
+  };
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
-      authDomain: "ohr-beit-midrash.firebaseapp.com",
-      projectId: "ohr-beit-midrash",
-      storageBucket: "ohr-beit-midrash.firebasestorage.app",
-      messagingSenderId: "173478100824",
-      appId: "1:173478100824:web:56e32e06f300bf28ccef2d",
-      measurementId: "G-E7EF0CRZG0"
-    };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-    const msgEl = document.getElementById("msg");
+  const msg = document.getElementById("msg");
 
-    function showMsg(text, type) {
-      msgEl.textContent = text;
-      msgEl.className = "msg show " + type;
+  function showMsg(text, type) {
+    msg.innerText = text;
+    msg.className = "msg " + type;
+  }
+
+  auth.onAuthStateChanged(function(user) {
+    if (user) {
+      window.location.href = "perfil.html";
     }
+  });
 
-    try {
-      firebase.initializeApp(firebaseConfig);
-      showMsg("Firebase carregado com sucesso.", "ok");
-    } catch (e) {
-      showMsg("Erro ao iniciar Firebase:\n" + e.message, "error");
-    }
+  function criarConta() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
 
-    const auth = firebase.auth();
-
-    auth.onAuthStateChanged(function(user) {
-      if (user) {
+    auth.createUserWithEmailAndPassword(email, senha)
+      .then(() => {
+        showMsg("Conta criada!", "ok");
         window.location.href = "perfil.html";
-      }
-    });
+      })
+      .catch(err => {
+        showMsg(err.code + "\n" + err.message, "error");
+      });
+  }
 
-    function entrar() {
-      const email = document.getElementById("email").value.trim();
-      const senha = document.getElementById("senha").value;
+  function entrar() {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
 
-      if (!email || !senha) {
-        showMsg("Preencha email e senha.", "error");
-        return;
-      }
+    auth.signInWithEmailAndPassword(email, senha)
+      .then(() => {
+        showMsg("Login realizado!", "ok");
+        window.location.href = "perfil.html";
+      })
+      .catch(err => {
+        showMsg(err.code + "\n" + err.message, "error");
+      });
+  }
 
-      showMsg("Tentando entrar...", "ok");
+  function loginGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
 
-      auth.signInWithEmailAndPassword(email, senha)
-        .then(function() {
-          showMsg("Login realizado com sucesso. Redirecionando...", "ok");
-          window.location.href = "perfil.html";
-        })
-        .catch(function(error) {
-          showMsg("Erro ao entrar:\n" + error.code + "\n" + error.message, "error");
-        });
-    }
+    auth.signInWithPopup(provider)
+      .then(result => {
+        showMsg("Bem-vindo " + result.user.email, "ok");
+        window.location.href = "perfil.html";
+      })
+      .catch(err => {
+        showMsg(err.code + "\n" + err.message, "error");
+      });
+  }
+</script>
 
-    function criarConta() {
-      const email = document.getElementById("email").value.trim();
-      const senha = document.getElementById("senha").value;
-
-      if (!email || !senha) {
-        showMsg("Preencha email e senha.", "error");
-        return;
-      }
-
-      showMsg("Criando conta...", "ok");
-
-      auth.createUserWithEmailAndPassword(email, senha)
-        .then(function() {
-          showMsg("Conta criada com sucesso. Redirecionando...", "ok");
-          window.location.href = "perfil.html";
-        })
-        .catch(function(error) {
-          showMsg("Erro ao criar conta:\n" + error.code + "\n" + error.message, "error");
-        });
-    }
-
-    function loginGoogle() {
-      showMsg("Login com Google temporariamente em ajuste no Cloudflare Pages. Use email e senha por enquanto.", "error");
-    }
-  </script>
 </body>
 </html>
