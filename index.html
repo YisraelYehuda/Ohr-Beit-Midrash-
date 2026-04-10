@@ -21,7 +21,6 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -33,7 +32,6 @@
       overflow-x: hidden;
     }
 
-    /* ── TEXTURE OVERLAY ── */
     body::before {
       content: '';
       position: fixed;
@@ -45,7 +43,6 @@
       opacity: 0.6;
     }
 
-    /* ── NAVBAR ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -85,6 +82,7 @@
       display: flex;
       gap: 2rem;
       list-style: none;
+      align-items: center;
     }
 
     .nav-links a {
@@ -110,14 +108,19 @@
     .nav-links a:hover::after { width: 100%; }
 
     .nav-cta {
-      font-family: 'Cinzel', serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.12em;
+      font-family: 'Cinzel', serif !important;
+      font-size: 0.8rem !important;
+      letter-spacing: 0.12em !important;
       color: var(--ink) !important;
       background: var(--gold);
       padding: 0.5rem 1.4rem;
       border-radius: 2px;
       transition: background 0.3s, transform 0.2s !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 110px;
+      text-transform: uppercase;
     }
 
     .nav-cta::after { display: none !important; }
@@ -127,7 +130,6 @@
       color: var(--ink) !important;
     }
 
-    /* ── HERO ── */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -277,7 +279,6 @@
       transform: translateY(-2px);
     }
 
-    /* ── SCROLL INDICATOR ── */
     .scroll-hint {
       position: absolute;
       bottom: 2.5rem;
@@ -312,11 +313,7 @@
       100% { transform: scaleY(0); transform-origin: bottom; }
     }
 
-    /* ── SECTIONS COMMON ── */
-    section {
-      position: relative;
-      z-index: 1;
-    }
+    section { position: relative; z-index: 1; }
 
     .section-header {
       text-align: center;
@@ -349,7 +346,6 @@
       opacity: 0.6;
     }
 
-    /* ── PILLARS ── */
     .pillars {
       padding: 6rem 3rem;
       background: linear-gradient(180deg, var(--deep) 0%, #120D05 100%);
@@ -416,7 +412,6 @@
       line-height: 1.6;
     }
 
-    /* ── COURSES PREVIEW ── */
     .courses {
       padding: 6rem 3rem;
       background: #0A0703;
@@ -509,7 +504,6 @@
       transform: translateX(4px);
     }
 
-    /* ── QUOTE SECTION ── */
     .quote-section {
       padding: 5rem 3rem;
       background: linear-gradient(135deg, rgba(200,168,75,0.06), rgba(200,168,75,0.02));
@@ -545,7 +539,6 @@
       opacity: 0.6;
     }
 
-    /* ── ABOUT SECTION ── */
     .about {
       padding: 6rem 3rem;
       background: var(--deep);
@@ -574,7 +567,6 @@
       opacity: 0.9;
     }
 
-    /* ── FOOTER ── */
     footer {
       background: #070503;
       border-top: 1px solid var(--border);
@@ -638,7 +630,6 @@
       font-family: 'EB Garamond', serif;
     }
 
-    /* ── ANIMATIONS ── */
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -654,7 +645,6 @@
       to { opacity: 1; }
     }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
@@ -667,7 +657,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav>
     <a href="index.html" class="nav-logo">
       <span class="hebrew-mark">אוֹר</span>
@@ -678,47 +667,37 @@
       <li><a href="quiz.html">Quiz</a></li>
       <li><a href="sobre.html">Sobre</a></li>
       <li><a href="contato.html">Contato</a></li>
-      <li><a href="login.html" class="nav-cta">Entrar</a></li>
+      <li><a href="login.html" class="nav-cta" id="navAccountLink">Entrar</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"></div>
     <span class="hero-ornament">בֵּית מִדְרָשׁ</span>
-
     <div class="divider-star">✦ ✦ ✦</div>
-
     <p class="hero-hebrew">אוֹר בֵּית מִדְרָשׁ</p>
-
     <h1>
       OHR BEIT MIDRASH
       <span>Casa de Estudo de Torá</span>
     </h1>
-
     <p class="hero-subtitle">
       "Vira e revira nela, pois tudo está nela" — Avot 5:22
     </p>
-
     <div class="hero-line"></div>
-
     <p class="hero-desc">
       Um espaço sagrado de aprendizado judaico autêntico, rigoroso e acessível —
       construído com amor para todos que buscam a luz da Torá.
     </p>
-
     <div class="hero-buttons">
       <a href="cursos.html" class="btn-primary">COMEÇAR A ESTUDAR</a>
       <a href="sobre.html" class="btn-secondary">NOSSA MISSÃO</a>
     </div>
-
     <div class="scroll-hint">
       <span>EXPLORAR</span>
       <div class="scroll-dot"></div>
     </div>
   </section>
 
-  <!-- PILLARS -->
   <section class="pillars">
     <div class="section-header">
       <span class="section-label">Os Pilares do Ohr</span>
@@ -760,7 +739,6 @@
     </div>
   </section>
 
-  <!-- COURSES PREVIEW -->
   <section class="courses">
     <div class="section-header">
       <span class="section-label">Aprendizado estruturado</span>
@@ -811,14 +789,12 @@
     </div>
   </section>
 
-  <!-- QUOTE -->
   <section class="quote-section">
     <p class="quote-hebrew">כִּי נֵר מִצְוָה וְתוֹרָה אוֹר</p>
     <p class="quote-translation">"Pois o mandamento é uma lâmpada, e a Torá é luz"</p>
     <span class="quote-source">MISHLEI 6:23 — PROVÉRBIOS</span>
   </section>
 
-  <!-- ABOUT -->
   <section class="about">
     <div class="about-inner">
       <div class="section-header">
@@ -853,7 +829,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-logo">OHR BEIT MIDRASH</div>
     <div class="footer-hebrew">אוֹר בֵּית מִדְרָשׁ</div>
@@ -863,7 +838,7 @@
       <a href="quiz.html">Quiz</a>
       <a href="sobre.html">Sobre</a>
       <a href="contato.html">Contato</a>
-      <a href="login.html">Entrar</a>
+      <a href="login.html" id="footerAccountLink">Entrar</a>
     </div>
 
     <div class="footer-email">
@@ -875,5 +850,52 @@
     </p>
   </footer>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
+      authDomain: "ohr-beit-midrash.firebaseapp.com",
+      projectId: "ohr-beit-midrash",
+      storageBucket: "ohr-beit-midrash.firebasestorage.app",
+      messagingSenderId: "173478100824",
+      appId: "1:173478100824:web:56e32e06f300bf28ccef2d"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const ADMIN_EMAIL = "orhatorabrasil@gmail.com";
+    const navAccountLink = document.getElementById("navAccountLink");
+    const footerAccountLink = document.getElementById("footerAccountLink");
+
+    function updateAccountLinks(text, href) {
+      if (navAccountLink) {
+        navAccountLink.textContent = text;
+        navAccountLink.href = href;
+      }
+      if (footerAccountLink) {
+        footerAccountLink.textContent = text;
+        footerAccountLink.href = href;
+      }
+    }
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        updateAccountLinks("Entrar", "login.html");
+        return;
+      }
+
+      const email = (user.email || "").toLowerCase();
+      const isAdmin = email === ADMIN_EMAIL.toLowerCase();
+
+      if (isAdmin) {
+        updateAccountLinks("Admin", "perfil.html");
+      } else {
+        updateAccountLinks("Perfil", "perfil.html");
+      }
+    });
+  </script>
 </body>
 </html>
