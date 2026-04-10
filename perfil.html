@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meu Perfil — Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--gold:#C8A84B;--gold-light:#E8CC7A;--gold-dim:#8A6F2E;--parchment:#F5EDD6;--parchment-dark:#E8D9B5;--ink:#1A1208;--deep:#0D0A04;--border:rgba(200,168,75,0.3);}
+    *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+    body{background-color:var(--deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:linear-gradient(180deg,rgba(13,10,4,0.98) 0%,rgba(13,10,4,0.85) 100%);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);}
+    .nav-logo{display:flex;align-items:center;gap:0.75rem;text-decoration:none;}
+    .nav-logo .hebrew-mark{font-family:'Frank Ruhl Libre',serif;font-size:1.6rem;color:var(--gold);}
+    .nav-logo .brand-name{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.15em;color:var(--parchment);font-weight:600;}
+    .nav-links{display:flex;gap:2rem;list-style:none;}
+    .nav-links a{font-family:'EB Garamond',serif;font-size:0.95rem;color:var(--parchment-dark);text-decoration:none;letter-spacing:0.05em;transition:color 0.3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
+    .nav-links a:hover{color:var(--gold-light);}.nav-links a:hover::after{width:100%;}
+    .nav-links a.active{color:var(--gold);}.nav-links a.active::after{width:100%;}
+    .nav-cta{font-family:'Cinzel',serif !important;font-size:0.8rem !important;letter-spacing:0.12em !important;color:var(--ink) !important;background:var(--gold);padding:0.5rem 1.4rem;border-radius:2px;}
+    .nav-cta::after{display:none !important;}.nav-cta:hover{background:var(--gold-light) !important;color:var(--ink) !important;}
+
+    /* PAGE */
+    .page-wrap{max-width:1100px;margin:0 auto;padding:8rem 3rem 5rem;position:relative;z-index:1;}
+
+    /* PROFILE HEADER */
+    .profile-header{display:flex;align-items:center;gap:2.5rem;margin-bottom:3.5rem;padding:2.5rem 3rem;background:linear-gradient(135deg,rgba(200,168,75,0.08),rgba(200,168,75,0.02));border:1px solid rgba(200,168,75,0.35);border-radius:6px;flex-wrap:wrap;}
+    .avatar{width:90px;height:90px;border-radius:50%;border:2px solid var(--gold);background:rgba(200,168,75,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .avatar-letter{font-family:'Frank Ruhl Libre',serif;font-size:2.8rem;color:var(--gold);opacity:0.8;}
+    .profile-info h2{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--parchment);letter-spacing:0.06em;margin-bottom:0.3rem;}
+    .profile-email{font-size:0.9rem;color:var(--parchment-dark);opacity:0.6;margin-bottom:0.8rem;}
+    .profile-badges{display:flex;flex-wrap:wrap;gap:0.5rem;}
+    .badge{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.15em;padding:0.3rem 0.8rem;border-radius:2px;border:1px solid;}
+    .badge-free{color:var(--gold);border-color:rgba(200,168,75,0.3);background:rgba(200,168,75,0.08);}
+    .badge-student{color:#A5D6A7;border-color:rgba(165,214,167,0.3);background:rgba(165,214,167,0.08);}
+    .profile-stats{margin-left:auto;display:flex;gap:2.5rem;flex-wrap:wrap;}
+    .stat-item{text-align:center;}
+    .stat-number{font-family:'Cinzel',serif;font-size:2rem;color:var(--gold);display:block;line-height:1;}
+    .stat-label{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.15em;color:var(--gold-dim);margin-top:0.3rem;}
+
+    /* DASHBOARD GRID */
+    .dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem;}
+    @media(max-width:750px){.dashboard-grid{grid-template-columns:1fr;}}
+
+    .panel{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+    .panel-header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .panel-title{font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.15em;color:var(--gold);}
+    .panel-body{padding:1.8rem 2rem;}
+
+    /* PROGRESS COURSES */
+    .course-progress-item{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.5rem;}
+    .course-progress-item:last-child{margin-bottom:0;}
+    .cp-letter{font-family:'Frank Ruhl Libre',serif;font-size:1.8rem;color:var(--gold);opacity:0.4;min-width:2rem;}
+    .cp-info{flex:1;}
+    .cp-name{font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:0.08em;color:var(--parchment);margin-bottom:0.4rem;}
+    .cp-bar{height:3px;background:rgba(200,168,75,0.12);border-radius:2px;overflow:hidden;}
+    .cp-fill{height:100%;background:var(--gold);border-radius:2px;}
+    .cp-pct{font-family:'Cinzel',serif;font-size:0.65rem;color:var(--gold-dim);min-width:2.5rem;text-align:right;}
+
+    /* RECENT ACTIVITY */
+    .activity-item{display:flex;gap:1rem;align-items:flex-start;padding-bottom:1.2rem;margin-bottom:1.2rem;border-bottom:1px solid rgba(200,168,75,0.1);}
+    .activity-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+    .activity-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);opacity:0.5;margin-top:0.5rem;flex-shrink:0;}
+    .activity-text{font-size:0.9rem;color:var(--parchment-dark);opacity:0.8;line-height:1.5;}
+    .activity-time{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.1em;color:var(--gold-dim);display:block;margin-top:0.2rem;}
+
+    /* PREMIUM BANNER */
+    .premium-banner{background:linear-gradient(135deg,rgba(200,168,75,0.12),rgba(200,168,75,0.04));border:1px solid rgba(200,168,75,0.4);border-radius:4px;padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:2rem;}
+    .premium-banner h3{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.08em;color:var(--gold-light);margin-bottom:0.4rem;}
+    .premium-banner p{font-size:0.9rem;color:var(--parchment-dark);opacity:0.8;}
+    .btn-premium{font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.15em;color:var(--ink);background:var(--gold);padding:0.7rem 1.8rem;border:none;border-radius:2px;cursor:pointer;white-space:nowrap;transition:all 0.3s;text-decoration:none;display:inline-block;}
+    .btn-premium:hover{background:var(--gold-light);transform:translateY(-1px);}
+
+    /* QUIZ SCORES */
+    .score-row{display:flex;justify-content:space-between;align-items:center;padding:0.8rem 0;border-bottom:1px solid rgba(200,168,75,0.08);}
+    .score-row:last-child{border-bottom:none;}
+    .score-topic{font-family:'Cinzel',serif;font-size:0.72rem;letter-spacing:0.1em;color:var(--parchment-dark);}
+    .score-val{font-family:'Cinzel',serif;font-size:0.8rem;color:var(--gold);}
+
+    /* LOGOUT */
+    .logout-btn{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.15em;color:var(--gold-dim);background:transparent;border:1px solid rgba(200,168,75,0.15);padding:0.5rem 1.3rem;border-radius:2px;cursor:pointer;transition:all 0.3s;}
+    .logout-btn:hover{border-color:rgba(200,168,75,0.4);color:var(--parchment-dark);}
+
+    footer{background:#070503;border-top:1px solid var(--border);padding:3rem;text-align:center;position:relative;z-index:1;}
+    .footer-logo{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--gold);letter-spacing:0.15em;margin-bottom:0.5rem;}
+    .footer-hebrew{font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;color:var(--gold-dim);margin-bottom:1.5rem;}
+    .footer-links{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;}
+    .footer-links a{font-family:'EB Garamond',serif;font-size:0.9rem;color:var(--parchment-dark);text-decoration:none;opacity:0.6;transition:all 0.3s;}
+    .footer-links a:hover{opacity:1;color:var(--gold-light);}
+    .footer-copy{margin-top:2rem;font-size:0.8rem;color:var(--parchment-dark);opacity:0.3;font-family:'EB Garamond',serif;}
+
+    @media(max-width:768px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.page-wrap{padding:7rem 1.5rem 4rem;}.profile-header{flex-direction:column;text-align:center;padding:2rem;}.profile-stats{margin-left:0;justify-content:center;}.premium-banner{flex-direction:column;}footer{padding:2rem 1.5rem;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <span class="hebrew-mark">אוֹר</span>
+      <span class="brand-name">OHR BEIT MIDRASH</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="cursos.html">Cursos</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="sobre.html">Sobre</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><button class="logout-btn" onclick="window.location='login.html'">SAIR</button></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+      <div class="avatar"><span class="avatar-letter">י</span></div>
+      <div class="profile-info">
+        <h2>YISRAEL YEHUDA</h2>
+        <p class="profile-email">estudante@email.com</p>
+        <div class="profile-badges">
+          <span class="badge badge-free">PLANO GRATUITO</span>
+          <span class="badge badge-student">ESTUDANTE ATIVO</span>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-number">3</span>
+          <span class="stat-label">CURSOS</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <span class="stat-label">LIÇÕES</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <span class="stat-label">QUIZZES</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREMIUM BANNER -->
+    <div class="premium-banner">
+      <div>
+        <h3>✦ ACESSO PREMIUM OHR</h3>
+        <p>Desbloqueie todos os cursos, conversa ilimitada com a IA e suporte prioritário do criador.</p>
+      </div>
+      <a href="#" class="btn-premium">ASSINAR PREMIUM</a>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard-grid">
+
+      <!-- COURSE PROGRESS -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">MEU PROGRESSO</span>
+          <a href="cursos.html" style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.12em;color:var(--gold-dim);text-decoration:none;">VER TODOS →</a>
+        </div>
+        <div class="panel-body">
+          <div class="course-progress-item">
+            <span class="cp-letter">א</span>
+            <div class="cp-info">
+              <div class="cp-name">INTRODUÇÃO AO JUDAÍSMO</div>
+              <div class="cp-bar"><div class="cp-fill" style="width:35%"></div></div>
+            </div>
+            <span class="cp-pct">35%</span>
+          </div>
+          <div class="course-progress-item">
+            <span class="cp-letter">ב</span>
+            <div class="cp-info">
+              <div class="cp-name">SETE LEIS DE NOÉ</div>
+              <div class="cp-bar"><div class="cp-fill" style="width:10%"></div></div>
+            </div>
+            <span class="cp-pct">10%</span>
+          </div>
+          <div class="course-progress-item">
+            <span class="cp-letter">ג</span>
+            <div class="cp-info">
+              <div class="cp-name">ÉTICA JUDAICA</div>
+              <div class="cp-bar"><div class="cp-fill" style="width:0%"></div></div>
+            </div>
+            <span class="cp-pct">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ SCORES -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">MEUS QUIZZES</span>
+          <a href="quiz.html" style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.12em;color:var(--gold-dim);text-decoration:none;">FAZER QUIZ →</a>
+        </div>
+        <div class="panel-body">
+          <div class="score-row"><span class="score-topic">FUNDAMENTOS</span><span class="score-val">4/5 ✦</span></div>
+          <div class="score-row"><span class="score-topic">BNEI NOACH</span><span class="score-val">3/5</span></div>
+          <div class="score-row"><span class="score-topic">HISTÓRIA</span><span class="score-val">5/5 ✦</span></div>
+          <div class="score-row"><span class="score-topic">MUSSAR</span><span class="score-val">—</span></div>
+          <div class="score-row"><span class="score-topic">HALACHÁ</span><span class="score-val">—</span></div>
+          <div class="score-row"><span class="score-topic">PARASHÁ</span><span class="score-val">—</span></div>
+        </div>
+      </div>
+
+      <!-- RECENT ACTIVITY -->
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">ATIVIDADE RECENTE</span></div>
+        <div class="panel-body">
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div><p class="activity-text">Completou a Lição 4 — Introdução ao Judaísmo</p><span class="activity-time">HÁ 2 DIAS</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div><p class="activity-text">Quiz de História: 5/5 pontos — Excelente!</p><span class="activity-time">HÁ 3 DIAS</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div><p class="activity-text">Iniciou o curso — Sete Leis de Noé</p><span class="activity-time">HÁ 5 DIAS</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div><p class="activity-text">Criou sua conta no Ohr Beit Midrash</p><span class="activity-time">HÁ 1 SEMANA</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VERSE OF DAY -->
+      <div class="panel" style="background:linear-gradient(135deg,rgba(200,168,75,0.06),rgba(200,168,75,0.02));">
+        <div class="panel-header"><span class="panel-title">VERSÍCULO DO DIA</span></div>
+        <div class="panel-body" style="text-align:center;">
+          <p style="font-family:'Frank Ruhl Libre',serif;font-size:1.5rem;color:var(--gold-light);opacity:0.85;letter-spacing:0.08em;margin-bottom:0.8rem;">בְּכָל דְּרָכֶיךָ דָּעֵהוּ</p>
+          <p style="font-style:italic;font-size:1rem;color:var(--parchment-dark);opacity:0.8;margin-bottom:0.5rem;">"Em todos os teus caminhos, conhece-O"</p>
+          <span style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;color:var(--gold);opacity:0.55;">MISHLEI 3:6</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">OHR BEIT MIDRASH</div>
+    <div class="footer-hebrew">אוֹר בֵּית מִדְרָשׁ</div>
+    <div class="footer-links">
+      <a href="cursos.html">Cursos</a><a href="quiz.html">Quiz</a>
+      <a href="sobre.html">Sobre</a><a href="contato.html">Contato</a>
+    </div>
+    <p class="footer-copy">© 2025 Ohr Beit Midrash — Construído com amor por Yisrael Yehuda · לשם שמים</p>
+  </footer>
+</body>
+</html>

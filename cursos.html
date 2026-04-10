@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cursos — Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C8A84B;
+      --gold-light: #E8CC7A;
+      --gold-dim: #8A6F2E;
+      --parchment: #F5EDD6;
+      --parchment-dark: #E8D9B5;
+      --ink: #1A1208;
+      --deep: #0D0A04;
+      --cream: #FAF5E8;
+      --border: rgba(200,168,75,0.3);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      background-color: var(--deep);
+      color: var(--parchment);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    body::before {
+      content:'';
+      position:fixed; inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none; z-index:0; opacity:0.6;
+    }
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1rem 3rem;
+      background:linear-gradient(180deg,rgba(13,10,4,0.98) 0%,rgba(13,10,4,0.85) 100%);
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(12px);
+    }
+    .nav-logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+    .nav-logo .hebrew-mark { font-family:'Frank Ruhl Libre',serif; font-size:1.6rem; color:var(--gold); }
+    .nav-logo .brand-name { font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.15em; color:var(--parchment); font-weight:600; }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { font-family:'EB Garamond',serif; font-size:0.95rem; color:var(--parchment-dark); text-decoration:none; letter-spacing:0.05em; transition:color 0.3s; position:relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width 0.3s; }
+    .nav-links a:hover { color:var(--gold-light); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-links a.active { color:var(--gold); }
+    .nav-links a.active::after { width:100%; }
+    .nav-cta { font-family:'Cinzel',serif !important; font-size:0.8rem !important; letter-spacing:0.12em !important; color:var(--ink) !important; background:var(--gold); padding:0.5rem 1.4rem; border-radius:2px; transition:background 0.3s,transform 0.2s !important; }
+    .nav-cta::after { display:none !important; }
+    .nav-cta:hover { background:var(--gold-light) !important; transform:translateY(-1px); color:var(--ink) !important; }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 9rem 3rem 5rem;
+      text-align: center;
+      background: linear-gradient(180deg, #0D0A04 0%, #0A0703 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: 'לִמּוּד';
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 14rem;
+      color: var(--gold);
+      opacity: 0.04;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .page-label { font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.3em; color:var(--gold); text-transform:uppercase; margin-bottom:0.8rem; display:block; }
+    .page-hero h1 { font-family:'Cinzel',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:700; color:var(--parchment); letter-spacing:0.06em; }
+    .page-hero p { font-family:'EB Garamond',serif; font-style:italic; font-size:1.15rem; color:var(--parchment-dark); opacity:0.8; margin-top:1rem; }
+    .hero-line { width:60px; height:1px; background:var(--gold); margin:1.5rem auto 0; opacity:0.6; }
+
+    /* FILTER BAR */
+    .filter-bar {
+      padding: 2rem 3rem;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative; z-index:1;
+    }
+    .filter-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--parchment-dark);
+      background: transparent;
+      border: 1px solid rgba(200,168,75,0.25);
+      padding: 0.5rem 1.4rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: rgba(200,168,75,0.12);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    /* COURSES GRID */
+    .courses-section {
+      padding: 5rem 3rem;
+      position: relative; z-index:1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+    .course-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.4s;
+      display: flex;
+      flex-direction: column;
+    }
+    .course-card:hover {
+      border-color: rgba(200,168,75,0.55);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    }
+    .card-banner {
+      background: linear-gradient(135deg, rgba(200,168,75,0.15), rgba(200,168,75,0.04));
+      padding: 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .card-letter {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 3.5rem;
+      color: var(--gold);
+      opacity: 0.4;
+      line-height: 1;
+    }
+    .card-tags { display:flex; flex-direction:column; gap:0.4rem; align-items:flex-end; }
+    .tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      background: rgba(200,168,75,0.1);
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+      border: 1px solid rgba(200,168,75,0.2);
+    }
+    .tag.free { color:#6BCB77; border-color:rgba(107,203,119,0.3); background:rgba(107,203,119,0.08); }
+    .tag.premium { color:#E8CC7A; border-color:rgba(232,204,122,0.4); background:rgba(232,204,122,0.1); }
+    .card-body { padding:1.8rem 2rem; flex:1; }
+    .card-body h3 { font-family:'Cinzel',serif; font-size:1.05rem; color:var(--parchment); letter-spacing:0.05em; margin-bottom:0.7rem; }
+    .card-body p { font-size:0.9rem; color:var(--parchment-dark); opacity:0.75; line-height:1.65; margin-bottom:1.2rem; }
+    .card-meta { display:flex; gap:1.5rem; }
+    .meta-item { font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.12em; color:var(--gold-dim); }
+    .meta-item span { color:var(--parchment-dark); opacity:0.7; font-family:'EB Garamond',serif; font-size:0.85rem; letter-spacing:0; }
+    .card-footer {
+      padding:1.2rem 2rem;
+      border-top: 1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .btn-start {
+      font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.15em;
+      color:var(--ink); background:var(--gold);
+      padding:0.55rem 1.5rem; border-radius:2px; border:none;
+      cursor:pointer; text-decoration:none; transition:all 0.3s;
+    }
+    .btn-start:hover { background:var(--gold-light); transform:translateY(-1px); }
+    .btn-outline {
+      font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.15em;
+      color:var(--gold); background:transparent;
+      padding:0.55rem 1.5rem; border-radius:2px; border:1px solid var(--gold-dim);
+      cursor:pointer; text-decoration:none; transition:all 0.3s;
+    }
+    .btn-outline:hover { border-color:var(--gold); background:rgba(200,168,75,0.08); }
+    .progress-bar-wrap { display:flex; align-items:center; gap:0.6rem; }
+    .progress-bar { width:80px; height:3px; background:rgba(200,168,75,0.15); border-radius:2px; overflow:hidden; }
+    .progress-fill { height:100%; background:var(--gold); border-radius:2px; }
+    .progress-label { font-family:'Cinzel',serif; font-size:0.6rem; color:var(--gold-dim); letter-spacing:0.1em; }
+
+    /* FEATURED BANNER */
+    .featured-banner {
+      background: linear-gradient(135deg, rgba(200,168,75,0.12), rgba(200,168,75,0.04));
+      border: 1px solid rgba(200,168,75,0.4);
+      border-radius:4px;
+      padding:3rem;
+      margin-bottom:3rem;
+      display:flex; gap:3rem; align-items:center;
+      flex-wrap:wrap;
+    }
+    .featured-badge {
+      font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.25em;
+      color:var(--gold); background:rgba(200,168,75,0.15);
+      padding:0.35rem 1rem; border-radius:2px;
+      border:1px solid rgba(200,168,75,0.3);
+      display:inline-block; margin-bottom:1rem;
+    }
+    .featured-banner h2 { font-family:'Cinzel',serif; font-size:1.6rem; color:var(--parchment); letter-spacing:0.05em; margin-bottom:0.8rem; }
+    .featured-banner p { font-size:1rem; color:var(--parchment-dark); opacity:0.8; max-width:500px; line-height:1.7; margin-bottom:1.5rem; }
+    .featured-hebrew { font-family:'Frank Ruhl Libre',serif; font-size:4rem; color:var(--gold); opacity:0.25; margin-left:auto; }
+
+    /* QUOTE */
+    .quote-strip {
+      padding:3rem; text-align:center;
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      background:rgba(200,168,75,0.03);
+      position:relative; z-index:1;
+    }
+    .quote-strip p { font-family:'EB Garamond',serif; font-style:italic; font-size:1.2rem; color:var(--parchment-dark); opacity:0.8; }
+    .quote-strip span { font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.2em; color:var(--gold); opacity:0.6; display:block; margin-top:0.5rem; }
+
+    footer {
+      background:#070503; border-top:1px solid var(--border);
+      padding:3rem; text-align:center; position:relative; z-index:1;
+    }
+    .footer-logo { font-family:'Cinzel',serif; font-size:1.2rem; color:var(--gold); letter-spacing:0.15em; margin-bottom:0.5rem; }
+    .footer-hebrew { font-family:'Frank Ruhl Libre',serif; font-size:1.1rem; color:var(--gold-dim); margin-bottom:1.5rem; }
+    .footer-links { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
+    .footer-links a { font-family:'EB Garamond',serif; font-size:0.9rem; color:var(--parchment-dark); text-decoration:none; opacity:0.6; transition:all 0.3s; }
+    .footer-links a:hover { opacity:1; color:var(--gold-light); }
+    .footer-copy { margin-top:2rem; font-size:0.8rem; color:var(--parchment-dark); opacity:0.3; font-family:'EB Garamond',serif; }
+
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem;} .nav-links{display:none;}
+      .page-hero{padding:7rem 1.5rem 3rem;}
+      .filter-bar{padding:1.5rem;} .courses-section{padding:3rem 1.5rem;}
+      .featured-banner{padding:2rem; flex-direction:column;} .featured-hebrew{display:none;}
+      footer{padding:2rem 1.5rem;}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <span class="hebrew-mark">אוֹר</span>
+      <span class="brand-name">OHR BEIT MIDRASH</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="cursos.html" class="active">Cursos</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="sobre.html">Sobre</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><a href="login.html" class="nav-cta">Entrar</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <span class="page-label">Casa de Estudo</span>
+    <h1>CURSOS DE TORÁ</h1>
+    <p>"Estabelece tempos fixos para o estudo da Torá" — Avot 1:15</p>
+    <div class="hero-line"></div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active">TODOS</button>
+    <button class="filter-btn">FUNDAMENTOS</button>
+    <button class="filter-btn">BNEI NOACH</button>
+    <button class="filter-btn">HALACHÁ</button>
+    <button class="filter-btn">MUSSAR</button>
+    <button class="filter-btn">PARASHÁ</button>
+    <button class="filter-btn">GIYUR</button>
+  </div>
+
+  <div class="courses-section">
+
+    <!-- FEATURED -->
+    <div class="featured-banner">
+      <div>
+        <span class="featured-badge">✦ CURSO EM DESTAQUE</span>
+        <h2>Introdução Completa ao Judaísmo</h2>
+        <p>Do começo absoluto até uma compreensão sólida da fé, prática e identidade judaica. O ponto de partida para todo estudante sério.</p>
+        <a href="login.html" class="btn-start">COMEÇAR AGORA</a>
+      </div>
+      <span class="featured-hebrew">תּוֹרָה</span>
+    </div>
+
+    <div class="courses-grid">
+
+      <div class="course-card">
+        <div class="card-banner">
+          <span class="card-letter">א</span>
+          <div class="card-tags"><span class="tag">FUNDAMENTOS</span><span class="tag free">GRATUITO</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Introdução ao Judaísmo</h3>
+          <p>Os conceitos essenciais da fé, prática e identidade judaica explicados com clareza e profundidade.</p>
+          <div class="card-meta">
+            <div class="meta-item">AULAS<br><span>12 lições</span></div>
+            <div class="meta-item">NÍVEL<br><span>Iniciante</span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="login.html" class="btn-start">INICIAR</a>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+            <span class="progress-label">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="card-banner">
+          <span class="card-letter">ב</span>
+          <div class="card-tags"><span class="tag">BNEI NOACH</span><span class="tag free">GRATUITO</span></div>
+        </div>
+        <div class="card-body">
+          <h3>As Sete Leis de Noé</h3>
+          <p>Estudo detalhado das Mitzvot universais — sua origem, aplicação e profundidade espiritual para os filhos de Noé.</p>
+          <div class="card-meta">
+            <div class="meta-item">AULAS<br><span>10 lições</span></div>
+            <div class="meta-item">NÍVEL<br><span>Iniciante</span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="login.html" class="btn-start">INICIAR</a>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+            <span class="progress-label">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="card-banner">
+          <span class="card-letter">ג</span>
+          <div class="card-tags"><span class="tag">MUSSAR</span><span class="tag free">GRATUITO</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Ética e Caráter Judaico</h3>
+          <p>Pirkei Avot, Messilat Yesharim e ensinamentos dos grandes mestres do Mussar para aperfeiçoar o caráter.</p>
+          <div class="card-meta">
+            <div class="meta-item">AULAS<br><span>8 lições</span></div>
+            <div class="meta-item">NÍVEL<br><span>Intermediário</span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="login.html" class="btn-start">INICIAR</a>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+            <span class="progress-label">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="card-banner">
+          <span class="card-letter">ד</span>
+          <div class="card-tags"><span class="tag">HALACHÁ</span><span class="tag premium">PREMIUM</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Halachá Prática</h3>
+          <p>A lei judaica aplicada ao dia a dia — Shabat, Kashrut, Tefila e mais, com fontes do Shulchan Aruch.</p>
+          <div class="card-meta">
+            <div class="meta-item">AULAS<br><span>15 lições</span></div>
+            <div class="meta-item">NÍVEL<br><span>Intermediário</span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="login.html" class="btn-outline">VER CURSO</a>
+          <span class="tag premium" style="font-size:0.6rem;">🔒 PREMIUM</span>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="card-banner">
+          <span class="card-letter">ה</span>
+          <div class="card-tags"><span class="tag">PARASHÁ</span><span class="tag free">GRATUITO</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Parashá Semanal</h3>
+          <p>Estudo da porção semanal da Torá com comentários de Rashi, Ramban e outros grandes comentaristas.</p>
+          <div class="card-meta">
+            <div class="meta-item">FORMATO<br><span>Semanal</span></div>
+            <div class="meta-item">NÍVEL<br><span>Todos</span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="login.html" class="btn-start">INICIAR</a>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+            <span class="progress-label">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="card-banner">
+          <span class="card-letter">ו</span>
+          <div class="card-tags"><span class="tag">GIYUR</span><span class="tag premium">PREMIUM</span></div>
+        </div>
+        <div class="card-body">
+          <h3>Caminho para o Giyur</h3>
+          <p>Guia completo e rigoroso para o processo de conversão ao judaísmo — halachicamente correto e humanamente compassivo.</p>
+          <div class="card-meta">
+            <div class="meta-item">AULAS<br><span>20 lições</span></div>
+            <div class="meta-item">NÍVEL<br><span>Avançado</span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="login.html" class="btn-outline">VER CURSO</a>
+          <span class="tag premium" style="font-size:0.6rem;">🔒 PREMIUM</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="quote-strip">
+    <p>"Ao estudar Torá, o mundo inteiro é sustentado"</p>
+    <span>TALMUD BAVLI — SANHEDRIN 99B</span>
+  </div>
+
+  <footer>
+    <div class="footer-logo">OHR BEIT MIDRASH</div>
+    <div class="footer-hebrew">אוֹר בֵּית מִדְרָשׁ</div>
+    <div class="footer-links">
+      <a href="cursos.html">Cursos</a><a href="quiz.html">Quiz</a>
+      <a href="sobre.html">Sobre</a><a href="contato.html">Contato</a>
+      <a href="login.html">Entrar</a>
+    </div>
+    <p style="font-size:0.9rem;color:var(--gold-dim);"><a href="mailto:orhatorabrasil@gmail.com" style="color:inherit;text-decoration:none;">orhatorabrasil@gmail.com</a></p>
+    <p class="footer-copy">© 2025 Ohr Beit Midrash — Construído com amor por Yisrael Yehuda · לשם שמים</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

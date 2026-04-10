@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sobre — Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--gold:#C8A84B;--gold-light:#E8CC7A;--gold-dim:#8A6F2E;--parchment:#F5EDD6;--parchment-dark:#E8D9B5;--ink:#1A1208;--deep:#0D0A04;--border:rgba(200,168,75,0.3);}
+    *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+    body{background-color:var(--deep);color:var(--parchment);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:linear-gradient(180deg,rgba(13,10,4,0.98) 0%,rgba(13,10,4,0.85) 100%);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);}
+    .nav-logo{display:flex;align-items:center;gap:0.75rem;text-decoration:none;}
+    .nav-logo .hebrew-mark{font-family:'Frank Ruhl Libre',serif;font-size:1.6rem;color:var(--gold);}
+    .nav-logo .brand-name{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.15em;color:var(--parchment);font-weight:600;}
+    .nav-links{display:flex;gap:2rem;list-style:none;}
+    .nav-links a{font-family:'EB Garamond',serif;font-size:0.95rem;color:var(--parchment-dark);text-decoration:none;letter-spacing:0.05em;transition:color 0.3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
+    .nav-links a:hover{color:var(--gold-light);}.nav-links a:hover::after{width:100%;}
+    .nav-links a.active{color:var(--gold);}.nav-links a.active::after{width:100%;}
+    .nav-cta{font-family:'Cinzel',serif !important;font-size:0.8rem !important;letter-spacing:0.12em !important;color:var(--ink) !important;background:var(--gold);padding:0.5rem 1.4rem;border-radius:2px;}
+    .nav-cta::after{display:none !important;}.nav-cta:hover{background:var(--gold-light) !important;color:var(--ink) !important;}
+
+    .page-hero{padding:9rem 3rem 5rem;text-align:center;background:linear-gradient(180deg,#0D0A04 0%,#0A0703 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+    .page-hero::before{content:'מִשִּׁיחַ';font-family:'Frank Ruhl Libre',serif;font-size:14rem;color:var(--gold);opacity:0.04;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap;}
+    .page-label{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.3em;color:var(--gold);display:block;margin-bottom:0.8rem;}
+    .page-hero h1{font-family:'Cinzel',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;color:var(--parchment);letter-spacing:0.06em;}
+    .page-hero p{font-style:italic;font-size:1.15rem;color:var(--parchment-dark);opacity:0.8;margin-top:1rem;}
+    .hero-line{width:60px;height:1px;background:var(--gold);margin:1.5rem auto 0;opacity:0.6;}
+
+    .content-wrap{max-width:820px;margin:0 auto;padding:6rem 3rem;position:relative;z-index:1;}
+
+    /* MISSION */
+    .mission-block{text-align:center;margin-bottom:5rem;}
+    .section-label{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.3em;color:var(--gold);display:block;margin-bottom:0.8rem;}
+    .section-title{font-family:'Cinzel',serif;font-size:clamp(1.4rem,3vw,2rem);color:var(--parchment);letter-spacing:0.05em;margin-bottom:2rem;}
+    .section-line{width:60px;height:1px;background:var(--gold);margin:0 auto 2rem;opacity:0.6;}
+    .mission-block p{font-size:1.05rem;color:var(--parchment-dark);opacity:0.85;line-height:1.9;margin-bottom:1.4rem;}
+    .mission-verse{background:rgba(200,168,75,0.06);border-left:3px solid var(--gold);border-radius:0 4px 4px 0;padding:1.5rem 2rem;margin:2rem 0;text-align:left;}
+    .mission-verse-hebrew{font-family:'Frank Ruhl Libre',serif;font-size:1.4rem;color:var(--gold-light);display:block;margin-bottom:0.5rem;letter-spacing:0.08em;}
+    .mission-verse-pt{font-style:italic;font-size:1rem;color:var(--parchment-dark);opacity:0.8;}
+    .mission-verse-source{font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.2em;color:var(--gold);opacity:0.6;display:block;margin-top:0.4rem;}
+
+    /* VALUES */
+    .values-section{margin-bottom:5rem;}
+    .values-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;margin-top:2rem;}
+    .value-card{background:rgba(200,168,75,0.04);border:1px solid var(--border);border-radius:4px;padding:2rem 1.8rem;transition:all 0.3s;}
+    .value-card:hover{border-color:rgba(200,168,75,0.5);background:rgba(200,168,75,0.08);}
+    .value-hebrew{font-family:'Frank Ruhl Libre',serif;font-size:2rem;color:var(--gold);opacity:0.6;display:block;margin-bottom:0.8rem;}
+    .value-card h3{font-family:'Cinzel',serif;font-size:0.9rem;letter-spacing:0.12em;color:var(--gold-light);margin-bottom:0.6rem;}
+    .value-card p{font-size:0.9rem;color:var(--parchment-dark);opacity:0.75;line-height:1.65;}
+
+    /* FOUNDER */
+    .founder-section{margin-bottom:5rem;}
+    .founder-card{background:linear-gradient(135deg,rgba(200,168,75,0.08),rgba(200,168,75,0.02));border:1px solid rgba(200,168,75,0.35);border-radius:4px;padding:3rem;display:flex;gap:3rem;align-items:flex-start;flex-wrap:wrap;}
+    .founder-avatar{width:100px;height:100px;border-radius:50%;border:2px solid var(--gold);background:rgba(200,168,75,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .founder-avatar-letter{font-family:'Frank Ruhl Libre',serif;font-size:3rem;color:var(--gold);opacity:0.7;}
+    .founder-info h3{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--parchment);letter-spacing:0.08em;margin-bottom:0.4rem;}
+    .founder-role{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--gold);opacity:0.7;display:block;margin-bottom:1.2rem;}
+    .founder-info p{font-size:0.98rem;color:var(--parchment-dark);opacity:0.82;line-height:1.8;margin-bottom:1rem;}
+    .founder-tags{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1rem;}
+    .founder-tag{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.15em;color:var(--gold);background:rgba(200,168,75,0.1);padding:0.3rem 0.8rem;border-radius:2px;border:1px solid rgba(200,168,75,0.2);}
+
+    /* TIMELINE */
+    .timeline-section{margin-bottom:5rem;}
+    .timeline{position:relative;padding-left:2rem;}
+    .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--gold),transparent);opacity:0.3;}
+    .timeline-item{position:relative;padding-left:2rem;padding-bottom:2.5rem;}
+    .timeline-item::before{content:'';position:absolute;left:-0.35rem;top:0.4rem;width:0.7rem;height:0.7rem;border-radius:50%;background:var(--gold);opacity:0.6;}
+    .timeline-year{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--gold);opacity:0.7;display:block;margin-bottom:0.4rem;}
+    .timeline-title{font-family:'Cinzel',serif;font-size:0.95rem;color:var(--parchment);letter-spacing:0.05em;margin-bottom:0.4rem;}
+    .timeline-desc{font-size:0.9rem;color:var(--parchment-dark);opacity:0.75;line-height:1.65;}
+
+    /* QUOTE */
+    .closing-quote{text-align:center;padding:4rem 2rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(200,168,75,0.03);}
+    .closing-quote .hebrew{font-family:'Frank Ruhl Libre',serif;font-size:2rem;color:var(--gold-light);letter-spacing:0.1em;margin-bottom:1rem;}
+    .closing-quote .translation{font-style:italic;font-size:1.1rem;color:var(--parchment-dark);opacity:0.8;margin-bottom:0.5rem;}
+    .closing-quote .source{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--gold);opacity:0.6;}
+
+    footer{background:#070503;border-top:1px solid var(--border);padding:3rem;text-align:center;position:relative;z-index:1;}
+    .footer-logo{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--gold);letter-spacing:0.15em;margin-bottom:0.5rem;}
+    .footer-hebrew{font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;color:var(--gold-dim);margin-bottom:1.5rem;}
+    .footer-links{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;}
+    .footer-links a{font-family:'EB Garamond',serif;font-size:0.9rem;color:var(--parchment-dark);text-decoration:none;opacity:0.6;transition:all 0.3s;}
+    .footer-links a:hover{opacity:1;color:var(--gold-light);}
+    .footer-copy{margin-top:2rem;font-size:0.8rem;color:var(--parchment-dark);opacity:0.3;font-family:'EB Garamond',serif;}
+
+    @media(max-width:768px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.page-hero{padding:7rem 1.5rem 3rem;}.content-wrap{padding:4rem 1.5rem;}.founder-card{flex-direction:column;gap:1.5rem;}.founder-avatar{align-self:center;}footer{padding:2rem 1.5rem;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <span class="hebrew-mark">אוֹר</span>
+      <span class="brand-name">OHR BEIT MIDRASH</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="cursos.html">Cursos</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="sobre.html" class="active">Sobre</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><a href="login.html" class="nav-cta">Entrar</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <span class="page-label">Nossa Missão</span>
+    <h1>SOBRE O OHR</h1>
+    <p>"Toda a Torá existe apenas para estabelecer a paz" — Talmud, Gittin 59b</p>
+    <div class="hero-line"></div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- MISSION -->
+    <div class="mission-block">
+      <span class="section-label">O Propósito</span>
+      <h2 class="section-title">Por que o Ohr Beit Midrash existe</h2>
+      <div class="section-line"></div>
+      <p>O <strong style="color:var(--gold-light)">Ohr Beit Midrash</strong> nasceu de uma necessidade real: o judaísmo autêntico, rigoroso e halachicamente correto ainda é pouco acessível em língua portuguesa. Existem conteúdos superficiais e distorcidos por toda a internet — mas um espaço de estudo sério, organizado e fiel à tradição era escasso.</p>
+      <p>Este projeto foi construído por um único jovem, de forma independente, com recursos próprios e com um único objetivo: <em>que a luz da Torá chegue a todos que a buscam de coração</em> — judeus, Bnei Noach, cristãos curiosos, candidatos ao Giyur e qualquer alma sedenta de verdade.</p>
+      <p>Aqui não há conteúdo superficial. Cada lição, cada texto, cada recurso foi pensado para ser fiel às fontes — Talmud, Shulchan Aruch, Rishonim, Acharonim — e ao mesmo tempo acessível para quem está começando. Este é o equilíbrio que o Ohr busca.</p>
+      <div class="mission-verse">
+        <span class="mission-verse-hebrew">כִּי נֵר מִצְוָה וְתוֹרָה אוֹר</span>
+        <span class="mission-verse-pt">"Pois o mandamento é uma lâmpada, e a Torá é luz"</span>
+        <span class="mission-verse-source">MISHLEI 6:23</span>
+      </div>
+      <p>O nome <strong style="color:var(--gold-light)">Ohr (אוֹר)</strong> — "luz" em hebraico — não foi escolhido por acaso. A Torá é luz. E todo estudo genuíno é um ato de iluminar o mundo.</p>
+    </div>
+
+    <!-- VALUES -->
+    <div class="values-section">
+      <span class="section-label">Os Fundamentos</span>
+      <h2 class="section-title">O que nos guia</h2>
+      <div class="section-line"></div>
+      <div class="values-grid">
+        <div class="value-card">
+          <span class="value-hebrew">אֱמֶת</span>
+          <h3>EMET — VERDADE</h3>
+          <p>Todo conteúdo é baseado em fontes primárias da tradição judaica. Sem distorções, sem sincretismo, sem facilidade que comprometa a autenticidade.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-hebrew">כָּבוֹד</span>
+          <h3>KAVOD — RESPEITO</h3>
+          <p>Cada estudante — seja judeu, Bnei Noach ou apenas curioso — merece respeito e um ensino digno. A Torá foi dada a todos que a buscam com seriedade.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-hebrew">סֵדֶר</span>
+          <h3>SEDER — ORDEM</h3>
+          <p>O estudo judaico exige estrutura. Aqui o conteúdo é organizado, progressivo e construído sobre bases sólidas — do simples ao profundo.</p>
+        </div>
+        <div class="value-card">
+          <span class="value-hebrew">אַהֲבָה</span>
+          <h3>AHAVÁ — AMOR</h3>
+          <p>Tudo aqui foi construído com amor. Amor à Torá, ao povo judeu, e a cada pessoa que chega buscando conhecimento e propósito.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOUNDER -->
+    <div class="founder-section">
+      <span class="section-label">O Fundador</span>
+      <h2 class="section-title">Quem está por trás do Ohr</h2>
+      <div class="section-line"></div>
+      <div class="founder-card">
+        <div class="founder-avatar">
+          <span class="founder-avatar-letter">י</span>
+        </div>
+        <div class="founder-info">
+          <h3>YISRAEL YEHUDA</h3>
+          <span class="founder-role">FUNDADOR · ESCRITOR · CRIADOR DE CONTEÚDO JUDAICO</span>
+          <p>Yisrael Yehuda é um jovem escritor, criador de conteúdo judaico independente e estudante de Torá em processo de Giyur (conversão ao judaísmo). Nascido no Brasil, dedica sua vida ao estudo profundo e à difusão autêntica do judaísmo em língua portuguesa.</p>
+          <p>É autor de livros judaicos publicados, criador do aplicativo Ohr e do canal @yod.torah no TikTok. Todo o seu trabalho é construído de forma independente, movido pela convicção de que a Torá precisa ser acessível a todos que a buscam com coração sincero.</p>
+          <p><em style="color:var(--gold-light);opacity:0.9;">"Eu não construí o Ohr por ambição. Eu o construí porque senti que precisava existir."</em></p>
+          <div class="founder-tags">
+            <span class="founder-tag">ESCRITOR JUDAICO</span>
+            <span class="founder-tag">BNEI NOACH</span>
+            <span class="founder-tag">GIYUR</span>
+            <span class="founder-tag">DESENVOLVEDOR</span>
+            <span class="founder-tag">BRASIL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="timeline-section">
+      <span class="section-label">A Jornada</span>
+      <h2 class="section-title">Como o Ohr foi construído</h2>
+      <div class="section-line"></div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-year">INÍCIO</span>
+          <div class="timeline-title">Primeiro Livro — Guia para os Bnei Noach</div>
+          <p class="timeline-desc">O projeto começa com a publicação do primeiro livro judaico em português, voltado para os Filhos de Noé — disponível na Amazon e Google Play Books.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">CRESCIMENTO</span>
+          <div class="timeline-title">Segundo e Terceiro Livros + TikTok</div>
+          <p class="timeline-desc">Publicação de mais obras, incluindo "Como os Judeus Prosperam" — um livro de finanças baseado em Torá. Lançamento do canal @yod.torah para alcançar novos públicos.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">EXPANSÃO</span>
+          <div class="timeline-title">App Ohr — Assistente Espiritual</div>
+          <p class="timeline-desc">Criação do aplicativo Ohr: uma plataforma espiritual judaica com assistente de IA, quizzes, e recursos de prática judaica para o público em geral.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-year">HOJE</span>
+          <div class="timeline-title">Ohr Beit Midrash — Casa de Estudo</div>
+          <p class="timeline-desc">Nasce o Ohr Beit Midrash: uma plataforma completa de estudo judaico rigoroso, estruturado e gratuito — para todos que buscam a luz da Torá em português.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="closing-quote">
+    <p class="hebrew">הֲפֹךְ בָּהּ וַהֲפֹךְ בָּהּ, דְּכֹלָּא בָהּ</p>
+    <p class="translation">"Vira e revira nela, pois tudo está nela"</p>
+    <span class="source">PIRKEI AVOT 5:22 — BEN BAG BAG</span>
+  </div>
+
+  <footer>
+    <div class="footer-logo">OHR BEIT MIDRASH</div>
+    <div class="footer-hebrew">אוֹר בֵּית מִדְרָשׁ</div>
+    <div class="footer-links">
+      <a href="cursos.html">Cursos</a><a href="quiz.html">Quiz</a>
+      <a href="sobre.html">Sobre</a><a href="contato.html">Contato</a>
+      <a href="login.html">Entrar</a>
+    </div>
+    <p style="font-size:0.9rem;color:var(--gold-dim);"><a href="mailto:orhatorabrasil@gmail.com" style="color:inherit;text-decoration:none;">orhatorabrasil@gmail.com</a></p>
+    <p class="footer-copy">© 2025 Ohr Beit Midrash — Construído com amor por Yisrael Yehuda · לשם שמים</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz — Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:#C8A84B; --gold-light:#E8CC7A; --gold-dim:#8A6F2E;
+      --parchment:#F5EDD6; --parchment-dark:#E8D9B5;
+      --ink:#1A1208; --deep:#0D0A04; --border:rgba(200,168,75,0.3);
+      --correct:#4CAF50; --wrong:#E53935;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{ background-color:var(--deep); color:var(--parchment); font-family:'EB Garamond',Georgia,serif; font-size:18px; line-height:1.7; overflow-x:hidden; }
+    body::before{ content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:0.6; }
+    nav{ position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1rem 3rem; background:linear-gradient(180deg,rgba(13,10,4,0.98) 0%,rgba(13,10,4,0.85) 100%); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); }
+    .nav-logo{display:flex;align-items:center;gap:0.75rem;text-decoration:none;}
+    .nav-logo .hebrew-mark{font-family:'Frank Ruhl Libre',serif;font-size:1.6rem;color:var(--gold);}
+    .nav-logo .brand-name{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:0.15em;color:var(--parchment);font-weight:600;}
+    .nav-links{display:flex;gap:2rem;list-style:none;}
+    .nav-links a{font-family:'EB Garamond',serif;font-size:0.95rem;color:var(--parchment-dark);text-decoration:none;letter-spacing:0.05em;transition:color 0.3s;position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
+    .nav-links a:hover{color:var(--gold-light);} .nav-links a:hover::after{width:100%;}
+    .nav-links a.active{color:var(--gold);} .nav-links a.active::after{width:100%;}
+    .nav-cta{font-family:'Cinzel',serif !important;font-size:0.8rem !important;letter-spacing:0.12em !important;color:var(--ink) !important;background:var(--gold);padding:0.5rem 1.4rem;border-radius:2px;transition:background 0.3s !important;}
+    .nav-cta::after{display:none !important;} .nav-cta:hover{background:var(--gold-light) !important;color:var(--ink) !important;}
+
+    .page-hero{ padding:9rem 3rem 5rem; text-align:center; background:linear-gradient(180deg,#0D0A04 0%,#0A0703 100%); border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+    .page-hero::before{ content:'שְׁאֵלוֹת'; font-family:'Frank Ruhl Libre',serif; font-size:14rem; color:var(--gold); opacity:0.04; position:absolute; top:50%;left:50%; transform:translate(-50%,-50%); pointer-events:none; white-space:nowrap; }
+    .page-label{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.3em;color:var(--gold);display:block;margin-bottom:0.8rem;}
+    .page-hero h1{font-family:'Cinzel',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;color:var(--parchment);letter-spacing:0.06em;}
+    .page-hero p{font-style:italic;font-size:1.15rem;color:var(--parchment-dark);opacity:0.8;margin-top:1rem;}
+    .hero-line{width:60px;height:1px;background:var(--gold);margin:1.5rem auto 0;opacity:0.6;}
+
+    /* QUIZ AREA */
+    .quiz-container{ max-width:780px; margin:0 auto; padding:5rem 2rem; position:relative; z-index:1; }
+
+    /* TOPIC SELECTION */
+    #topic-screen{}
+    .topic-intro{ text-align:center; margin-bottom:3rem; }
+    .topic-intro h2{ font-family:'Cinzel',serif; font-size:1.6rem; color:var(--parchment); letter-spacing:0.06em; margin-bottom:0.8rem; }
+    .topic-intro p{ font-size:1rem; color:var(--parchment-dark); opacity:0.8; }
+    .topics-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.2rem; }
+    .topic-card{
+      background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:4px;
+      padding:2rem 1.5rem; text-align:center; cursor:pointer; transition:all 0.3s;
+    }
+    .topic-card:hover{ border-color:rgba(200,168,75,0.55); background:rgba(200,168,75,0.08); transform:translateY(-3px); }
+    .topic-icon{ font-family:'Frank Ruhl Libre',serif; font-size:2.2rem; color:var(--gold); opacity:0.7; display:block; margin-bottom:0.8rem; }
+    .topic-card h3{ font-family:'Cinzel',serif; font-size:0.9rem; letter-spacing:0.1em; color:var(--gold-light); margin-bottom:0.4rem; }
+    .topic-card p{ font-size:0.85rem; color:var(--parchment-dark); opacity:0.65; }
+
+    /* QUESTION SCREEN */
+    #quiz-screen{ display:none; }
+    .quiz-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
+    .quiz-progress-wrap{ flex:1; }
+    .quiz-topic-label{ font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; color:var(--gold); margin-bottom:0.5rem; }
+    .quiz-progress-bar{ height:3px; background:rgba(200,168,75,0.15); border-radius:2px; overflow:hidden; }
+    .quiz-progress-fill{ height:100%; background:var(--gold); border-radius:2px; transition:width 0.5s ease; }
+    .quiz-counter{ font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.15em; color:var(--gold-dim); white-space:nowrap; }
+    .question-box{ background:rgba(200,168,75,0.04); border:1px solid var(--border); border-radius:4px; padding:2.5rem; margin-bottom:2rem; }
+    .question-number{ font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.25em; color:var(--gold); opacity:0.6; margin-bottom:1rem; display:block; }
+    .question-text{ font-family:'EB Garamond',serif; font-size:1.3rem; color:var(--parchment); line-height:1.6; }
+    .question-hebrew{ font-family:'Frank Ruhl Libre',serif; font-size:1.1rem; color:var(--gold-light); opacity:0.7; margin-top:0.5rem; display:block; letter-spacing:0.08em; }
+    .answers-grid{ display:grid; gap:1rem; }
+    .answer-btn{
+      background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:4px;
+      padding:1.2rem 1.8rem; text-align:left; cursor:pointer; transition:all 0.3s;
+      font-family:'EB Garamond',serif; font-size:1rem; color:var(--parchment-dark);
+      display:flex; align-items:center; gap:1rem;
+    }
+    .answer-btn:hover:not(:disabled){ border-color:rgba(200,168,75,0.55); background:rgba(200,168,75,0.08); color:var(--parchment); }
+    .answer-btn.correct{ border-color:var(--correct); background:rgba(76,175,80,0.12); color:#A5D6A7; }
+    .answer-btn.wrong{ border-color:var(--wrong); background:rgba(229,57,53,0.12); color:#EF9A9A; }
+    .answer-letter{ font-family:'Frank Ruhl Libre',serif; font-size:1.2rem; color:var(--gold); opacity:0.5; min-width:1.5rem; }
+    .answer-btn.correct .answer-letter{ color:var(--correct); opacity:1; }
+    .answer-btn.wrong .answer-letter{ color:var(--wrong); opacity:1; }
+    .explanation-box{ background:rgba(200,168,75,0.06); border:1px solid rgba(200,168,75,0.25); border-radius:4px; padding:1.5rem 2rem; margin-top:1.5rem; display:none; }
+    .explanation-box.show{ display:block; animation:fadeIn 0.4s ease; }
+    .explanation-label{ font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; color:var(--gold); display:block; margin-bottom:0.5rem; }
+    .explanation-box p{ font-size:0.95rem; color:var(--parchment-dark); opacity:0.85; line-height:1.65; }
+    .btn-next{ font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.15em; color:var(--ink); background:var(--gold); padding:0.85rem 2.5rem; border:none; border-radius:2px; cursor:pointer; transition:all 0.3s; margin-top:1.5rem; display:none; }
+    .btn-next.show{ display:inline-block; animation:fadeIn 0.4s ease; }
+    .btn-next:hover{ background:var(--gold-light); transform:translateY(-2px); }
+
+    /* RESULT SCREEN */
+    #result-screen{ display:none; text-align:center; }
+    .result-hebrew{ font-family:'Frank Ruhl Libre',serif; font-size:5rem; color:var(--gold); opacity:0.2; margin-bottom:1rem; }
+    .result-score{ font-family:'Cinzel',serif; font-size:4rem; color:var(--gold); letter-spacing:0.1em; }
+    .result-label{ font-family:'Cinzel',serif; font-size:0.75rem; letter-spacing:0.25em; color:var(--gold-dim); display:block; margin-bottom:1.5rem; }
+    .result-message{ font-family:'EB Garamond',serif; font-style:italic; font-size:1.2rem; color:var(--parchment-dark); opacity:0.85; max-width:500px; margin:0 auto 2rem; }
+    .result-quote{ font-family:'Frank Ruhl Libre',serif; font-size:1.3rem; color:var(--gold-light); margin-bottom:0.5rem; }
+    .result-quote-pt{ font-style:italic; font-size:0.95rem; color:var(--parchment-dark); opacity:0.7; margin-bottom:2rem; }
+    .btn-retry{ font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.15em; color:var(--ink); background:var(--gold); padding:0.85rem 2.5rem; border:none; border-radius:2px; cursor:pointer; transition:all 0.3s; margin:0.5rem; }
+    .btn-retry:hover{ background:var(--gold-light); transform:translateY(-2px); }
+    .btn-topics{ font-family:'Cinzel',serif; font-size:0.8rem; letter-spacing:0.15em; color:var(--gold); background:transparent; padding:0.85rem 2.5rem; border:1px solid var(--gold-dim); border-radius:2px; cursor:pointer; transition:all 0.3s; margin:0.5rem; }
+    .btn-topics:hover{ border-color:var(--gold); background:rgba(200,168,75,0.08); }
+
+    @keyframes fadeIn{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    footer{ background:#070503; border-top:1px solid var(--border); padding:3rem; text-align:center; position:relative; z-index:1; }
+    .footer-logo{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--gold);letter-spacing:0.15em;margin-bottom:0.5rem;}
+    .footer-hebrew{font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;color:var(--gold-dim);margin-bottom:1.5rem;}
+    .footer-links{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;}
+    .footer-links a{font-family:'EB Garamond',serif;font-size:0.9rem;color:var(--parchment-dark);text-decoration:none;opacity:0.6;transition:all 0.3s;}
+    .footer-links a:hover{opacity:1;color:var(--gold-light);}
+    .footer-copy{margin-top:2rem;font-size:0.8rem;color:var(--parchment-dark);opacity:0.3;font-family:'EB Garamond',serif;}
+
+    @media(max-width:768px){ nav{padding:1rem 1.5rem;} .nav-links{display:none;} .page-hero{padding:7rem 1.5rem 3rem;} .quiz-container{padding:3rem 1.5rem;} footer{padding:2rem 1.5rem;} }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <span class="hebrew-mark">אוֹר</span>
+      <span class="brand-name">OHR BEIT MIDRASH</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="cursos.html">Cursos</a></li>
+      <li><a href="quiz.html" class="active">Quiz</a></li>
+      <li><a href="sobre.html">Sobre</a></li>
+      <li><a href="contato.html">Contato</a></li>
+      <li><a href="login.html" class="nav-cta">Entrar</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <span class="page-label">Teste seus conhecimentos</span>
+    <h1>QUIZ DE TORÁ</h1>
+    <p>"Quem aprende para ensinar — conseguirá aprender e ensinar" — Avot 4:5</p>
+    <div class="hero-line"></div>
+  </div>
+
+  <div class="quiz-container">
+    <!-- TOPIC SELECTION -->
+    <div id="topic-screen">
+      <div class="topic-intro">
+        <h2>ESCOLHA UM TEMA</h2>
+        <p>Selecione a área de conhecimento que deseja testar</p>
+      </div>
+      <div class="topics-grid">
+        <div class="topic-card" onclick="startQuiz('fundamentos')">
+          <span class="topic-icon">תּוֹרָה</span>
+          <h3>FUNDAMENTOS</h3>
+          <p>Conceitos básicos do judaísmo</p>
+        </div>
+        <div class="topic-card" onclick="startQuiz('noach')">
+          <span class="topic-icon">בְּנֵי נֹחַ</span>
+          <h3>BNEI NOACH</h3>
+          <p>As Sete Leis de Noé</p>
+        </div>
+        <div class="topic-card" onclick="startQuiz('mussar')">
+          <span class="topic-icon">מוּסָר</span>
+          <h3>MUSSAR</h3>
+          <p>Ética e caráter judaico</p>
+        </div>
+        <div class="topic-card" onclick="startQuiz('halacha')">
+          <span class="topic-icon">הֲלָכָה</span>
+          <h3>HALACHÁ</h3>
+          <p>Lei judaica prática</p>
+        </div>
+        <div class="topic-card" onclick="startQuiz('historia')">
+          <span class="topic-icon">הִיסְטוֹרְיָה</span>
+          <h3>HISTÓRIA</h3>
+          <p>História e tradição do povo judeu</p>
+        </div>
+        <div class="topic-card" onclick="startQuiz('parasha')">
+          <span class="topic-icon">פַּרְשָׁה</span>
+          <h3>PARASHÁ</h3>
+          <p>Porções da Torá</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen">
+      <div class="quiz-header">
+        <div class="quiz-progress-wrap">
+          <div class="quiz-topic-label" id="quiz-topic-label">FUNDAMENTOS</div>
+          <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progress-fill" style="width:0%"></div></div>
+        </div>
+        <span class="quiz-counter" id="quiz-counter">1 / 5</span>
+      </div>
+      <div class="question-box">
+        <span class="question-number" id="question-number">PERGUNTA 1</span>
+        <p class="question-text" id="question-text"></p>
+        <span class="question-hebrew" id="question-hebrew"></span>
+      </div>
+      <div class="answers-grid" id="answers-grid"></div>
+      <div class="explanation-box" id="explanation-box">
+        <span class="explanation-label">✦ EXPLICAÇÃO</span>
+        <p id="explanation-text"></p>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">PRÓXIMA PERGUNTA →</button>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen">
+      <div class="result-hebrew" id="result-hebrew">יָשָׁר כֹּחַ</div>
+      <div class="result-score" id="result-score">4/5</div>
+      <span class="result-label">PONTUAÇÃO FINAL</span>
+      <p class="result-message" id="result-message"></p>
+      <p class="result-quote" id="result-quote"></p>
+      <p class="result-quote-pt" id="result-quote-pt"></p>
+      <br>
+      <button class="btn-retry" onclick="retryQuiz()">TENTAR NOVAMENTE</button>
+      <button class="btn-topics" onclick="backToTopics()">OUTROS TEMAS</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">OHR BEIT MIDRASH</div>
+    <div class="footer-hebrew">אוֹר בֵּית מִדְרָשׁ</div>
+    <div class="footer-links">
+      <a href="cursos.html">Cursos</a><a href="quiz.html">Quiz</a>
+      <a href="sobre.html">Sobre</a><a href="contato.html">Contato</a>
+      <a href="login.html">Entrar</a>
+    </div>
+    <p class="footer-copy">© 2025 Ohr Beit Midrash — Construído com amor por Yisrael Yehuda · לשם שמים</p>
+  </footer>
+
+  <script>
+    const quizData = {
+      fundamentos: [
+        { q:"Qual é o principal texto sagrado do judaísmo?", hebrew:"מַהוּ הַכְּתָב הַקָּדוֹשׁ?", answers:["A Bíblia Cristã","A Torá","O Corão","Os Vedas"], correct:1, explanation:"A Torá (תּוֹרָה) é o texto sagrado central do judaísmo, composto pelos cinco livros de Moshé: Bereshit, Shemot, Vayikrá, Bamidbar e Devarim." },
+        { q:"Quantos mandamentos (Mitzvot) existem na Torá?", hebrew:"כַּמָּה מִצְווֹת יֵשׁ בַּתּוֹרָה?", answers:["248","365","613","1000"], correct:2, explanation:"Existem 613 Mitzvot (מִצְווֹת) na Torá — 248 positivas (faça) e 365 negativas (não faça), correspondendo aos 248 órgãos do corpo e 365 dias do ano." },
+        { q:"Qual é a oração central do judaísmo, recitada duas vezes ao dia?", hebrew:"מַהִי תְּפִלַּת הַיְּסוֹד שֶׁל הַיַּהֲדוּת?", answers:["Amidá","Shemá Israel","Kaddish","Hallel"], correct:1, explanation:"O Shemá Israel (שְׁמַע יִשְׂרָאֵל) é a declaração fundamental da fé judaica: 'Ouvi, ó Israel, o Eterno é nosso Deus, o Eterno é Um.'" },
+        { q:"O que significa a palavra 'Shabat'?", hebrew:"מָה פֵּרוּשׁ הַמִּלָּה שַׁבָּת?", answers:["Santidade","Descanso / Cessação","Alegria","Luz"], correct:1, explanation:"Shabat (שַׁבָּת) deriva da raiz שׁ-ב-ת que significa 'cessar' ou 'descansar'. É o dia sagrado de descanso, do pôr do sol de sexta ao pôr do sol de sábado." },
+        { q:"Quem recebeu a Torá no Monte Sinai?", hebrew:"מִי קִיבֵּל אֶת הַתּוֹרָה בְּהַר סִינַי?", answers:["Avraham","David HaMelech","Moshé Rabbeinu","Shlomo HaMelech"], correct:2, explanation:"Moshé Rabbeinu (מֹשֶׁה רַבֵּנוּ) — Moisés, nosso Mestre — recebeu a Torá no Monte Sinai. Por isso é chamado de 'Rabbeinu', nosso mestre por excelência." }
+      ],
+      noach: [
+        { q:"Quantas são as Leis de Noé (Mitzvot Bnei Noach)?", hebrew:"כַּמָּה מִצְווֹת יֵשׁ לִבְנֵי נֹחַ?", answers:["Três","Cinco","Sete","Dez"], correct:2, explanation:"Existem Sete Leis de Noé (שֶׁבַע מִצְווֹת בְּנֵי נֹחַ) que se aplicam a toda a humanidade: proibição de idolatria, blasfêmia, assassinato, roubo, imoralidade sexual, comer membro de animal vivo, e obrigação de estabelecer tribunais justos." },
+        { q:"Qual lei de Noé proíbe comer parte de um animal ainda vivo?", hebrew:"", answers:["Proibição do roubo","Eiver Min HaChai","Proibição da idolatria","Dinim"], correct:1, explanation:"Eiver Min HaChai (אֵבֶר מִן הַחַי) proíbe comer um membro ou órgão removido de um animal enquanto ainda estava vivo. Esta lei demonstra sensibilidade ao sofrimento dos animais." },
+        { q:"O que significa 'Dinim' nas Sete Leis de Noé?", hebrew:"מָה פֵּרוּשׁ 'דִּינִים'?", answers:["Proibição de roubo","Estabelecer tribunais de justiça","Proibição de idolatria","Lei alimentar"], correct:1, explanation:"Dinim (דִּינִים) é a obrigação de toda sociedade de estabelecer tribunais de justiça e um sistema legal funcional — pois a ordem social justa é fundamento do mundo." },
+        { q:"Para quem se aplicam as Sete Leis de Noé?", hebrew:"", answers:["Somente para judeus","Somente para cristãos","Para toda a humanidade","Somente para muçulmanos"], correct:2, explanation:"As Sete Leis de Noé se aplicam a toda a humanidade — são a aliança universal de HaShem com todos os filhos de Noé, ou seja, todos os seres humanos após o Dilúvio." },
+        { q:"Um não-judeu que observa as Sete Leis de Noé é chamado de:", hebrew:"", answers:["Ger Toshav","Bnei Noach / Chassid Umot HaOlam","Goy","Anussim"], correct:1, explanation:"É chamado de Bnei Noach (בְּנֵי נֹחַ) ou Chassid Umot HaOlam (חֲסִיד אֻמּוֹת הָעוֹלָם) — 'justo entre as nações' — e tem parte no Olam HaBa, o Mundo Vindouro." }
+      ],
+      mussar: [
+        { q:"Quem é considerado o fundador do movimento Mussar moderno?", hebrew:"", answers:["Rabi Moshe Chaim Luzzatto","Rav Yisrael Salanter","O Vilna Gaon","O Chofetz Chaim"], correct:1, explanation:"Rav Yisrael Salanter (רַב יִשְׂרָאֵל סַלַנְטֶר, 1809–1883) fundou o movimento Mussar moderno na Lituânia, enfatizando o trabalho profundo no caráter pessoal através do estudo ético intenso." },
+        { q:"O que é 'Tikun HaMidot' no Mussar?", hebrew:"תִּקּוּן הַמִּדּוֹת", answers:["Leitura da Torá","Correção e aperfeiçoamento dos traços de caráter","Oração matinal","Estudo do Talmud"], correct:1, explanation:"Tikun HaMidot (תִּקּוּן הַמִּדּוֹת) é o trabalho central do Mussar — a correção e refinamento dos traços de caráter (Midot), como humildade, paciência, honestidade e temor a HaShem." },
+        { q:"Qual obra clássica do Mussar foi escrita por Rabi Moshe Chaim Luzzatto?", hebrew:"", answers:["Pirkei Avot","Chovot HaLevavot","Messilat Yesharim","Orchot Tzadikim"], correct:2, explanation:"Messilat Yesharim (מְסִלַּת יְשָׁרִים) — 'O Caminho dos Justos' — escrito pelo Ramchal (Rabi Moshe Chaim Luzzatto) é considerado um dos textos de Mussar mais fundamentais já escritos." },
+        { q:"O que significa 'Anavá' no contexto do Mussar?", hebrew:"עֲנָוָה", answers:["Coragem","Humildade","Alegria","Diligência"], correct:1, explanation:"Anavá (עֲנָוָה) significa humildade — não a autopunição ou baixa autoestima, mas o conhecimento preciso do próprio lugar. Moshé é descrito na Torá como o homem mais humilde que já viveu." },
+        { q:"Qual é o primeiro tratado da Mishná dedicado à ética judaica?", hebrew:"", answers:["Sanhedrin","Pirkei Avot","Berachot","Kiddushin"], correct:1, explanation:"Pirkei Avot (פִּרְקֵי אָבוֹת) — 'Capítulos dos Pais' — é o tratado da Mishná dedicado à ética e sabedoria judaica. Começa com a cadeia de transmissão da Torá desde Moshé." }
+      ],
+      halacha: [
+        { q:"O que é o 'Shulchan Aruch'?", hebrew:"שֻׁלְחָן עָרוּךְ", answers:["Um livro de orações","O código central da lei judaica","Um comentário da Torá","Um livro de histórias"], correct:1, explanation:"O Shulchan Aruch (שֻׁלְחָן עָרוּךְ) — 'Mesa Posta' — é o código de lei judaica compilado por Rav Yosef Karo no século XVI e é a referência halachica central para o judaísmo até hoje." },
+        { q:"O que significa 'Kashrut'?", hebrew:"כַּשְׁרוּת", answers:["Oração","Lei alimentar judaica","Estudo da Torá","Tzedaká"], correct:1, explanation:"Kashrut (כַּשְׁרוּת) é o conjunto de leis alimentares judaicas — incluindo quais animais são permitidos, a separação entre carne e leite, o abate ritual (Shechitá), e muito mais." },
+        { q:"O que é 'Tzniut' na Halachá?", hebrew:"צְנִיעוּת", answers:["Lei do Shabat","Modéstia e recato","Lei da kashrut","Orações do dia"], correct:1, explanation:"Tzniut (צְנִיעוּת) é o princípio de modéstia e recato — não apenas no vestir, mas em toda conduta. Abrange humildade, discrição e dignidade no comportamento geral." },
+        { q:"Quantas horas geralmente se espera entre carne e leite (ashkenazita)?", hebrew:"", answers:["1 hora","3 horas","6 horas","12 horas"], correct:2, explanation:"A tradição ashkenazita aguarda 6 horas entre carne e leite. Comunidades sefarditas geralmente aguardam entre 1 e 6 horas dependendo da tradição familiar. A separação é uma lei da Torá." },
+        { q:"O que é 'Tzedaká'?", hebrew:"צְדָקָה", answers:["Uma oração especial","Caridade/justiça social","Um feriado judaico","Uma lei alimentar"], correct:1, explanation:"Tzedaká (צְדָקָה) deriva de 'tzedek' (justiça) e significa dar aos necessitados — não como caridade voluntária, mas como ato de justiça. No judaísmo, dar aos pobres é uma obrigação, não uma opção." }
+      ],
+      historia: [
+        { q:"Quem é considerado o primeiro judeu, o pai do povo judeu?", hebrew:"", answers:["Moshé","Yitzhak","Avraham Avinu","Yaakov"], correct:2, explanation:"Avraham Avinu (אַבְרָהָם אָבִינוּ) — Abraão, nosso pai — é o primeiro hebreu, que reconheceu HaShem através da razão e recebeu a Brit Milá. Com ele começou a história do povo judeu." },
+        { q:"Quando foi destruído o Segundo Templo (Beit HaMikdash)?", hebrew:"", answers:["70 a.C.","70 d.C.","135 d.C.","586 a.C."], correct:1, explanation:"O Segundo Templo (בֵּית הַמִּקְדָּשׁ) foi destruído pelos romanos em 70 d.C., no 9 de Av (Tisha B'Av). Esta data é o maior dia de luto do calendário judaico." },
+        { q:"O que foi o Exílio Babilônico?", hebrew:"גָּלוּת בָּבֶל", answers:["Uma guerra contra a Babilônia","A deportação do povo judeu para a Babilônia após a destruição do Primeiro Templo","Uma migração voluntária","A conquista da Babilônia pelos judeus"], correct:1, explanation:"O Exílio Babilônico (גָּלוּת בָּבֶל) ocorreu em 586 a.C. quando Nabucodonosor destruiu o Primeiro Templo e deportou o povo judeu para a Babilônia — um evento transformador na história judaica." },
+        { q:"O que é o Holocausto chamado em hebraico?", hebrew:"", answers:["Galut","Churban","Shoah","Evel"], correct:2, explanation:"Shoah (שׁוֹאָה) — 'catástrofe' em hebraico — é o termo usado para o genocídio de seis milhões de judeus pelo regime nazista durante a Segunda Guerra Mundial." },
+        { q:"Em que ano foi estabelecido o Estado de Israel?", hebrew:"", answers:["1945","1947","1948","1952"], correct:2, explanation:"O Estado de Israel foi estabelecido em 14 de maio de 1948 — 5 de Iyar de 5708 no calendário hebraico — com a Declaração de Independência lida por David Ben-Gurion em Tel Aviv." }
+      ],
+      parasha: [
+        { q:"Com qual palavra começa a Torá?", hebrew:"בְּמָה מַתְחִילָה הַתּוֹרָה?", answers:["Shemot","Bereshit","Vayikrá","Devarim"], correct:1, explanation:"A Torá começa com 'Bereshit' (בְּרֵאשִׁית) — 'No princípio'. Rashi pergunta por que a Torá começa com a Criação e não com o primeiro mandamento. A resposta: para mostrar que a terra pertence a HaShem." },
+        { q:"Qual é o nome hebraico do livro do Êxodo?", hebrew:"", answers:["Bereshit","Vayikrá","Shemot","Bamidbar"], correct:2, explanation:"Shemot (שְׁמוֹת) — 'Nomes' — é o nome hebraico do segundo livro da Torá (Êxodo). Começa listando os nomes dos filhos de Israel que desceram ao Egito." },
+        { q:"Qual parashá narra a travessia do Mar Vermelho?", hebrew:"", answers:["Vaerá","Bo","Beshalach","Yitro"], correct:2, explanation:"Beshalach (בְּשַׁלַּח) narra a saída do Egito e a travessia milagrosa do Mar de Juncos (Yam Suf). Contém o Shirat HaYam — o Cântico do Mar — cantado por Moshé e pelo povo." },
+        { q:"Quantos livros compõem a Torá (Chamisha Chumshei Torah)?", hebrew:"", answers:["Três","Cinco","Sete","Doze"], correct:1, explanation:"A Torá é composta por cinco livros (חֲמִישָּׁה חוּמְשֵׁי תוֹרָה): Bereshit, Shemot, Vayikrá, Bamidbar e Devarim — conhecidos em grego como Pentateuco." },
+        { q:"Qual é o último livro da Torá?", hebrew:"", answers:["Bamidbar","Vayikrá","Shemot","Devarim"], correct:3, explanation:"Devarim (דְּבָרִים) — 'Palavras' ou Deuteronômio — é o último livro da Torá. Contém o discurso de despedida de Moshé ao povo de Israel antes de entrar na Terra Prometida." }
+      ]
+    };
+
+    const topicLabels = { fundamentos:'FUNDAMENTOS', noach:'BNEI NOACH', mussar:'MUSSAR', halacha:'HALACHÁ', historia:'HISTÓRIA', parasha:'PARASHÁ' };
+    const letters = ['א','ב','ג','ד'];
+    let currentTopic = '', currentQuestions = [], currentIndex = 0, score = 0, answered = false;
+
+    function startQuiz(topic) {
+      currentTopic = topic;
+      currentQuestions = [...quizData[topic]];
+      currentIndex = 0; score = 0; answered = false;
+      document.getElementById('topic-screen').style.display = 'none';
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'block';
+      document.getElementById('quiz-topic-label').textContent = topicLabels[topic];
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      answered = false;
+      const q = currentQuestions[currentIndex];
+      const total = currentQuestions.length;
+      document.getElementById('question-number').textContent = `PERGUNTA ${currentIndex+1}`;
+      document.getElementById('question-text').textContent = q.q;
+      document.getElementById('question-hebrew').textContent = q.hebrew || '';
+      document.getElementById('quiz-counter').textContent = `${currentIndex+1} / ${total}`;
+      document.getElementById('progress-fill').style.width = `${((currentIndex)/total)*100}%`;
+      document.getElementById('explanation-box').classList.remove('show');
+      document.getElementById('btn-next').classList.remove('show');
+      const grid = document.getElementById('answers-grid');
+      grid.innerHTML = '';
+      q.answers.forEach((ans, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'answer-btn';
+        btn.innerHTML = `<span class="answer-letter">${letters[i]}</span>${ans}`;
+        btn.onclick = () => selectAnswer(i, q.correct, q.explanation);
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(chosen, correct, explanation) {
+      if (answered) return;
+      answered = true;
+      const btns = document.querySelectorAll('.answer-btn');
+      btns.forEach(b => b.disabled = true);
+      btns[chosen].classList.add(chosen === correct ? 'correct' : 'wrong');
+      if (chosen !== correct) btns[correct].classList.add('correct');
+      if (chosen === correct) score++;
+      document.getElementById('explanation-text').textContent = explanation;
+      document.getElementById('explanation-box').classList.add('show');
+      const nextBtn = document.getElementById('btn-next');
+      nextBtn.textContent = currentIndex < currentQuestions.length - 1 ? 'PRÓXIMA PERGUNTA →' : 'VER RESULTADO →';
+      nextBtn.classList.add('show');
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < currentQuestions.length) { loadQuestion(); }
+      else { showResult(); }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-screen').style.display = 'none';
+      document.getElementById('result-screen').style.display = 'block';
+      const total = currentQuestions.length;
+      document.getElementById('result-score').textContent = `${score}/${total}`;
+      const pct = score/total;
+      let msg, quote, quotePt, hebrew;
+      if (pct === 1) { msg="Perfeito! Você domina este assunto com excelência. Yishar Koach!"; quote="תַּלְמִיד חָכָם"; quotePt='"Sábio e estudioso"'; hebrew="מַזָּל טוֹב"; }
+      else if (pct >= 0.8) { msg="Excelente! Seu conhecimento é sólido. Continue estudando!"; quote="כִּי נֵר מִצְוָה וְתוֹרָה אוֹר"; quotePt='"O mandamento é uma lâmpada, e a Torá é luz" — Mishlei 6:23'; hebrew="יָשָׁר כֹּחַ"; }
+      else if (pct >= 0.6) { msg="Bom resultado! Você está no caminho certo. Revise os pontos perdidos."; quote="וְתַלְמוּד תּוֹרָה כְּנֶגֶד כֻּלָּם"; quotePt='"O estudo da Torá equivale a tudo" — Peah 1:1'; hebrew="חֲזַק וֶאֱמָץ"; }
+      else { msg="Continue estudando! A Torá não foi aprendida em um dia. Cada tentativa é crescimento."; quote="לִפּוּם צַעֲרָא אַגְרָא"; quotePt='"Segundo o esforço, é a recompensa" — Avot 5:26'; hebrew="חֲזַק חֲזַק"; }
+      document.getElementById('result-message').textContent = msg;
+      document.getElementById('result-quote').textContent = quote;
+      document.getElementById('result-quote-pt').textContent = quotePt;
+      document.getElementById('result-hebrew').textContent = hebrew;
+    }
+
+    function retryQuiz() { startQuiz(currentTopic); }
+    function backToTopics() {
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('topic-screen').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
