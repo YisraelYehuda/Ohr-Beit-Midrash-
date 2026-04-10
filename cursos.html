@@ -45,18 +45,22 @@
     .nav-logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
     .nav-logo .hebrew-mark { font-family:'Frank Ruhl Libre',serif; font-size:1.6rem; color:var(--gold); }
     .nav-logo .brand-name { font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.15em; color:var(--parchment); font-weight:600; }
-    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
     .nav-links a { font-family:'EB Garamond',serif; font-size:0.95rem; color:var(--parchment-dark); text-decoration:none; letter-spacing:0.05em; transition:color 0.3s; position:relative; }
     .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1px; background:var(--gold); transition:width 0.3s; }
     .nav-links a:hover { color:var(--gold-light); }
     .nav-links a:hover::after { width:100%; }
     .nav-links a.active { color:var(--gold); }
     .nav-links a.active::after { width:100%; }
-    .nav-cta { font-family:'Cinzel',serif !important; font-size:0.8rem !important; letter-spacing:0.12em !important; color:var(--ink) !important; background:var(--gold); padding:0.5rem 1.4rem; border-radius:2px; transition:background 0.3s,transform 0.2s !important; }
+    .nav-cta {
+      font-family:'Cinzel',serif !important; font-size:0.8rem !important; letter-spacing:0.12em !important;
+      color:var(--ink) !important; background:var(--gold); padding:0.5rem 1.4rem; border-radius:2px;
+      transition:background 0.3s,transform 0.2s !important;
+      display:inline-flex; align-items:center; justify-content:center; min-width:110px; text-transform:uppercase;
+    }
     .nav-cta::after { display:none !important; }
     .nav-cta:hover { background:var(--gold-light) !important; transform:translateY(-1px); color:var(--ink) !important; }
 
-    /* PAGE HERO */
     .page-hero {
       padding: 9rem 3rem 5rem;
       text-align: center;
@@ -82,7 +86,6 @@
     .page-hero p { font-family:'EB Garamond',serif; font-style:italic; font-size:1.15rem; color:var(--parchment-dark); opacity:0.8; margin-top:1rem; }
     .hero-line { width:60px; height:1px; background:var(--gold); margin:1.5rem auto 0; opacity:0.6; }
 
-    /* FILTER BAR */
     .filter-bar {
       padding: 2rem 3rem;
       background: rgba(0,0,0,0.3);
@@ -111,7 +114,6 @@
       color: var(--gold-light);
     }
 
-    /* COURSES GRID */
     .courses-section {
       padding: 5rem 3rem;
       position: relative; z-index:1;
@@ -165,6 +167,7 @@
     }
     .tag.free { color:#6BCB77; border-color:rgba(107,203,119,0.3); background:rgba(107,203,119,0.08); }
     .tag.premium { color:#E8CC7A; border-color:rgba(232,204,122,0.4); background:rgba(232,204,122,0.1); }
+    .tag.admin { color:#9ecbff; border-color:rgba(158,203,255,0.35); background:rgba(158,203,255,0.1); }
     .card-body { padding:1.8rem 2rem; flex:1; }
     .card-body h3 { font-family:'Cinzel',serif; font-size:1.05rem; color:var(--parchment); letter-spacing:0.05em; margin-bottom:0.7rem; }
     .card-body p { font-size:0.9rem; color:var(--parchment-dark); opacity:0.75; line-height:1.65; margin-bottom:1.2rem; }
@@ -175,19 +178,21 @@
       padding:1.2rem 2rem;
       border-top: 1px solid var(--border);
       display:flex; justify-content:space-between; align-items:center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-    .btn-start {
+    .btn-start, .btn-outline {
       font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.15em;
-      color:var(--ink); background:var(--gold);
-      padding:0.55rem 1.5rem; border-radius:2px; border:none;
+      padding:0.55rem 1.5rem; border-radius:2px;
       cursor:pointer; text-decoration:none; transition:all 0.3s;
+      border:none;
+      display:inline-flex; align-items:center; justify-content:center;
     }
+    .btn-start { color:var(--ink); background:var(--gold); }
     .btn-start:hover { background:var(--gold-light); transform:translateY(-1px); }
     .btn-outline {
-      font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.15em;
       color:var(--gold); background:transparent;
-      padding:0.55rem 1.5rem; border-radius:2px; border:1px solid var(--gold-dim);
-      cursor:pointer; text-decoration:none; transition:all 0.3s;
+      border:1px solid var(--gold-dim);
     }
     .btn-outline:hover { border-color:var(--gold); background:rgba(200,168,75,0.08); }
     .progress-bar-wrap { display:flex; align-items:center; gap:0.6rem; }
@@ -195,7 +200,6 @@
     .progress-fill { height:100%; background:var(--gold); border-radius:2px; }
     .progress-label { font-family:'Cinzel',serif; font-size:0.6rem; color:var(--gold-dim); letter-spacing:0.1em; }
 
-    /* FEATURED BANNER */
     .featured-banner {
       background: linear-gradient(135deg, rgba(200,168,75,0.12), rgba(200,168,75,0.04));
       border: 1px solid rgba(200,168,75,0.4);
@@ -216,7 +220,20 @@
     .featured-banner p { font-size:1rem; color:var(--parchment-dark); opacity:0.8; max-width:500px; line-height:1.7; margin-bottom:1.5rem; }
     .featured-hebrew { font-family:'Frank Ruhl Libre',serif; font-size:4rem; color:var(--gold); opacity:0.25; margin-left:auto; }
 
-    /* QUOTE */
+    .auth-note {
+      margin: 0 auto 2.5rem;
+      max-width: 900px;
+      padding: 1rem 1.2rem;
+      border: 1px solid rgba(200,168,75,0.22);
+      background: rgba(200,168,75,0.05);
+      border-radius: 4px;
+      color: var(--parchment-dark);
+      opacity: 0.9;
+    }
+    .auth-note strong {
+      color: var(--gold-light);
+    }
+
     .quote-strip {
       padding:3rem; text-align:center;
       border-top:1px solid var(--border); border-bottom:1px solid var(--border);
@@ -238,10 +255,13 @@
     .footer-copy { margin-top:2rem; font-size:0.8rem; color:var(--parchment-dark); opacity:0.3; font-family:'EB Garamond',serif; }
 
     @media(max-width:768px){
-      nav{padding:1rem 1.5rem;} .nav-links{display:none;}
+      nav{padding:1rem 1.5rem;}
+      .nav-links{display:none;}
       .page-hero{padding:7rem 1.5rem 3rem;}
-      .filter-bar{padding:1.5rem;} .courses-section{padding:3rem 1.5rem;}
-      .featured-banner{padding:2rem; flex-direction:column;} .featured-hebrew{display:none;}
+      .filter-bar{padding:1.5rem;}
+      .courses-section{padding:3rem 1.5rem;}
+      .featured-banner{padding:2rem; flex-direction:column;}
+      .featured-hebrew{display:none;}
       footer{padding:2rem 1.5rem;}
     }
   </style>
@@ -257,7 +277,7 @@
       <li><a href="quiz.html">Quiz</a></li>
       <li><a href="sobre.html">Sobre</a></li>
       <li><a href="contato.html">Contato</a></li>
-      <li><a href="login.html" class="nav-cta">Entrar</a></li>
+      <li><a href="login.html" class="nav-cta" id="navAccountLink">Entrar</a></li>
     </ul>
   </nav>
 
@@ -279,14 +299,16 @@
   </div>
 
   <div class="courses-section">
+    <div class="auth-note" id="authNote">
+      <strong>Modo visitante:</strong> você pode explorar os cursos, mas para manter progresso, pontos e recursos da sua conta, entre no site.
+    </div>
 
-    <!-- FEATURED -->
     <div class="featured-banner">
       <div>
         <span class="featured-badge">✦ CURSO EM DESTAQUE</span>
         <h2>Introdução Completa ao Judaísmo</h2>
         <p>Do começo absoluto até uma compreensão sólida da fé, prática e identidade judaica. O ponto de partida para todo estudante sério.</p>
-        <a href="login.html" class="btn-start">COMEÇAR AGORA</a>
+        <a href="login.html" class="btn-start requires-auth">COMEÇAR AGORA</a>
       </div>
       <span class="featured-hebrew">תּוֹרָה</span>
     </div>
@@ -307,7 +329,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-start">INICIAR</a>
+          <a href="login.html" class="btn-start requires-auth">INICIAR</a>
           <div class="progress-bar-wrap">
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
             <span class="progress-label">0%</span>
@@ -329,7 +351,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-start">INICIAR</a>
+          <a href="login.html" class="btn-start requires-auth">INICIAR</a>
           <div class="progress-bar-wrap">
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
             <span class="progress-label">0%</span>
@@ -351,7 +373,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-start">INICIAR</a>
+          <a href="login.html" class="btn-start requires-auth">INICIAR</a>
           <div class="progress-bar-wrap">
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
             <span class="progress-label">0%</span>
@@ -373,8 +395,8 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-outline">VER CURSO</a>
-          <span class="tag premium" style="font-size:0.6rem;">🔒 PREMIUM</span>
+          <a href="login.html" class="btn-outline premium-link">VER CURSO</a>
+          <span class="tag premium premium-status">🔒 PREMIUM</span>
         </div>
       </div>
 
@@ -392,7 +414,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-start">INICIAR</a>
+          <a href="login.html" class="btn-start requires-auth">INICIAR</a>
           <div class="progress-bar-wrap">
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
             <span class="progress-label">0%</span>
@@ -414,8 +436,8 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-outline">VER CURSO</a>
-          <span class="tag premium" style="font-size:0.6rem;">🔒 PREMIUM</span>
+          <a href="login.html" class="btn-outline premium-link">VER CURSO</a>
+          <span class="tag premium premium-status">🔒 PREMIUM</span>
         </div>
       </div>
 
@@ -431,15 +453,127 @@
     <div class="footer-logo">OHR BEIT MIDRASH</div>
     <div class="footer-hebrew">אוֹר בֵּית מִדְרָשׁ</div>
     <div class="footer-links">
-      <a href="cursos.html">Cursos</a><a href="quiz.html">Quiz</a>
-      <a href="sobre.html">Sobre</a><a href="contato.html">Contato</a>
-      <a href="login.html">Entrar</a>
+      <a href="cursos.html">Cursos</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="sobre.html">Sobre</a>
+      <a href="contato.html">Contato</a>
+      <a href="login.html" id="footerAccountLink">Entrar</a>
     </div>
     <p style="font-size:0.9rem;color:var(--gold-dim);"><a href="mailto:orhatorabrasil@gmail.com" style="color:inherit;text-decoration:none;">orhatorabrasil@gmail.com</a></p>
     <p class="footer-copy">© 2025 Ohr Beit Midrash — Construído com amor por Yisrael Yehuda · לשם שמים</p>
   </footer>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
+      authDomain: "ohr-beit-midrash.firebaseapp.com",
+      projectId: "ohr-beit-midrash",
+      storageBucket: "ohr-beit-midrash.firebasestorage.app",
+      messagingSenderId: "173478100824",
+      appId: "1:173478100824:web:56e32e06f300bf28ccef2d"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const ADMIN_EMAIL = "orhatorabrasil@gmail.com";
+    const navAccountLink = document.getElementById("navAccountLink");
+    const footerAccountLink = document.getElementById("footerAccountLink");
+    const authNote = document.getElementById("authNote");
+    const requiresAuthLinks = document.querySelectorAll(".requires-auth");
+    const premiumLinks = document.querySelectorAll(".premium-link");
+    const premiumStatus = document.querySelectorAll(".premium-status");
+
+    function updateAccountLinks(text, href) {
+      if (navAccountLink) {
+        navAccountLink.textContent = text;
+        navAccountLink.href = href;
+      }
+      if (footerAccountLink) {
+        footerAccountLink.textContent = text;
+        footerAccountLink.href = href;
+      }
+    }
+
+    function setLoggedOutMode() {
+      updateAccountLinks("Entrar", "login.html");
+
+      if (authNote) {
+        authNote.innerHTML = "<strong>Modo visitante:</strong> você pode explorar os cursos, mas para manter progresso, pontos e recursos da sua conta, entre no site.";
+      }
+
+      requiresAuthLinks.forEach(link => {
+        link.textContent = link.dataset.originalText || link.textContent;
+        link.href = "login.html";
+      });
+
+      premiumLinks.forEach(link => {
+        link.href = "login.html";
+        link.textContent = "VER CURSO";
+      });
+
+      premiumStatus.forEach(tag => {
+        tag.textContent = "🔒 PREMIUM";
+        tag.classList.remove("admin");
+        tag.classList.add("premium");
+      });
+    }
+
+    function setLoggedInMode(user) {
+      const email = (user.email || "").toLowerCase();
+      const isAdmin = email === ADMIN_EMAIL.toLowerCase();
+
+      updateAccountLinks(isAdmin ? "Admin" : "Perfil", "perfil.html");
+
+      if (authNote) {
+        if (isAdmin) {
+          authNote.innerHTML = "<strong>Shalom, Yisrael.</strong> Sua conta de administrador foi reconhecida. Os cursos premium abaixo já aparecem liberados para você nesta interface.";
+        } else {
+          authNote.innerHTML = "<strong>Conta reconhecida.</strong> Agora o site já sabe que você está logado. O próximo passo será salvar progresso e pontos na sua conta.";
+        }
+      }
+
+      requiresAuthLinks.forEach(link => {
+        if (!link.dataset.originalText) {
+          link.dataset.originalText = link.textContent;
+        }
+        link.href = "perfil.html";
+      });
+
+      premiumLinks.forEach(link => {
+        if (isAdmin) {
+          link.href = "perfil.html";
+          link.textContent = "ACESSO LIBERADO";
+        } else {
+          link.href = "perfil.html";
+          link.textContent = "VER CURSO";
+        }
+      });
+
+      premiumStatus.forEach(tag => {
+        if (isAdmin) {
+          tag.textContent = "ADMIN LIBERADO";
+          tag.classList.remove("premium");
+          tag.classList.add("admin");
+        } else {
+          tag.textContent = "🔒 PREMIUM";
+          tag.classList.remove("admin");
+          tag.classList.add("premium");
+        }
+      });
+    }
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        setLoggedOutMode();
+        return;
+      }
+      setLoggedInMode(user);
+    });
+
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
