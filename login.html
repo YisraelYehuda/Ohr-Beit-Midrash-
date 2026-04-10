@@ -1,82 +1,156 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Login - Ohr</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Entrar — Ohr Beit Midrash</title>
+  <style>
+    :root{
+      --gold:#C8A84B;
+      --gold-light:#E8CC7A;
+      --parchment:#F5EDD6;
+      --parchment-dark:#E8D9B5;
+      --ink:#1A1208;
+      --deep:#0D0A04;
+      --border:rgba(200,168,75,0.3);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--deep);
+      color:var(--parchment);
+      font-family: Georgia, serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .wrap{
+      width:100%;
+      max-width:460px;
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:28px 22px;
+    }
+    h1{
+      margin:0 0 8px;
+      color:var(--gold-light);
+      font-size:30px;
+      letter-spacing:.04em;
+      text-align:center;
+    }
+    p.sub{
+      margin:0 0 24px;
+      text-align:center;
+      color:var(--parchment-dark);
+      opacity:.9;
+    }
+    label{
+      display:block;
+      margin:14px 0 6px;
+      color:var(--gold-light);
+      font-size:14px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    input{
+      width:100%;
+      padding:14px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      color:var(--parchment);
+      outline:none;
+      font-size:16px;
+    }
+    input::placeholder{
+      color:#b9aa84;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+    button{
+      flex:1;
+      min-width:130px;
+      padding:14px 16px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+    }
+    .primary{
+      background:var(--gold);
+      color:var(--ink);
+    }
+    .secondary{
+      background:rgba(255,255,255,0.08);
+      color:var(--parchment);
+      border:1px solid rgba(255,255,255,0.12);
+    }
+    .google{
+      width:100%;
+      margin-top:18px;
+      background:#fff;
+      color:#111;
+    }
+    .msg{
+      margin-top:18px;
+      padding:12px 14px;
+      border-radius:10px;
+      display:none;
+      font-size:14px;
+      line-height:1.5;
+    }
+    .msg.show{display:block}
+    .msg.error{
+      background:rgba(180,40,40,0.18);
+      border:1px solid rgba(180,40,40,0.38);
+      color:#ffd9d9;
+    }
+    .msg.ok{
+      background:rgba(40,140,90,0.18);
+      border:1px solid rgba(40,140,90,0.38);
+      color:#d9ffe8;
+    }
+    .links{
+      margin-top:18px;
+      text-align:center;
+    }
+    .links a{
+      color:var(--gold-light);
+      text-decoration:none;
+    }
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Entrar no Ohr</h1>
+    <p class="sub">Acesse sua conta e continue seus estudos</p>
 
-<h2>Entrar no Ohr</h2>
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="seu@email.com" />
 
-<input type="email" id="email" placeholder="Email"><br><br>
-<input type="password" id="senha" placeholder="Senha"><br><br>
+    <label for="senha">Senha</label>
+    <input id="senha" type="password" placeholder="Sua senha" />
 
-<button onclick="login()">Entrar</button>
-<button onclick="cadastrar()">Criar Conta</button>
+    <div class="row">
+      <button class="primary" id="btnEntrar">Entrar</button>
+      <button class="secondary" id="btnCriar">Criar conta</button>
+    </div>
 
-<br><br>
+    <button class="google" id="btnGoogle">Entrar com Google</button>
 
-<button onclick="loginGoogle()">Entrar com Google</button>
+    <div id="msg" class="msg"></div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    <div class="links">
+      <a href="index.html">← Voltar ao início</a>
+    </div>
+  </div>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
-    authDomain: "ohr-beit-midrash.firebaseapp.com",
-    projectId: "ohr-beit-midrash",
-    storageBucket: "ohr-beit-midrash.firebasestorage.app",
-    messagingSenderId: "173478100824",
-    appId: "1:173478100824:web:56e32e06f300bf28ccef2d"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // LOGIN EMAIL
-  window.login = function () {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
-
-    signInWithEmailAndPassword(auth, email, senha)
-      .then(() => {
-        alert("Login realizado!");
-        window.location.href = "perfil.html";
-      })
-      .catch((error) => {
-        alert("Erro: " + error.message);
-      });
-  };
-
-  // CADASTRO
-  window.cadastrar = function () {
-    const email = document.getElementById("email").value;
-    const senha = document.getElementById("senha").value;
-
-    createUserWithEmailAndPassword(auth, email, senha)
-      .then(() => {
-        alert("Conta criada!");
-      })
-      .catch((error) => {
-        alert("Erro: " + error.message);
-      });
-  };
-
-  // GOOGLE LOGIN
-  window.loginGoogle = function () {
-    const provider = new GoogleAuthProvider();
-
-    signInWithPopup(auth, provider)
-      .then(() => {
-        alert("Login com Google realizado!");
-        window.location.href = "perfil.html";
-      })
-      .catch((error) => {
-        alert("Erro: " + error.message);
-      });
-  };
-</script>
-
-</body>
-</html>
+  <script type
