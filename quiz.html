@@ -233,6 +233,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
@@ -247,6 +248,7 @@
       firebase.initializeApp(firebaseConfig);
     }
 
+    const db = firebase.firestore();
     const ADMIN_EMAIL = "orhatorabrasil@gmail.com";
     const navAccountLink = document.getElementById("navAccountLink");
     const footerAccountLink = document.getElementById("footerAccountLink");
@@ -279,9 +281,9 @@
 
       if (authNote) {
         if (isAdmin) {
-          authNote.innerHTML = "<strong>Shalom, Yisrael.</strong> Sua conta de administrador foi reconhecida. O quiz já sabe que você está logado; a próxima etapa será gravar a pontuação no banco.";
+          authNote.innerHTML = "<strong>Shalom, Yisrael.</strong> Sua conta de administrador foi reconhecida. Agora o quiz salva a pontuação no banco ao final de cada rodada.";
         } else {
-          authNote.innerHTML = "<strong>Conta reconhecida.</strong> Agora o quiz sabe que você está logado. O próximo passo será salvar automaticamente os pontos no seu perfil.";
+          authNote.innerHTML = "<strong>Conta reconhecida.</strong> Agora o quiz salva automaticamente a pontuação na sua conta ao final de cada rodada.";
         }
       }
     });
@@ -389,11 +391,39 @@
       else { showResult(); }
     }
 
-    function showResult() {
+    async function saveScoreToFirestore(points) {
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+
+      const userRef = db.collection("users").doc(user.uid);
+
+      try {
+        const snapshot = await userRef.get();
+
+        if (snapshot.exists) {
+          await userRef.set({
+            email: user.email || "",
+            score: firebase.firestore.FieldValue.increment(points)
+          }, { merge: true });
+        } else {
+          await userRef.set({
+            email: user.email || "",
+            score: points
+          }, { merge: true });
+        }
+      } catch (error) {
+        console.error("Erro ao salvar pontuação:", error);
+      }
+    }
+
+    async function showResult() {
       document.getElementById('quiz-screen').style.display = 'none';
       document.getElementById('result-screen').style.display = 'block';
       const total = currentQuestions.length;
       document.getElementById('result-score').textContent = `${score}/${total}`;
+
+      await saveScoreToFirestore(score);
+
       const pct = score/total;
       let msg, quote, quotePt, hebrew;
       if (pct === 1) { msg="Perfeito! Você domina este assunto com excelência. Yishar Koach!"; quote="תַּלְמִיד חָכָם"; quotePt='"Sábio e estudioso"'; hebrew="מַזָּל טוֹב"; }
