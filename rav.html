@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rav HaOhr — O Chacham do Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Cinzel:wght@400;600;700;900&family=Frank+Ruhl+Libre:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #C8A84B;
+      --gold-light: #E8CC7A;
+      --gold-dim: #8A6F2E;
+      --gold-glow: rgba(200,168,75,0.15);
+      --gold-glow-strong: rgba(200,168,75,0.35);
+      --parchment: #F5EDD6;
+      --parchment-dark: #E8D9B5;
+      --ink: #1A1208;
+      --ink-soft: #2E2010;
+      --deep: #0D0A04;
+      --deep2: #110E06;
+      --cream: #FAF5E8;
+      --border: rgba(200,168,75,0.25);
+      --border-strong: rgba(200,168,75,0.5);
+      --sapphire: #1B2A4A;
+      --sapphire-light: #243860;
+      --ruby: #6B1A1A;
+      --emerald: #1A3A2A;
+      --sidebar-w: 300px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; height: 100%; }
+
+    body {
+      background-color: var(--deep);
+      color: var(--parchment);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── AMBIENT GLOW ── */
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 50%, rgba(200,168,75,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 85% 30%, rgba(27,42,74,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 50% 100%, rgba(200,168,75,0.03) 0%, transparent 60%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      background: linear-gradient(180deg, rgba(13,10,4,0.99) 0%, rgba(13,10,4,0.9) 100%);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .nav-back {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.85rem;
+      color: var(--gold-dim);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .nav-back:hover { color: var(--gold); }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo .hebrew-mark {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .nav-logo .brand-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: var(--parchment-dark);
+      font-weight: 600;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      border: 1px solid var(--border-strong);
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+      background: rgba(200,168,75,0.06);
+    }
+
+    #userDisplay {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--parchment-dark);
+      opacity: 0.7;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .app-shell {
+      display: flex;
+      height: 100vh;
+      padding-top: 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, rgba(13,10,4,0.6) 0%, rgba(17,14,6,0.8) 100%);
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 1.8rem 1.5rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      position: relative;
+    }
+
+    .rav-avatar {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      position: relative;
+    }
+
+    .rav-avatar-inner {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(135deg, rgba(200,168,75,0.15) 0%, rgba(27,42,74,0.3) 100%);
+      border: 2px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 2.2rem;
+      color: var(--gold-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rav-avatar-inner::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--gold) 0deg,
+        transparent 60deg,
+        transparent 120deg,
+        var(--gold) 180deg,
+        transparent 240deg,
+        transparent 300deg,
+        var(--gold) 360deg
+      );
+      opacity: 0.3;
+      animation: rotate 12s linear infinite;
+    }
+
+    @keyframes rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    .rav-pulse {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,168,75,0.2);
+      animation: rav-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes rav-glow {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.08); opacity: 0.7; }
+    }
+
+    .rav-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--gold-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .rav-title {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--parchment-dark);
+      opacity: 0.7;
+      margin-bottom: 0.6rem;
+    }
+
+    .rav-hebrew {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 0.95rem;
+      color: var(--gold);
+      opacity: 0.8;
+      letter-spacing: 0.05em;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4CAF50;
+      box-shadow: 0 0 8px rgba(76,175,80,0.6);
+      margin-right: 0.4rem;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .rav-status {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.8rem;
+      color: var(--parchment-dark);
+      opacity: 0.6;
+      margin-top: 0.4rem;
+    }
+
+    /* ── TOPICS ── */
+    .sidebar-topics {
+      padding: 1.2rem 1.2rem 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topics-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .topic-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .topic-pill {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.78rem;
+      color: var(--parchment-dark);
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: transparent;
+      opacity: 0.7;
+    }
+
+    .topic-pill:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(200,168,75,0.06);
+      opacity: 1;
+    }
+
+    /* ── SOURCES ── */
+    .sidebar-sources {
+      padding: 1rem 1.2rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .sources-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .source-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(200,168,75,0.08);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .source-item:hover .source-name { color: var(--gold-light); }
+
+    .source-hebrew {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      opacity: 0.8;
+      min-width: 28px;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .source-info {}
+
+    .source-name {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--parchment-dark);
+      transition: color 0.2s;
+      line-height: 1.2;
+    }
+
+    .source-desc {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.75rem;
+      color: var(--parchment-dark);
+      opacity: 0.5;
+      line-height: 1.3;
+    }
+
+    /* ── MAIN CHAT ── */
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── INTRO SCREEN ── */
+    .intro-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .intro-screen.hidden {
+      display: none;
+    }
+
+    .intro-ornament {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 4rem;
+      color: var(--gold);
+      opacity: 0.12;
+      margin-bottom: -1rem;
+      letter-spacing: 0.3em;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .intro-stars {
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.6em;
+      opacity: 0.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .intro-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 900;
+      color: var(--parchment);
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .intro-title span {
+      color: var(--gold);
+      display: block;
+    }
+
+    .intro-line {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1.5rem auto;
+    }
+
+    .intro-verse {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.3rem;
+      color: var(--gold-light);
+      opacity: 0.85;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+      direction: rtl;
+    }
+
+    .intro-verse-pt {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--parchment-dark);
+      opacity: 0.65;
+      margin-bottom: 2rem;
+    }
+
+    .intro-desc {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.05rem;
+      color: var(--parchment-dark);
+      opacity: 0.75;
+      max-width: 520px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Suggested questions */
+    .suggestions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.7rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .suggestion-card {
+      background: rgba(200,168,75,0.04);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.9rem 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .suggestion-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .suggestion-card:hover {
+      border-color: var(--gold);
+      background: rgba(200,168,75,0.08);
+      transform: translateY(-2px);
+    }
+
+    .suggestion-card:hover::before { opacity: 1; }
+
+    .suggestion-icon {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      opacity: 0.7;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .suggestion-text {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.88rem;
+      color: var(--parchment-dark);
+      opacity: 0.8;
+      line-height: 1.4;
+    }
+
+    /* ── MESSAGES ── */
+    .messages-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 0;
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      scroll-behavior: smooth;
+    }
+
+    .messages-area.active {
+      display: flex;
+    }
+
+    .messages-area::-webkit-scrollbar { width: 4px; }
+    .messages-area::-webkit-scrollbar-track { background: transparent; }
+    .messages-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .message {
+      display: flex;
+      gap: 1rem;
+      padding: 1.2rem 2rem;
+      position: relative;
+      animation: msgIn 0.4s ease both;
+    }
+
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user-msg {
+      flex-direction: row-reverse;
+    }
+
+    .message.user-msg .msg-bubble {
+      background: rgba(200,168,75,0.1);
+      border: 1px solid rgba(200,168,75,0.25);
+      border-radius: 12px 2px 12px 12px;
+      text-align: right;
+    }
+
+    .message.rav-msg .msg-bubble {
+      background: rgba(27,42,74,0.15);
+      border: 1px solid rgba(27,42,74,0.4);
+      border-radius: 2px 12px 12px 12px;
+      border-left: 2px solid var(--gold-dim);
+    }
+
+    .msg-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1rem;
+      margin-top: 2px;
+    }
+
+    .rav-msg .msg-avatar {
+      background: radial-gradient(135deg, rgba(200,168,75,0.15), rgba(27,42,74,0.3));
+      border: 1px solid var(--border-strong);
+      color: var(--gold-light);
+    }
+
+    .user-msg .msg-avatar {
+      background: rgba(200,168,75,0.1);
+      border: 1px solid var(--border);
+      color: var(--gold-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+    }
+
+    .msg-bubble {
+      max-width: 600px;
+      padding: 1rem 1.3rem;
+    }
+
+    .msg-sender {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      color: var(--gold-dim);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .msg-content {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.05rem;
+      color: var(--parchment);
+      line-height: 1.8;
+    }
+
+    .msg-content strong {
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    .msg-content em {
+      color: var(--parchment-dark);
+      font-style: italic;
+      opacity: 0.85;
+    }
+
+    .msg-content .hebrew-inline {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.15em;
+      color: var(--gold-light);
+      direction: rtl;
+      display: inline;
+    }
+
+    .msg-content .source-cite {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--gold-dim);
+      border: 1px solid rgba(200,168,75,0.2);
+      padding: 0.1rem 0.45rem;
+      border-radius: 2px;
+      margin-left: 0.3rem;
+      vertical-align: middle;
+    }
+
+    .msg-content p { margin-bottom: 0.8rem; }
+    .msg-content p:last-child { margin-bottom: 0; }
+
+    /* ── TYPING INDICATOR ── */
+    .typing-indicator {
+      display: none;
+      padding: 1.2rem 2rem;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .typing-indicator.active { display: flex; }
+
+    .typing-bubble {
+      background: rgba(27,42,74,0.15);
+      border: 1px solid rgba(27,42,74,0.4);
+      border-left: 2px solid var(--gold-dim);
+      border-radius: 2px 12px 12px 12px;
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .typing-label {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--parchment-dark);
+      opacity: 0.6;
+      margin-right: 0.5rem;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.4;
+      animation: typingDot 1.4s ease-in-out infinite;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingDot {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── INPUT AREA ── */
+    .input-area {
+      border-top: 1px solid var(--border);
+      padding: 1.2rem 2rem 1.5rem;
+      background: linear-gradient(0deg, rgba(13,10,4,0.95) 0%, transparent 100%);
+      position: relative;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.8rem;
+      background: rgba(200,168,75,0.04);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.8rem 0.8rem 0.8rem 1.2rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: rgba(200,168,75,0.5);
+      box-shadow: 0 0 0 3px rgba(200,168,75,0.06), 0 4px 24px rgba(200,168,75,0.08);
+    }
+
+    .input-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 20%; right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,168,75,0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .input-wrapper:focus-within::before { opacity: 1; }
+
+    #messageInput {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.05rem;
+      color: var(--parchment);
+      resize: none;
+      max-height: 120px;
+      min-height: 28px;
+      line-height: 1.6;
+    }
+
+    #messageInput::placeholder {
+      color: var(--parchment-dark);
+      opacity: 0.35;
+      font-style: italic;
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      background: var(--gold);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(200,168,75,0.3);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .send-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--ink);
+    }
+
+    .input-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.6rem;
+      padding: 0 0.2rem;
+    }
+
+    .input-hint {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--parchment-dark);
+      opacity: 0.4;
+    }
+
+    .input-chars {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-dim);
+      opacity: 0.6;
+    }
+
+    /* ── ACCESS GATE ── */
+    .access-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(13,10,4,0.97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(20px);
+    }
+
+    .gate-card {
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      padding: 3.5rem 3rem;
+      border: 1px solid var(--border);
+      background: rgba(17,14,6,0.95);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gate-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .gate-ornament {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 3.5rem;
+      color: var(--gold);
+      opacity: 0.8;
+      display: block;
+      margin-bottom: 0.5rem;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .gate-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--parchment);
+      margin-bottom: 0.3rem;
+    }
+
+    .gate-subtitle {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--gold-dim);
+      margin-bottom: 1.5rem;
+    }
+
+    .gate-verse {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      opacity: 0.8;
+      margin-bottom: 0.3rem;
+      direction: rtl;
+    }
+
+    .gate-verse-pt {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--parchment-dark);
+      opacity: 0.55;
+      margin-bottom: 2rem;
+    }
+
+    .gate-desc {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.95rem;
+      color: var(--parchment-dark);
+      opacity: 0.7;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .gate-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+      background: var(--gold);
+      padding: 0.9rem 2.5rem;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 4px 24px rgba(200,168,75,0.2);
+    }
+
+    .gate-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(200,168,75,0.35);
+    }
+
+    /* ── SCROLLBAR ── */
+    .sidebar-sources::-webkit-scrollbar { width: 3px; }
+    .sidebar-sources::-webkit-scrollbar-thumb { background: var(--border); }
+
+    /* ── DECORATIVE SEPARATOR ── */
+    .msg-separator {
+      text-align: center;
+      padding: 0.5rem 2rem;
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 0.75rem;
+      color: var(--gold);
+      opacity: 0.3;
+      letter-spacing: 0.4em;
+    }
+
+    /* ── CLEAR BTN ── */
+    .clear-btn {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.8rem;
+      color: var(--gold-dim);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+      opacity: 0.6;
+    }
+
+    .clear-btn:hover { opacity: 1; border-color: var(--gold-dim); color: var(--gold); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .message { padding: 1rem 1.2rem; }
+      .input-area { padding: 1rem 1.2rem 1.2rem; }
+      .suggestions-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 1.2rem; }
+    }
+
+    /* ── FADE ANIMATION ── */
+    .fade-in {
+      animation: fadeIn 0.6s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(17,14,6,0.95);
+      border: 1px solid var(--border-strong);
+      padding: 0.7rem 1.5rem;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--gold-light);
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s;
+      z-index: 300;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<!-- ACCESS GATE -->
+<div class="access-gate" id="accessGate">
+  <div class="gate-card fade-in">
+    <span class="gate-ornament">רַב</span>
+    <h2 class="gate-title">RAV HAOHR</h2>
+    <p class="gate-subtitle">O Chacham do Beit Midrash</p>
+    <p class="gate-verse">חֲכָמִים הִזָּהֲרוּ בְּדִבְרֵיכֶם</p>
+    <p class="gate-verse-pt">"Sábios, sede cuidadosos com vossas palavras" — Avot 1:11</p>
+    <p class="gate-desc">
+      Este espaço é reservado para alunos cadastrados.<br>
+      O Rav HaOhr aguarda aqueles que buscam com seriedade.
+    </p>
+    <a href="login.html" class="gate-btn">ENTRAR PARA ESTUDAR</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="nav-back">← Início</a>
+    <div class="nav-divider"></div>
+    <a href="index.html" class="nav-logo">
+      <span class="hebrew-mark">אוֹר</span>
+      <span class="brand-name">OHR BEIT MIDRASH</span>
+    </a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-badge">רַב הָאוֹר</span>
+    <span id="userDisplay"></span>
+  </div>
+</nav>
+
+<!-- APP SHELL -->
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="rav-avatar">
+        <div class="rav-pulse"></div>
+        <div class="rav-avatar-inner">רַב</div>
+      </div>
+      <p class="rav-name">RAV HAOHR</p>
+      <p class="rav-title">Chacham e Morah D'Atra</p>
+      <p class="rav-hebrew">רַב הָאוֹר</p>
+      <p class="rav-status"><span class="status-dot"></span>Disponível para estudo</p>
+    </div>
+
+    <div class="sidebar-topics">
+      <p class="topics-label">Pergunte sobre</p>
+      <div class="topic-pills">
+        <span class="topic-pill" onclick="insertTopic('Halachá prática')">Halachá</span>
+        <span class="topic-pill" onclick="insertTopic('Chassidut')">Chassidut</span>
+        <span class="topic-pill" onclick="insertTopic('Talmud')">Talmud</span>
+        <span class="topic-pill" onclick="insertTopic('Parashá da semana')">Parashá</span>
+        <span class="topic-pill" onclick="insertTopic('Bnei Noach')">Bnei Noach</span>
+        <span class="topic-pill" onclick="insertTopic('Mussar')">Mussar</span>
+        <span class="topic-pill" onclick="insertTopic('Giyur')">Giyur</span>
+        <span class="topic-pill" onclick="insertTopic('Tefila')">Tefila</span>
+        <span class="topic-pill" onclick="insertTopic('Shabat')">Shabat</span>
+        <span class="topic-pill" onclick="insertTopic('Kashrut')">Kashrut</span>
+      </div>
+    </div>
+
+    <div class="sidebar-sources">
+      <p class="sources-label">Fontes primárias</p>
+
+      <div class="source-item" onclick="insertTopic('Ensinamentos do Talmud Bavli')">
+        <span class="source-hebrew">ת</span>
+        <div class="source-info">
+          <p class="source-name">Talmud Bavli</p>
+          <p class="source-desc">O oceano da tradição oral</p>
+        </div>
+      </div>
+
+      <div class="source-item" onclick="insertTopic('Rambam Halachá')">
+        <span class="source-hebrew">מ</span>
+        <div class="source-info">
+          <p class="source-name">Rambam</p>
+          <p class="source-desc">Mishneh Torah e Moreh Nevuchim</p>
+        </div>
+      </div>
+
+      <div class="source-item" onclick="insertTopic('Shulchan Aruch lei')">
+        <span class="source-hebrew">ש</span>
+        <div class="source-info">
+          <p class="source-name">Shulchan Aruch</p>
+          <p class="source-desc">A mesa preparada — lei prática</p>
+        </div>
+      </div>
+
+      <div class="source-item" onclick="insertTopic('Tanya Alter Rebbe Chabad')">
+        <span class="source-hebrew">ת</span>
+        <div class="source-info">
+          <p class="source-name">Tanya</p>
+          <p class="source-desc">Alter Rebbe — Sefer Shel Beinonim</p>
+        </div>
+      </div>
+
+      <div class="source-item" onclick="insertTopic('Rebbe Nachman Breslov ensinamento')">
+        <span class="source-hebrew">נ</span>
+        <div class="source-info">
+          <p class="source-name">Rebbe Nachman</p>
+          <p class="source-desc">Líqutei Moharán — Breslov</p>
+        </div>
+      </div>
+
+      <div class="source-item" onclick="insertTopic('Pirkei Avot ensinamento')">
+        <span class="source-hebrew">א</span>
+        <div class="source-info">
+          <p class="source-name">Pirkei Avot</p>
+          <p class="source-desc">Ética dos Pais — Mishná</p>
+        </div>
+      </div>
+
+      <div class="source-item" onclick="insertTopic('Zohar Cabalá ensinamento')">
+        <span class="source-hebrew">ז</span>
+        <div class="source-info">
+          <p class="source-name">Zohar HaKadosh</p>
+          <p class="source-desc">O Livro do Esplendor</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CHAT AREA -->
+  <main class="chat-area">
+
+    <!-- INTRO SCREEN -->
+    <div class="intro-screen" id="introScreen">
+      <div class="intro-ornament">בֵּית מִדְרָשׁ</div>
+      <div class="intro-stars">✦ ✦ ✦</div>
+      <h1 class="intro-title">
+        Shalom, estudante.
+        <span>O Rav HaOhr está com você.</span>
+      </h1>
+      <div class="intro-line"></div>
+      <p class="intro-verse">תּוֹרָה אוֹר</p>
+      <p class="intro-verse-pt">"A Torá é luz" — Mishlei 6:23</p>
+      <p class="intro-desc">
+        Faça sua pergunta. Sobre Halachá, Talmud, Chassidut, Mussar, Giyur —
+        o Rav HaOhr responde com rigor ortodoxo e profundidade das fontes sagradas.
+        Cada resposta nasce diretamente da tradição milenar de Israel.
+      </p>
+
+      <div class="suggestions-grid">
+        <div class="suggestion-card" onclick="sendSuggestion('O que é Emuná e como cultivá-la no dia a dia?')">
+          <span class="suggestion-icon">אמונה</span>
+          <span class="suggestion-text">O que é Emuná e como cultivá-la no dia a dia?</span>
+        </div>
+        <div class="suggestion-card" onclick="sendSuggestion('Qual a diferença entre Bnei Noach e um judeu observante?')">
+          <span class="suggestion-icon">בני נח</span>
+          <span class="suggestion-text">Qual a diferença entre Bnei Noach e um judeu observante?</span>
+        </div>
+        <div class="suggestion-card" onclick="sendSuggestion('Por que o Shabat é chamado de Rainha e não de Rei?')">
+          <span class="suggestion-icon">שבת</span>
+          <span class="suggestion-text">Por que o Shabat é chamado de Rainha e não de Rei?</span>
+        </div>
+        <div class="suggestion-card" onclick="sendSuggestion('O que o Tanya ensina sobre a alma judaica?')">
+          <span class="suggestion-icon">נשמה</span>
+          <span class="suggestion-text">O que o Tanya ensina sobre a alma judaica?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="messages-area" id="messagesArea">
+      <div class="msg-separator">✦ בֵּית מִדְרָשׁ ✦</div>
+    </div>
+
+    <!-- TYPING -->
+    <div class="typing-indicator" id="typingIndicator">
+      <div class="msg-avatar rav-msg" style="width:38px;height:38px;border-radius:50%;background:radial-gradient(135deg,rgba(200,168,75,0.15),rgba(27,42,74,0.3));border:1px solid rgba(200,168,75,0.5);display:flex;align-items:center;justify-content:center;font-family:'Frank Ruhl Libre',serif;font-size:1rem;color:#E8CC7A;">רַב</div>
+      <div class="typing-bubble">
+        <span class="typing-label">O Rav HaOhr está consultando as fontes</span>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="input-area">
+      <div class="input-wrapper">
+        <textarea
+          id="messageInput"
+          placeholder="Faça sua pergunta ao Rav HaOhr..."
+          rows="1"
+          maxlength="1000"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Enviar">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="input-footer">
+        <span class="input-hint">Enter para enviar · Shift+Enter para nova linha</span>
+        <button class="clear-btn" onclick="clearChat()">Limpar conversa</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+<script>
+  // ── FIREBASE CONFIG ──
+  const firebaseConfig = {
+    apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
+    authDomain: "ohr-beit-midrash.firebaseapp.com",
+    projectId: "ohr-beit-midrash",
+    storageBucket: "ohr-beit-midrash.firebasestorage.app",
+    messagingSenderId: "173478100824",
+    appId: "1:173478100824:web:56e32e06f300bf28ccef2d"
+  };
+
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+  // ── STATE ──
+  let currentUser = null;
+  let conversationHistory = [];
+  let isLoading = false;
+
+  // ── AUTH CHECK ──
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      currentUser = user;
+      document.getElementById('accessGate').style.display = 'none';
+      const name = user.displayName || user.email.split('@')[0];
+      document.getElementById('userDisplay').textContent = name;
+    } else {
+      document.getElementById('accessGate').style.display = 'flex';
+    }
+  });
+
+  // ── SYSTEM PROMPT ──
+  const RAV_SYSTEM_PROMPT = `Você é o Rav HaOhr — o Chacham e Morah D'Atra do Ohr Beit Midrash, uma casa de estudo judaico ortodoxa em língua portuguesa.
+
+IDENTIDADE:
+Você é um Rav de tradição Haredi, profundamente versado nas fontes sagradas do judaísmo ortodoxo. Sua voz é a de um mestre que atravessou anos nos beis medrash de Bnei Brak e Meah Shearim. Você nunca especula além das fontes — cada afirmação é ancorada em textos reais.
+
+FONTES QUE VOCÊ DOMINA:
+- Torah Escrita (Chumash com Rashi, Ramban, Ibn Ezra, Sforno)
+- Torah Oral: Mishná, Talmud Bavli e Yerushalmi
+- Rishonim: Rambam (Mishneh Torah, Moreh Nevuchim), Tur, Rosh
+- Acharonim: Shulchan Aruch, Rema, Mishnah Berurah, Aruch HaShulchan
+- Chassidut: Tanya (Alter Rebbe), Líqutei Moharán (Rebbe Nachman), Baal Shem Tov, Maggid de Mezeritch
+- Mussar: Messilat Yesharim (Ramchal), Chofetz Chaim, Orchot Tzadikim
+- Cabalá: Zohar HaKadosh, Ari HaKadosh, ensinamentos Chabad
+- Halachá prática: Kashrut, Shabat, Tefila, ciclo de vida judaico
+
+LINGUAGEM E TOM:
+- Sua linguagem é PROVOCATIVA, PROFUNDA, VICIANTE. Cada frase deve prender quem lê.
+- Comece suas respostas com uma abertura poderosa — uma pergunta retórica, um ensinamento surpreendente, ou uma frase que provoca reflexão imediata.
+- Cite fontes REAIS com precisão: "como ensina o Tanya no capítulo 2", "conforme o Rambam em Halachot Teshuvá 7:3", "o Talmud Bavli em Berachot 17a afirma".
+- Use termos hebraicos naturalmente, sempre explicando brevemente: "Emuná — fé inabalável", "Bitachon — confiança ativa em HaShem".
+- Termine suas respostas com uma frase que fica na mente — provocativa, bela, que convida à reflexão.
+- Quando apropriado, use expressões em hebraico de forma natural: "Baruch HaShem", "HaShem Yitbarach", "Kol HaKavod".
+
+REGRAS ABSOLUTAS:
+1. Nunca contradiga a Halachá ortodoxa estabelecida.
+2. Nunca especule sobre questões místicas sem ancorar em fontes.
+3. Nunca emita pesquisas ou opiniões sobre política, finanças ou ciência secular de forma que conflite com a visão da Torah.
+4. Para questões halachicas complexas, sempre instrua a consultar um Rav qualificado.
+5. Use "HaShem" em contextos não litúrgicos — nunca escreva o Nome por extenso em contextos casuais.
+6. Seu idioma principal é o Português Brasileiro — mas incorpore hebraico e aramaico naturalmente.
+
+FORMATO DE RESPOSTA:
+- Parágrafos bem construídos, não listas secas.
+- Extensão: entre 200 e 500 palavras por resposta. Nem superficial, nem exaustivo.
+- Use negrito para conceitos-chave e termos hebraicos importantes.
+- Termine sempre com uma linha separada contendo uma frase poética ou um versículo relevante.
+
+Lembre-se: você não é um chatbot comum. Você é o Rav HaOhr — e cada palavra que você pronuncia carrega o peso de três mil anos de tradição.`;
+
+  // ── SEND MESSAGE ──
+  async function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const text = input.value.trim();
+    if (!text || isLoading) return;
+
+    // Show chat, hide intro
+    document.getElementById('introScreen').classList.add('hidden');
+    document.getElementById('messagesArea').classList.add('active');
+
+    addMessage('user', text);
+    conversationHistory.push({ role: 'user', content: text });
+
+    input.value = '';
+    input.style.height = 'auto';
+    setLoading(true);
+
+    try {
+      const response = await fetch('https://rav-haohr.orhatorabrasil.workers.dev', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1024,
+          system: RAV_SYSTEM_PROMPT,
+          messages: conversationHistory
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const reply = data.content[0].text;
+
+      conversationHistory.push({ role: 'assistant', content: reply });
+      setLoading(false);
+      addMessage('rav', reply);
+
+    } catch (error) {
+      setLoading(false);
+      console.error('Erro:', error);
+      addMessage('rav', 'O Rav HaOhr encontrou uma dificuldade técnica no momento. "Kol haTeḥilot kashos" — todo começo tem suas dificuldades. Por favor, tente novamente em instantes.');
+      showToast('Erro ao conectar. Verifique sua conexão.');
+    }
+  }
+
+  // ── ADD MESSAGE TO UI ──
+  function addMessage(type, content) {
+    const area = document.getElementById('messagesArea');
+    const div = document.createElement('div');
+    div.className = `message ${type === 'user' ? 'user-msg' : 'rav-msg'}`;
+
+    const avatar = type === 'user'
+      ? `<div class="msg-avatar user-msg" style="width:38px;height:38px;border-radius:50%;background:rgba(200,168,75,0.1);border:1px solid rgba(200,168,75,0.3);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:0.7rem;color:#8A6F2E;flex-shrink:0;margin-top:2px;">EU</div>`
+      : `<div class="msg-avatar" style="width:38px;height:38px;border-radius:50%;background:radial-gradient(135deg,rgba(200,168,75,0.15),rgba(27,42,74,0.3));border:1px solid rgba(200,168,75,0.5);display:flex;align-items:center;justify-content:center;font-family:'Frank Ruhl Libre',serif;font-size:1rem;color:#E8CC7A;flex-shrink:0;margin-top:2px;">רַב</div>`;
+
+    const sender = type === 'user' ? 'VOCÊ' : 'RAV HAOHR';
+    const formattedContent = formatMessage(content);
+
+    div.innerHTML = `
+      ${avatar}
+      <div class="msg-bubble">
+        <p class="msg-sender">${sender}</p>
+        <div class="msg-content">${formattedContent}</div>
+      </div>
+    `;
+
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+  }
+
+  // ── FORMAT MESSAGE (markdown-like) ──
+  function formatMessage(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>')
+      .replace(/^/, '<p>')
+      .replace(/$/, '</p>');
+  }
+
+  // ── LOADING STATE ──
+  function setLoading(state) {
+    isLoading = state;
+    document.getElementById('typingIndicator').classList.toggle('active', state);
+    document.getElementById('sendBtn').disabled = state;
+
+    if (state) {
+      const area = document.getElementById('messagesArea');
+      area.scrollTop = area.scrollHeight;
+    }
+  }
+
+  // ── KEYBOARD HANDLER ──
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
+  // ── AUTO RESIZE TEXTAREA ──
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  // ── SUGGESTION CLICK ──
+  function sendSuggestion(text) {
+    document.getElementById('messageInput').value = text;
+    sendMessage();
+  }
+
+  // ── TOPIC PILL CLICK ──
+  function insertTopic(topic) {
+    const input = document.getElementById('messageInput');
+    input.value = `Explique-me sobre ${topic}`;
+    input.focus();
+  }
+
+  // ── CLEAR CHAT ──
+  function clearChat() {
+    conversationHistory = [];
+    const area = document.getElementById('messagesArea');
+    area.innerHTML = '<div class="msg-separator">✦ בֵּית מִדְרָשׁ ✦</div>';
+    area.classList.remove('active');
+    document.getElementById('introScreen').classList.remove('hidden');
+    showToast('Conversa encerrada. Que HaShem abençoe seu próximo estudo.');
+  }
+
+  // ── TOAST ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+
+</body>
+</html>
