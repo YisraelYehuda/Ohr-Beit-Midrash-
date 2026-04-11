@@ -18,6 +18,7 @@
       --deep: #0D0A04;
       --cream: #FAF5E8;
       --border: rgba(200, 168, 75, 0.3);
+      --border-strong: rgba(200, 168, 75, 0.45);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -106,6 +107,15 @@
 
     .nav-links a:hover { color: var(--gold-light); }
     .nav-links a:hover::after { width: 100%; }
+
+    .nav-rav-link {
+      color: var(--gold-light) !important;
+    }
+
+    .nav-rav-link::before {
+      content: '✦ ';
+      opacity: 0.8;
+    }
 
     .nav-cta {
       font-family: 'Cinzel', serif !important;
@@ -279,6 +289,15 @@
       transform: translateY(-2px);
     }
 
+    .btn-rav {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      box-shadow: 0 6px 28px rgba(200,168,75,0.28);
+    }
+
+    .btn-rav:hover {
+      box-shadow: 0 10px 34px rgba(200,168,75,0.36);
+    }
+
     .scroll-hint {
       position: absolute;
       bottom: 2.5rem;
@@ -410,6 +429,145 @@
       color: var(--parchment-dark);
       opacity: 0.8;
       line-height: 1.6;
+    }
+
+    .rav-section {
+      padding: 6rem 3rem;
+      background: linear-gradient(180deg, #0A0703 0%, #110B04 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .rav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+
+    .rav-main, .rav-side {
+      background: linear-gradient(135deg, rgba(200,168,75,0.08), rgba(200,168,75,0.02));
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2rem;
+    }
+
+    .rav-kicker {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .rav-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      color: var(--parchment);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: 0.04em;
+    }
+
+    .rav-title span {
+      color: var(--gold-light);
+      display: block;
+    }
+
+    .rav-copy {
+      font-size: 1.03rem;
+      color: var(--parchment-dark);
+      opacity: 0.84;
+      max-width: 650px;
+      margin-bottom: 1.5rem;
+    }
+
+    .rav-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 0.85rem 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .rav-point {
+      border: 1px solid rgba(200,168,75,0.14);
+      background: rgba(200,168,75,0.05);
+      border-radius: 4px;
+      padding: 0.9rem 1rem;
+      color: var(--parchment-dark);
+      font-size: 0.95rem;
+    }
+
+    .rav-point strong {
+      color: var(--gold-light);
+      display: block;
+      margin-bottom: 0.2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+    }
+
+    .rav-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .rav-side h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      color: var(--gold-light);
+      margin-bottom: 1rem;
+    }
+
+    .rav-side ul {
+      list-style: none;
+      display: grid;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .rav-side li {
+      border-bottom: 1px solid rgba(200,168,75,0.12);
+      padding-bottom: 0.8rem;
+      color: var(--parchment-dark);
+    }
+
+    .rav-side li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .rav-side small {
+      display: block;
+      color: var(--gold-dim);
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.1em;
+      font-size: 0.6rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .rav-limit-box {
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border-strong);
+      background: rgba(200,168,75,0.07);
+      border-radius: 4px;
+    }
+
+    .rav-limit-box p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--parchment-dark);
+    }
+
+    .rav-limit-box strong {
+      color: var(--gold-light);
     }
 
     .courses {
@@ -645,13 +803,19 @@
       to { opacity: 1; }
     }
 
+    @media (max-width: 900px) {
+      .rav-inner { grid-template-columns: 1fr; }
+      .rav-points { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
       .hero { padding: 7rem 1.5rem 4rem; }
-      .pillars, .courses, .about { padding: 4rem 1.5rem; }
+      .pillars, .courses, .about, .rav-section { padding: 4rem 1.5rem; }
       .quote-section { padding: 3.5rem 1.5rem; }
       footer { padding: 2.5rem 1.5rem; }
+      .rav-main, .rav-side { padding: 1.5rem; }
     }
   </style>
 </head>
@@ -665,6 +829,7 @@
     <ul class="nav-links">
       <li><a href="cursos.html">Cursos</a></li>
       <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="rav.html" class="nav-rav-link">Rav HaOhr</a></li>
       <li><a href="sobre.html">Sobre</a></li>
       <li><a href="contato.html">Contato</a></li>
       <li><a href="login.html" class="nav-cta" id="navAccountLink">Entrar</a></li>
@@ -690,6 +855,7 @@
     </p>
     <div class="hero-buttons">
       <a href="cursos.html" class="btn-primary">COMEÇAR A ESTUDAR</a>
+      <a href="rav.html" class="btn-primary btn-rav">PERGUNTAR AO RAV</a>
       <a href="sobre.html" class="btn-secondary">NOSSA MISSÃO</a>
     </div>
     <div class="scroll-hint">
@@ -736,6 +902,76 @@
         <h3>GIYUR</h3>
         <p>Orientação rigorosa e amorosa para aqueles que caminham em direção ao povo judeu.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="rav-section">
+    <div class="section-header">
+      <span class="section-label">Inteligência do Beit Midrash</span>
+      <h2 class="section-title">Rav HaOhr</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="rav-inner">
+      <div class="rav-main">
+        <span class="rav-kicker">Rigor • Torá • Direção</span>
+        <h3 class="rav-title">Converse com o <span>Rav HaOhr</span></h3>
+        <p class="rav-copy">
+          Uma inteligência construída para responder com linguagem judaica autêntica, profundidade de Beit Midrash
+          e seriedade espiritual. Ideal para dúvidas, estudo, reflexão e aprofundamento em temas da Torá.
+        </p>
+
+        <div class="rav-points">
+          <div class="rav-point">
+            <strong>ACESSO ORDENADO</strong>
+            Usuários do plano gratuito terão limite diário de interações.
+          </div>
+          <div class="rav-point">
+            <strong>CONTA ADMIN</strong>
+            Sua conta reconhecida como administrador possui acesso total ao sistema.
+          </div>
+          <div class="rav-point">
+            <strong>ESTUDO COM IDENTIDADE</strong>
+            O Rav HaOhr foi pensado para prender atenção com linguagem forte, sofisticada e judaica.
+          </div>
+          <div class="rav-point">
+            <strong>EVOLUÇÃO FUTURA</strong>
+            Em seguida, o sistema poderá receber memória, streak, ranking e progresso por usuário.
+          </div>
+        </div>
+
+        <div class="rav-actions">
+          <a href="rav.html" class="btn-primary btn-rav">ABRIR O RAV HAOHR</a>
+          <a href="cursos.html" class="btn-secondary">ESTUDAR ANTES</a>
+        </div>
+      </div>
+
+      <aside class="rav-side">
+        <h3>PERGUNTAS QUE PRENDEM</h3>
+        <ul>
+          <li>
+            <small>PERGUNTA 01</small>
+            O que a Torá realmente ensina sobre a missão da alma?
+          </li>
+          <li>
+            <small>PERGUNTA 02</small>
+            Como um Bnei Noach deve organizar sua vida espiritual com seriedade?
+          </li>
+          <li>
+            <small>PERGUNTA 03</small>
+            O que diferencia estudo superficial de verdadeiro crescimento em Torá?
+          </li>
+          <li>
+            <small>PERGUNTA 04</small>
+            Qual é o perigo espiritual de viver sem disciplina e constância?
+          </li>
+        </ul>
+
+        <div class="rav-limit-box">
+          <p><strong>Plano FREE:</strong> até 4 mensagens por dia.</p>
+          <p><strong>Conta Admin:</strong> acesso ilimitado às funcionalidades do Rav.</p>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -836,6 +1072,7 @@
     <div class="footer-links">
       <a href="cursos.html">Cursos</a>
       <a href="quiz.html">Quiz</a>
+      <a href="rav.html">Rav HaOhr</a>
       <a href="sobre.html">Sobre</a>
       <a href="contato.html">Contato</a>
       <a href="login.html" id="footerAccountLink">Entrar</a>
