@@ -1536,6 +1536,16 @@ Lembre-se: você não é um chatbot comum. Você é o Rav HaOhr — e cada palav
   }
 </script>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    document.getElementById('accessGate').style.display = 'none';
+  }
+});
+</script>
+
 </body>
 
 </html>
