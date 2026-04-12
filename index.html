@@ -923,20 +923,20 @@
 
         <div class="rav-points">
           <div class="rav-point">
-            <strong>ACESSO ORDENADO</strong>
-            Usuários do plano gratuito terão limite diário de interações.
+            <strong>ESTUDO COM DIREÇÃO</strong>
+            O Rav HaOhr foi pensado para orientar com linguagem judaica, profundidade e seriedade espiritual.
           </div>
           <div class="rav-point">
-            <strong>CONTA ADMIN</strong>
-            Sua conta reconhecida como administrador possui acesso total ao sistema.
+            <strong>ACESSO ORGANIZADO</strong>
+            A experiência do Rav foi estruturada para estudo guiado, perguntas sinceras e crescimento real.
           </div>
           <div class="rav-point">
-            <strong>ESTUDO COM IDENTIDADE</strong>
-            O Rav HaOhr foi pensado para prender atenção com linguagem forte, sofisticada e judaica.
+            <strong>IDENTIDADE FORTE</strong>
+            O Rav HaOhr foi construído para prender atenção com linguagem forte, sofisticada e profundamente judaica.
           </div>
           <div class="rav-point">
-            <strong>EVOLUÇÃO FUTURA</strong>
-            Em seguida, o sistema poderá receber memória, streak, ranking e progresso por usuário.
+            <strong>EVOLUÇÃO CONTÍNUA</strong>
+            O sistema seguirá recebendo melhorias, novos recursos de estudo e expansão de conteúdo.
           </div>
         </div>
 
@@ -968,8 +968,8 @@
         </ul>
 
         <div class="rav-limit-box">
-          <p><strong>Plano FREE:</strong> até 4 mensagens por dia.</p>
-          <p><strong>Conta Admin:</strong> acesso ilimitado às funcionalidades do Rav.</p>
+          <p><strong>Acesso do aluno:</strong> estudo guiado, perguntas e aprofundamento com identidade judaica.</p>
+          <p><strong>Ambiente protegido:</strong> recursos internos e acessos especiais aparecem apenas para a conta autorizada.</p>
         </div>
       </aside>
     </div>
@@ -1127,11 +1127,9 @@
       const email = (user.email || "").toLowerCase();
       const isAdmin = email === ADMIN_EMAIL.toLowerCase();
 
-      if (isAdmin) {
-        updateAccountLinks("Admin", "perfil.html");
-      } else {
-        updateAccountLinks("Perfil", "perfil.html");
-      }
+      // Na página pública inicial, o rótulo visível permanece neutro para qualquer conta.
+      // Recursos exclusivos de administrador devem aparecer apenas dentro das áreas internas protegidas.
+      updateAccountLinks("Perfil", "perfil.html");
     });
   </script>
 </body>
