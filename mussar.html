@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mussar — Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- ============================================================
+       CSS — BLOCOS
+       1. Variáveis e Reset
+       2. Nav
+       3. Hero
+       4. Barra de Progresso
+       5. Tabs e Painéis
+       6. Seletor de Nível
+       7. Cards de Ensinamento
+       8. Modal
+       9. Quiz
+       10. Animações
+       11. Footer / Responsivo
+  ============================================================ -->
+  <style>
+
+    /* ── 1. VARIÁVEIS E RESET ─────────────────────────────── */
+    :root {
+      --gold:           #C8A84B;
+      --gold-light:     #E8CC7A;
+      --gold-dim:       #8A6F2E;
+      --gold-faint:     rgba(200,168,75,0.07);
+      --gold-border:    rgba(200,168,75,0.25);
+      --gold-border-hi: rgba(200,168,75,0.50);
+      --parchment:      #F5EDD6;
+      --parchment-mid:  #E8D9B5;
+      --ink:            #1A1208;
+      --deep:           #0D0A04;
+      --deep2:          #110D05;
+      --correct:        #4CAF50;
+      --wrong:          #E53935;
+      --correct-bg:     rgba(76,175,80,0.10);
+      --wrong-bg:       rgba(229,57,53,0.10);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--parchment);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.6;
+    }
+
+    /* ── 2. NAV ───────────────────────────────────────────── */
+    .ohr-nav {
+      position: fixed; top:0; left:0; right:0; z-index: 300;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      background: linear-gradient(180deg, rgba(13,10,4,0.98) 0%, rgba(13,10,4,0.88) 100%);
+      border-bottom: 1px solid var(--gold-border);
+      backdrop-filter: blur(14px);
+    }
+    .ohr-nav__logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+    .ohr-nav__logo-heb  { font-family:'Frank Ruhl Libre',serif; font-size:1.6rem; color:var(--gold); line-height:1; }
+    .ohr-nav__logo-name { font-family:'Cinzel',serif; font-size:.95rem; letter-spacing:.15em; color:var(--parchment); font-weight:600; }
+    .ohr-nav__links { display:flex; align-items:center; gap:1.5rem; }
+    .ohr-nav__link {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.12em;
+      color:var(--parchment-mid); text-decoration:none;
+      transition:color .3s; position:relative;
+    }
+    .ohr-nav__link::after {
+      content:''; position:absolute; bottom:-3px; left:0;
+      width:0; height:1px; background:var(--gold); transition:width .3s;
+    }
+    .ohr-nav__link:hover { color:var(--gold-light); }
+    .ohr-nav__link:hover::after { width:100%; }
+    .ohr-nav__link--rav { color:var(--gold-light) !important; }
+    .ohr-nav__back {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.12em;
+      color:var(--gold-light); text-decoration:none;
+      border:1px solid var(--gold-border-hi); padding:.45rem 1.2rem;
+      transition:all .3s;
+    }
+    .ohr-nav__back:hover { background:var(--gold-faint); }
+
+    /* ── 3. HERO ──────────────────────────────────────────── */
+    .ohr-hero {
+      min-height: 40vh;
+      display: flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align: center; padding: 8rem 2rem 3.5rem;
+      position: relative; overflow:hidden;
+    }
+    .ohr-hero__bg {
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(200,168,75,0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 35% at 80% 80%, rgba(200,168,75,0.04) 0%, transparent 60%);
+    }
+    .ohr-hero__float {
+      position:absolute; top:10%;
+      font-family:'Frank Ruhl Libre',serif;
+      font-size:clamp(4rem,12vw,9rem);
+      color:var(--gold); opacity:.05; letter-spacing:.3em;
+      user-select:none; pointer-events:none;
+      animation: hero-breathe 8s ease-in-out infinite;
+    }
+    .ohr-hero__content { position:relative; z-index:1; }
+    .ohr-hero__label {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.3em;
+      color:var(--gold-dim); text-transform:uppercase; margin-bottom:.9rem;
+      animation: anim-fadedown .8s ease both;
+    }
+    .ohr-hero__title {
+      font-family:'Cinzel',serif; font-size:clamp(2.2rem,5vw,4rem);
+      font-weight:700; color:var(--parchment); letter-spacing:.08em; line-height:1.1;
+      animation: anim-fadedown .8s .1s ease both;
+    }
+    .ohr-hero__title span { color:var(--gold); display:block; }
+    .ohr-hero__line {
+      width:100px; height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      margin:1.5rem auto; animation:anim-fadein .8s .3s ease both;
+    }
+    .ohr-hero__desc {
+      font-style:italic; color:var(--parchment-mid); opacity:.85;
+      max-width:560px; font-size:1.05rem; margin:0 auto;
+      animation: anim-fadedown .8s .4s ease both;
+    }
+
+    /* ── 4. BARRA DE PROGRESSO ─────────────────────────────── */
+    .ohr-progress {
+      position: sticky; top:72px; z-index: 200;
+      background: rgba(13,10,4,0.97);
+      border-top:1px solid var(--gold-border); border-bottom:1px solid var(--gold-border);
+      backdrop-filter: blur(10px);
+      padding: .8rem 3rem;
+      display: flex; align-items:center; gap:2.5rem; flex-wrap:wrap;
+    }
+    .ohr-progress__item { display:flex; flex-direction:column; gap:.1rem; }
+    .ohr-progress__label {
+      font-family:'Cinzel',serif; font-size:.60rem; letter-spacing:.2em;
+      color:var(--gold-dim); text-transform:uppercase;
+    }
+    .ohr-progress__value {
+      font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700; color:var(--gold-light);
+    }
+    .ohr-progress__bar-wrap { flex:1; min-width:140px; }
+    .ohr-progress__bar-bg   { height:3px; background:rgba(200,168,75,0.12); border-radius:2px; }
+    .ohr-progress__bar-fill {
+      height:3px;
+      background:linear-gradient(90deg, var(--gold-dim), var(--gold-light));
+      border-radius:2px; width:0%;
+      transition: width .7s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── 5. TABS E PAINÉIS ─────────────────────────────────── */
+    .ohr-main { max-width:1120px; margin:0 auto; padding:3rem 2rem 4rem; position:relative; z-index:1; }
+
+    .ohr-tabs {
+      display:flex; gap:.4rem; flex-wrap:wrap;
+      border-bottom:1px solid var(--gold-border); margin-bottom:2.5rem;
+    }
+    .ohr-tab {
+      font-family:'Cinzel',serif; font-size:.70rem; letter-spacing:.14em;
+      text-transform:uppercase; padding:.65rem 1.5rem;
+      background:transparent; border:none; cursor:pointer;
+      color:var(--parchment-mid);
+      position:relative; margin-bottom:-1px; transition:color .3s;
+    }
+    .ohr-tab::after {
+      content:''; position:absolute; bottom:-1px; left:0; right:0;
+      height:2px; background:var(--gold);
+      transform:scaleX(0); transition:transform .3s;
+    }
+    .ohr-tab:hover { color:var(--gold-light); }
+    .ohr-tab.is-active { color:var(--gold); }
+    .ohr-tab.is-active::after { transform:scaleX(1); }
+
+    .ohr-panel { display:none; }
+    .ohr-panel.is-active { display:block; animation:anim-fadein .35s ease; }
+
+    /* ── 6. SELETOR DE NÍVEL ───────────────────────────────── */
+    .mussar-level-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+      gap:1rem; margin-bottom:2.5rem;
+    }
+    .mussar-level-card {
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.75);
+      padding:1.3rem 1.4rem; cursor:pointer;
+      transition:all .3s; position:relative; overflow:hidden;
+    }
+    .mussar-level-card::before {
+      content:''; position:absolute; inset:0;
+      background:var(--gold); opacity:0; transition:opacity .3s;
+    }
+    .mussar-level-card:hover::before,
+    .mussar-level-card.is-active::before { opacity:.06; }
+    .mussar-level-card.is-active { border-color:var(--gold); }
+    .mussar-level-card__num {
+      font-family:'Frank Ruhl Libre',serif; font-size:2rem; line-height:1;
+      color:var(--gold); opacity:.7; margin-bottom:.4rem;
+    }
+    .mussar-level-card__title {
+      font-family:'Cinzel',serif; font-size:.70rem; letter-spacing:.11em;
+      color:var(--parchment); font-weight:600;
+    }
+    .mussar-level-card__range {
+      font-size:.78rem; color:var(--parchment-mid); opacity:.55; margin-top:.25rem;
+    }
+    .mussar-level-card__badge {
+      position:absolute; top:.7rem; right:.8rem;
+      font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.1em;
+      color:var(--gold); opacity:0; transition:opacity .3s;
+    }
+    .mussar-level-card.is-complete .mussar-level-card__badge { opacity:1; }
+
+    /* ── 7. CARDS DE ENSINAMENTO ───────────────────────────── */
+    .mussar-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(310px,1fr));
+      gap:1.2rem;
+    }
+    .mussar-card {
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.82);
+      padding:1.5rem 1.6rem;
+      cursor:pointer; position:relative; overflow:hidden;
+      transition:border-color .3s, transform .3s;
+    }
+    .mussar-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      transform:scaleX(0); transition:transform .4s;
+    }
+    .mussar-card:hover { border-color:var(--gold-border-hi); transform:translateY(-2px); }
+    .mussar-card:hover::before { transform:scaleX(1); }
+    .mussar-card.is-read { border-color:rgba(200,168,75,0.38); }
+
+    .mussar-card__header {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:1rem; margin-bottom:.7rem;
+    }
+    .mussar-card__num {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.15em;
+      color:var(--gold-dim); flex-shrink:0;
+    }
+    .mussar-card__tag {
+      font-family:'Cinzel',serif; font-size:.60rem; letter-spacing:.1em;
+      padding:.18rem .65rem; border:1px solid var(--gold-border);
+      color:var(--parchment-mid); opacity:.7;
+    }
+    .mussar-card__heb {
+      font-family:'Frank Ruhl Libre',serif; font-size:1.05rem;
+      color:var(--gold-light); text-align:right;
+      line-height:1.4; margin-bottom:.45rem;
+    }
+    .mussar-card__title {
+      font-family:'Cinzel',serif; font-size:.88rem; letter-spacing:.04em;
+      color:var(--parchment); font-weight:600; margin-bottom:.5rem;
+    }
+    .mussar-card__body {
+      font-size:.88rem; color:var(--parchment-mid);
+      opacity:.82; line-height:1.6;
+    }
+    .mussar-card__source {
+      margin-top:.75rem; font-size:.75rem; font-style:italic;
+      color:var(--gold-dim); border-top:1px solid var(--gold-border); padding-top:.55rem;
+    }
+    .mussar-card__read {
+      position:absolute; bottom:.7rem; right:.8rem;
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em;
+      color:var(--gold); opacity:0; transition:opacity .3s;
+    }
+    .mussar-card.is-read .mussar-card__read { opacity:.75; }
+
+    /* ── 8. MODAL ─────────────────────────────────────────── */
+    .mussar-modal {
+      position:fixed; inset:0; z-index:500;
+      background:rgba(13,10,4,0.93);
+      display:none; align-items:center; justify-content:center;
+      padding:2rem; backdrop-filter:blur(5px);
+    }
+    .mussar-modal.is-open { display:flex; animation:anim-fadein .3s ease; }
+    .mussar-modal__box {
+      background:var(--deep2); border:1px solid var(--gold-border-hi);
+      max-width:680px; width:100%; max-height:88vh; overflow-y:auto;
+      padding:2.4rem; position:relative;
+      animation:anim-fadeup .3s ease;
+    }
+    .mussar-modal__box::-webkit-scrollbar { width:3px; }
+    .mussar-modal__box::-webkit-scrollbar-thumb { background:var(--gold-dim); }
+
+    .mussar-modal__close {
+      position:absolute; top:1rem; right:1.2rem;
+      background:none; border:none; color:var(--parchment-mid);
+      font-size:1.3rem; cursor:pointer; opacity:.55; transition:opacity .3s;
+    }
+    .mussar-modal__close:hover { opacity:1; }
+    .mussar-modal__meta {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.2em;
+      color:var(--gold-dim); margin-bottom:.5rem;
+    }
+    .mussar-modal__heb {
+      font-family:'Frank Ruhl Libre',serif; font-size:1.6rem;
+      color:var(--gold-light); text-align:right; line-height:1.4; margin-bottom:.7rem;
+    }
+    .mussar-modal__title {
+      font-family:'Cinzel',serif; font-size:1.25rem;
+      color:var(--parchment); font-weight:700; margin-bottom:1rem;
+    }
+    .mussar-modal__divider {
+      height:1px;
+      background:linear-gradient(90deg,var(--gold),rgba(200,168,75,0.1));
+      margin:1rem 0;
+    }
+    .mussar-modal__text {
+      font-size:1rem; color:var(--parchment-mid); line-height:1.85; margin-bottom:.9rem;
+    }
+    /* Bloco de reflexão — exclusivo do Mussar */
+    .mussar-modal__reflection {
+      background:rgba(200,168,75,0.07);
+      border-left:2px solid var(--gold);
+      padding:.9rem 1.1rem; margin:1rem 0;
+      font-size:.93rem; color:var(--parchment-mid); line-height:1.7;
+      font-style:italic;
+    }
+    .mussar-modal__reflection strong {
+      font-family:'Cinzel',serif; font-size:.66rem; letter-spacing:.12em;
+      color:var(--gold-dim); display:block; margin-bottom:.35rem; font-style:normal;
+    }
+    /* Exercício prático */
+    .mussar-modal__exercise {
+      background:rgba(200,168,75,0.04);
+      border:1px solid var(--gold-border);
+      padding:.9rem 1.1rem; margin:1rem 0;
+      font-size:.92rem; color:var(--parchment-mid); line-height:1.7;
+    }
+    .mussar-modal__exercise strong {
+      font-family:'Cinzel',serif; font-size:.66rem; letter-spacing:.12em;
+      color:var(--gold-dim); display:block; margin-bottom:.35rem;
+    }
+    .mussar-modal__source {
+      font-size:.80rem; font-style:italic; color:var(--gold-dim); margin-top:.9rem;
+    }
+    .mussar-modal__actions {
+      display:flex; gap:.9rem; margin-top:1.6rem; flex-wrap:wrap;
+    }
+
+    /* Botões */
+    .btn-primary {
+      font-family:'Cinzel',serif; font-size:.70rem; letter-spacing:.12em;
+      padding:.6rem 1.5rem; background:var(--gold); color:var(--ink);
+      border:none; cursor:pointer; transition:all .3s; text-decoration:none;
+      display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-primary:hover { background:var(--gold-light); transform:translateY(-1px); }
+    .btn-secondary {
+      font-family:'Cinzel',serif; font-size:.70rem; letter-spacing:.12em;
+      padding:.6rem 1.5rem; background:transparent; color:var(--gold-light);
+      border:1px solid var(--gold-border-hi); cursor:pointer; transition:all .3s;
+      text-decoration:none; display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-secondary:hover { background:var(--gold-faint); }
+
+    /* ── 9. QUIZ ──────────────────────────────────────────── */
+    .mussar-quiz { max-width:680px; margin:0 auto; }
+
+    .mussar-quiz__header {
+      text-align:center; padding:2.4rem 2rem;
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.8); margin-bottom:1.8rem;
+      position:relative; overflow:hidden;
+    }
+    .mussar-quiz__header::before {
+      content:'מוּסָר'; position:absolute;
+      font-family:'Frank Ruhl Libre',serif; font-size:5rem;
+      color:var(--gold); opacity:.04;
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      pointer-events:none; user-select:none;
+    }
+    .mussar-quiz__header-title {
+      font-family:'Cinzel',serif; font-size:1.4rem;
+      color:var(--parchment); font-weight:700; margin-bottom:.4rem;
+    }
+    .mussar-quiz__header-sub {
+      font-style:italic; color:var(--parchment-mid); opacity:.8; font-size:.95rem;
+    }
+    .mussar-quiz__stats {
+      display:flex; gap:2rem; justify-content:center; margin-top:1.4rem; flex-wrap:wrap;
+    }
+    .mussar-quiz__stat { text-align:center; }
+    .mussar-quiz__stat-val {
+      font-family:'Cinzel',serif; font-size:1.35rem; color:var(--gold); font-weight:700; display:block;
+    }
+    .mussar-quiz__stat-lbl {
+      font-family:'Cinzel',serif; font-size:.60rem; letter-spacing:.1em;
+      color:var(--parchment-mid); opacity:.6;
+    }
+    .mussar-quiz__filters {
+      display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin-bottom:1.4rem;
+    }
+    .mussar-quiz__filter {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em;
+      padding:.38rem 1rem; background:transparent;
+      border:1px solid var(--gold-border); color:var(--parchment-mid);
+      cursor:pointer; transition:all .3s;
+    }
+    .mussar-quiz__filter:hover,
+    .mussar-quiz__filter.is-active { border-color:var(--gold); color:var(--gold); }
+
+    .mussar-quiz__question-wrap { animation:anim-fadeup .35s ease; }
+    .mussar-quiz__progress-dots { display:flex; gap:.3rem; flex-wrap:wrap; margin-bottom:1.4rem; }
+    .mussar-quiz__dot { width:8px; height:8px; border-radius:50%; background:var(--gold-border); transition:all .3s; }
+    .mussar-quiz__dot.is-correct { background:var(--correct); }
+    .mussar-quiz__dot.is-wrong   { background:var(--wrong); }
+    .mussar-quiz__dot.is-current { background:var(--gold); animation:dot-pulse 1s infinite; }
+
+    .mussar-quiz__q-label {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.2em;
+      color:var(--gold-dim); margin-bottom:.4rem;
+    }
+    .mussar-quiz__q-text {
+      font-family:'EB Garamond',serif; font-size:1.2rem;
+      color:var(--parchment); line-height:1.65;
+      border-left:2px solid var(--gold); padding-left:1rem;
+      margin-bottom:1.4rem;
+    }
+    .mussar-quiz__options { display:flex; flex-direction:column; gap:.7rem; margin-bottom:1.3rem; }
+    .mussar-quiz__option {
+      padding:.9rem 1.2rem; border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.8); cursor:pointer; transition:all .3s;
+      display:flex; align-items:center; gap:1rem;
+      font-size:.93rem; color:var(--parchment-mid);
+    }
+    .mussar-quiz__option:hover { border-color:var(--gold-border-hi); background:var(--gold-faint); }
+    .mussar-quiz__option.is-correct { border-color:var(--correct); background:var(--correct-bg); color:#a5d6a7; }
+    .mussar-quiz__option.is-wrong   { border-color:var(--wrong);   background:var(--wrong-bg);   color:#ef9a9a; }
+    .mussar-quiz__option-letter {
+      font-family:'Cinzel',serif; font-size:.72rem; min-width:22px; height:22px;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid var(--gold-border); color:var(--gold-dim); flex-shrink:0;
+    }
+    .mussar-quiz__feedback {
+      padding:.9rem 1.1rem; margin-bottom:.9rem;
+      border-left:3px solid var(--gold); background:var(--gold-faint);
+      font-size:.92rem; line-height:1.65; color:var(--parchment-mid); display:none;
+    }
+    .mussar-quiz__feedback.is-shown { display:block; animation:anim-fadein .3s ease; }
+    .mussar-quiz__result {
+      text-align:center; padding:2.5rem;
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.85);
+      animation:anim-fadein .5s ease;
+    }
+    .mussar-quiz__result-icon  { font-size:2.8rem; margin-bottom:.8rem; }
+    .mussar-quiz__result-score { font-family:'Cinzel',serif; font-size:2.4rem; color:var(--gold); font-weight:700; }
+    .mussar-quiz__result-pct   { color:var(--parchment-mid); opacity:.75; margin-top:.3rem; font-size:.95rem; }
+    .mussar-quiz__result-msg   { font-style:italic; color:var(--gold-light); margin:1rem auto; max-width:420px; font-size:1rem; }
+
+    /* ── 10. ANIMAÇÕES ────────────────────────────────────── */
+    @keyframes hero-breathe {
+      0%,100% { opacity:.04; transform:scale(1); }
+      50%      { opacity:.09; transform:scale(1.02); }
+    }
+    @keyframes anim-fadein   { from{opacity:0;} to{opacity:1;} }
+    @keyframes anim-fadedown { from{opacity:0;transform:translateY(-14px);} to{opacity:1;transform:none;} }
+    @keyframes anim-fadeup   { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:none;} }
+    @keyframes dot-pulse     { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+    /* ── 11. FOOTER / RESPONSIVO ──────────────────────────── */
+    .ohr-footer {
+      border-top:1px solid var(--gold-border);
+      padding:2rem 3rem; text-align:center;
+      position:relative; z-index:1; margin-top:5rem;
+    }
+    .ohr-footer__copy {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.08em;
+      color:var(--parchment-mid); opacity:.38;
+    }
+
+    @media(max-width:768px) {
+      .ohr-nav  { padding:1rem 1.5rem; }
+      .ohr-nav__links { display:none; }
+      .ohr-progress { padding:.7rem 1.5rem; gap:1rem; }
+      .ohr-main { padding:2rem 1rem 3rem; }
+      .mussar-grid { grid-template-columns:1fr; }
+      .mussar-modal__box { padding:1.5rem; }
+      .mussar-quiz { max-width:100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HTML — ESTRUTURA
+============================================================ -->
+
+<!-- NAV -->
+<nav class="ohr-nav">
+  <a href="index.html" class="ohr-nav__logo">
+    <span class="ohr-nav__logo-heb">אוֹר</span>
+    <span class="ohr-nav__logo-name">OHR BEIT MIDRASH</span>
+  </a>
+  <div class="ohr-nav__links">
+    <a href="torah.html"      class="ohr-nav__link">Torá</a>
+    <a href="halacha.html"    class="ohr-nav__link">Halachá</a>
+    <a href="bnei-noach.html" class="ohr-nav__link">Bnei Noach</a>
+    <a href="giyur.html"      class="ohr-nav__link">Giyur</a>
+    <a href="rav.html"        class="ohr-nav__link ohr-nav__link--rav">✦ Rav HaOhr</a>
+  </div>
+  <a href="index.html" class="ohr-nav__back">← INÍCIO</a>
+</nav>
+
+<!-- HERO -->
+<section class="ohr-hero">
+  <div class="ohr-hero__bg"></div>
+  <div class="ohr-hero__float">מוּסָר</div>
+  <div class="ohr-hero__content">
+    <div class="ohr-hero__label">Ohr Beit Midrash · Módulo III</div>
+    <h1 class="ohr-hero__title">Estudo do<span>Mussar</span></h1>
+    <div class="ohr-hero__line"></div>
+    <p class="ohr-hero__desc">"A pessoa só se encontra quando para de fugir de si mesma." — Rav Yisrael Salanter</p>
+  </div>
+</section>
+
+<!-- BARRA DE PROGRESSO -->
+<div class="ohr-progress">
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">Ensinamentos Lidos</span>
+    <span class="ohr-progress__value" id="mussar-read-count">0 / 100</span>
+  </div>
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">Pontos</span>
+    <span class="ohr-progress__value" id="mussar-points">0</span>
+  </div>
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">Nível</span>
+    <span class="ohr-progress__value" id="mussar-level-title">Talmid</span>
+  </div>
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">🔥 Sequência</span>
+    <span class="ohr-progress__value" id="mussar-streak">0 dias</span>
+  </div>
+  <div class="ohr-progress__bar-wrap">
+    <div class="ohr-progress__label" style="margin-bottom:.28rem;">Progresso Geral</div>
+    <div class="ohr-progress__bar-bg">
+      <div class="ohr-progress__bar-fill" id="mussar-bar-fill"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<main class="ohr-main">
+
+  <!-- ABAS -->
+  <div class="ohr-tabs">
+    <button class="ohr-tab is-active" id="mussar-tab-study" onclick="UI.switchTab('study')">📖 ESTUDO</button>
+    <button class="ohr-tab"           id="mussar-tab-quiz"  onclick="UI.switchTab('quiz')">✦ QUIZ</button>
+  </div>
+
+  <!-- PAINEL: ESTUDO -->
+  <div class="ohr-panel is-active" id="mussar-panel-study">
+    <div class="mussar-level-grid" id="mussar-level-selector"></div>
+    <div class="mussar-grid"       id="mussar-grid"></div>
+  </div>
+
+  <!-- PAINEL: QUIZ -->
+  <div class="ohr-panel" id="mussar-panel-quiz">
+    <div class="mussar-quiz">
+      <div id="mussar-quiz-home">
+        <div class="mussar-quiz__header">
+          <div class="mussar-quiz__header-title">Quiz de Mussar</div>
+          <div class="mussar-quiz__header-sub">Teste seu conhecimento da Ética Judaica</div>
+          <div class="mussar-quiz__stats">
+            <div class="mussar-quiz__stat">
+              <span class="mussar-quiz__stat-val" id="mussar-quiz-total">0</span>
+              <span class="mussar-quiz__stat-lbl">REALIZADOS</span>
+            </div>
+            <div class="mussar-quiz__stat">
+              <span class="mussar-quiz__stat-val" id="mussar-quiz-best">—</span>
+              <span class="mussar-quiz__stat-lbl">MELHOR QUIZ</span>
+            </div>
+            <div class="mussar-quiz__stat">
+              <span class="mussar-quiz__stat-val" id="mussar-quiz-avg">—</span>
+              <span class="mussar-quiz__stat-lbl">MÉDIA GERAL</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-bottom:1.2rem;">
+          <div style="font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.18em;color:var(--gold-dim);margin-bottom:.7rem;">FILTRAR POR NÍVEL</div>
+          <div class="mussar-quiz__filters">
+            <button class="mussar-quiz__filter is-active" data-level="0" onclick="Quiz.setLevel(0,this)">TODOS</button>
+            <button class="mussar-quiz__filter" data-level="1" onclick="Quiz.setLevel(1,this)">NÍVEL 1</button>
+            <button class="mussar-quiz__filter" data-level="2" onclick="Quiz.setLevel(2,this)">NÍVEL 2</button>
+            <button class="mussar-quiz__filter" data-level="3" onclick="Quiz.setLevel(3,this)">NÍVEL 3</button>
+            <button class="mussar-quiz__filter" data-level="4" onclick="Quiz.setLevel(4,this)">NÍVEL 4</button>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <button class="btn-primary" onclick="Quiz.start()" style="font-size:.78rem;padding:.85rem 2.4rem;">
+            INICIAR QUIZ — 10 QUESTÕES
+          </button>
+        </div>
+      </div>
+      <div id="mussar-quiz-play"   style="display:none;"></div>
+      <div id="mussar-quiz-result" style="display:none;"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="mussar-modal" id="mussar-modal" onclick="Modal.closeOutside(event)">
+  <div class="mussar-modal__box">
+    <button class="mussar-modal__close" onclick="Modal.close()">✕</button>
+    <div id="mussar-modal-content"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="ohr-footer">
+  <p class="ohr-footer__copy">© 2025 OHR BEIT MIDRASH — לשם שמים · Construído com amor por Yisrael Yehuda</p>
+</footer>
+
+
+<!-- ============================================================
+     SCRIPTS
+     1. Firebase init
+     2. Dados (ensinamentos + quiz)
+     3. AppState
+     4. FireSync
+     5. Progress
+     6. UI
+     7. Modal
+     8. Quiz
+     9. Init
+============================================================ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── 1. FIREBASE INIT ─────────────────────────────────── */
+  const FB_CONFIG = {
+    apiKey:            "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
+    authDomain:        "ohr-beit-midrash.firebaseapp.com",
+    projectId:         "ohr-beit-midrash",
+    storageBucket:     "ohr-beit-midrash.firebasestorage.app",
+    messagingSenderId: "173478100834",
+    appId:             "1:173478100824:web:56e32e06f300bf28ccef2d"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+  const db   = firebase.firestore();
+  const auth = firebase.auth();
+
+  /* ── 2. DADOS — ENSINAMENTOS ──────────────────────────── */
+  /*
+   * Estrutura de cada ensinamento:
+   *   id:         "mussar-01" … "mussar-100"
+   *   level:      1 | 2 | 3 | 4
+   *   tag:        categoria (midá trabalhada)
+   *   heb:        texto hebraico
+   *   title:      título em português
+   *   body:       ensinamento principal
+   *   reflection: frase para meditação / cheshbon hanefesh
+   *   exercise:   prática concreta para o dia
+   *   source:     obra e autor
+   */
+  const TEACHINGS = [
+
+    /* ── NÍVEL 1: AS MIDOT FUNDAMENTAIS (01–25) ── */
+    {
+      id:"mussar-01", level:1, tag:"HUMILDADE",
+      heb:"הֱוֵי שְׁפַל רוּחַ בִּפְנֵי כָל אָדָם",
+      title:"Anavá: Seja Humilde Diante de Todo Ser Humano",
+      body:"O Mussar começa onde o ego termina. Pirkei Avot ordena: 'Seja de espírito baixo diante de todo ser humano.' A Anavá — humildade — não é a negação do próprio valor, mas o reconhecimento de que todo ser humano foi criado à imagem de HaShem e, portanto, merece respeito incondicional.",
+      reflection:"'Um homem aprende de si mesmo apenas quando para de defender quem ele acha que é.' — Rav Simcha Zissel Ziv",
+      exercise:"Hoje, ao encontrar alguém que normalmente considera inferior a você em algum aspecto, procure conscientemente uma qualidade nessa pessoa que você não possui.",
+      source:"Pirkei Avot 4:10 · Orchot Tzadikim, Shaar HaAnavah"
+    },
+    {
+      id:"mussar-02", level:1, tag:"EMET",
+      heb:"אֱמֶת קְנֵה וְאַל תִּמְכֹּר",
+      title:"Emet: Compra a Verdade e Não a Venda",
+      body:"A verdade é o único ativo que, quando dado, não se perde — pelo contrário, aumenta. O Mussar ensina que a pessoa que vive em Emet (verdade) não precisa lembrar o que disse, não teme ser descoberta, e caminha com leveza. A mentira, mesmo pequena, cria uma segunda realidade que exige energia constante para manter.",
+      reflection:"'O selo de HaShem é Emet. Quem mente, está selando sua alma com o oposto do Divino.' — Talmud, Shabat 55a",
+      exercise:"Por 24 horas, antes de falar, pergunte a si mesmo: 'Isto é completamente verdadeiro?' Se não for, silencie ou corrija.",
+      source:"Mishlei 23:23 · Messilat Yesharim, cap. 11"
+    },
+    {
+      id:"mussar-03", level:1, tag:"BITACHON",
+      heb:"בְּטַח בַּיהוָה בְּכָל לִבֶּךָ",
+      title:"Bitachon: Confiar em HaShem com Todo o Coração",
+      body:"Bitachon não é passividade — é a convicção ativa de que HaShem cuida de cada detalhe da vida. O Chovot HaLevavot ensina que Bitachon real liberta o ser humano da ansiedade paralisante, pois quem confia genuinamente age com serenidade e deixa o resultado a HaShem.",
+      reflection:"'O homem que tem Bitachon verdadeiro não acorda mais cedo por dinheiro, nem fica acordado à noite por medo.' — Chovot HaLevavot, Shaar HaBitachon",
+      exercise:"Identifique uma preocupação que está carregando. Escreva-a num papel. Abaixo escreva: 'Fiz meu esforço. O restante pertence a HaShem.' Releia toda manhã desta semana.",
+      source:"Mishlei 3:5 · Chovot HaLevavot, Shaar HaBitachon"
+    },
+    {
+      id:"mussar-04", level:1, tag:"SAVLANUT",
+      heb:"טוֹב אֶרֶךְ אַפַּיִם מִגִּבּוֹר",
+      title:"Savlanut: A Paciência é Mais Forte que a Força",
+      body:"'Melhor o paciente que o herói, e aquele que domina seu espírito do que aquele que conquista uma cidade.' A Savlanut (paciência) é uma das midot mais difíceis de cultivar porque o mundo moderno recompensa a reatividade imediata. O Mussar ensina que cada momento de paciência é uma vitória espiritual maior que qualquer conquista externa.",
+      reflection:"'A pessoa que explode com facilidade revela que está vazia por dentro. O vaso cheio não derrama com qualquer solavanco.' — Rav Shlomo Wolbe",
+      exercise:"Hoje, quando sentir irritação surgindo, respire 3 vezes antes de responder. Note o que acontece com a qualidade de sua resposta.",
+      source:"Mishlei 16:32 · Alei Shur, vol. 1"
+    },
+    {
+      id:"mussar-05", level:1, tag:"HAKARAT HATOV",
+      heb:"הַכָּרַת הַטּוֹב",
+      title:"Hakarat HaTov: Reconhecer o Bem Recebido",
+      body:"Hakarat HaTov — reconhecer o bem — é considerado pelo Mussar o fundamento de toda a vida espiritual. Quem não reconhece o bem que os seres humanos lhe fizeram, não reconhecerá o bem que HaShem lhe faz. A ingratidão fecha os olhos da alma.",
+      reflection:"'A primeira pergunta que HaShem fará no Juízo não será 'o que você estudou?' mas 'fizeste seus negócios com fé?' e 'esperaste pela salvação?' — mas gratidão precede tudo.' — Rav Dessler",
+      exercise:"Antes de dormir hoje, escreva o nome de 3 pessoas que lhe fizeram bem esta semana. Amanhã, encontre uma forma de expressar gratidão a pelo menos uma delas.",
+      source:"Orchot Tzadikim, Shaar HaHakarat HaTov · Chovot HaLevavot"
+    },
+    {
+      id:"mussar-06", level:1, tag:"SHMIAT HAÓZEN",
+      heb:"שְׁמִיעַת הָאֹזֶן",
+      title:"Ouvir de Verdade: A Arte do Shmiiat HaOzen",
+      body:"O Mussar distingue entre 'ouvir' (shomea) e 'escutar' (meiven). A maioria das pessoas ouve para responder, não para entender. O verdadeiro ouvinte silencia seu próprio monólogo interno e se abre completamente para a realidade do outro.",
+      reflection:"'Temos duas orelhas e uma boca — para ouvir o dobro do que falamos.' — Ensinamento tradicional do Mussar",
+      exercise:"Numa conversa hoje, comprometa-se a não interromper e a não formular sua resposta enquanto o outro fala. Apenas ouça. Pergunte depois.",
+      source:"Pirkei Avot 2:4 · Rav Shlomo Wolbe, Alei Shur"
+    },
+    {
+      id:"mussar-07", level:1, tag:"DIBBUR",
+      heb:"שִׁמְרוּ פִיכֶם וּלְשׁוֹנְכֶם",
+      title:"Shmirat HaLashon: Guardar a Língua",
+      body:"O Chofetz Chaim ensinou que a língua é o único órgão do corpo que pode causar dano ilimitado sem sair do lugar. Shmirat HaLashon (guardar a língua) não é sobre silêncio — é sobre soberania: falar quando necessário, calar quando prudente.",
+      reflection:"'Palavras são como flechas — uma vez disparadas, não voltam.' — Provérbio do Mussar",
+      exercise:"Hoje, antes de cada conversa, faça mentalmente a pergunta: 'O que quero alcançar com estas palavras?' Não fale sem propósito claro.",
+      source:"Chofetz Chaim, Shmirat HaLashon · Tehilim 34:14"
+    },
+    {
+      id:"mussar-08", level:1, tag:"SIMCHÁ",
+      heb:"עִבְדוּ אֶת יְהוָה בְּשִׂמְחָה",
+      title:"Simchá: A Alegria como Ferramenta Espiritual",
+      body:"O Rav Nachman de Breslov ensinou: 'É uma grande mitzvá estar sempre alegre.' Mas o Mussar é preciso: Simchá não é alegria superficial nem negação da dor. É a escolha de encontrar o ponto de luz em toda situação — de se ancorar na dimensão eterna do ser.",
+      reflection:"'A tristeza não é pecado, mas causa mais danos que qualquer pecado.' — Rav Nachman de Breslov",
+      exercise:"Hoje, ao sentir tristeza ou peso, pergunte: 'Existe algo nesta situação pelo qual posso ser grato?' Escreva ao menos uma coisa.",
+      source:"Tehilim 100:2 · Likutei Moharan II:24"
+    },
+    {
+      id:"mussar-09", level:1, tag:"ZRIZUT",
+      heb:"זְרִיזוּת",
+      title:"Zrizut: A Presteza como Serviço Divino",
+      body:"O Messilat Yesharim dedica um capítulo inteiro à Zrizut — a presteza, o agir com vigor e sem postergação. A procrastinação não é apenas ineficiência: é o Yetzer HaRá usando o tempo como arma. Cada hora adiada é uma hora de serviço a HaShem roubada.",
+      reflection:"'O indolente sempre tem razões. O diligente sempre tem resultados.' — Messilat Yesharim, cap. 7",
+      exercise:"Identifique hoje uma tarefa que tem adiado. Comprometa-se a dar o primeiro passo agora — não amanhã, não depois. Apenas o primeiro passo.",
+      source:"Messilat Yesharim, cap. 6–7 · Rav Moshe Chaim Luzzatto"
+    },
+    {
+      id:"mussar-10", level:1, tag:"KAVOD HABRIOT",
+      heb:"כָּבוֹד הַבְּרִיּוֹת",
+      title:"Cavod HaBriot: A Dignidade de Todo Ser Criado",
+      body:"O Talmud ensina que a dignidade humana (Cavod HaBriot) é tão importante que pode suspender certas proibições rabínicas. O Mussar expande: tratar alguém com descaso é uma forma de negar que ele foi criado à imagem de HaShem.",
+      reflection:"'Quem envergonha outro em público — mesmo com razão — é como se derramasse sangue.' — Bava Metzia 58b",
+      exercise:"Hoje, ao falar de alguém que não está presente, fale apenas o que diria na presença dessa pessoa.",
+      source:"Berachot 19b · Orchot Tzadikim, Shaar HaBushah"
+    },
+    {
+      id:"mussar-11", level:1, tag:"ACHRAYUT",
+      heb:"כָּל יִשְׂרָאֵל עֲרֵבִים זֶה לָזֶה",
+      title:"Achrayut: Responsabilidade pelo Outro",
+      body:"'Todo Israel é responsável um pelo outro.' A responsabilidade coletiva não é fardo — é laço sagrado. O Mussar ensina que a indiferença ao sofrimento alheio é uma deficiência espiritual, não apenas social.",
+      reflection:"'Se eu não sou para mim, quem será? Mas se sou apenas para mim, o que sou?' — Hillel, Pirkei Avot 1:14",
+      exercise:"Hoje, note uma oportunidade de ajudar alguém que normalmente ignoraria por ser 'pequena demais'. Aproveite-a.",
+      source:"Sanhedrin 27b · Pirkei Avot 1:14"
+    },
+    {
+      id:"mussar-12", level:1, tag:"SEDER",
+      heb:"סֵדֶר",
+      title:"Seder: A Ordem como Fundamento Espiritual",
+      body:"O Vilna Gaon e o Mussar de Novardok ensinavam que a vida desordenada é sintoma de confusão interior. Estabelecer Seder — ordem no tempo, nos compromissos, no espaço — não é rigidez, mas respeito pelo dom da vida.",
+      reflection:"'Uma pessoa que não domina seu tempo é dominada por tudo ao redor.' — Rav Yisrael Salanter",
+      exercise:"Esta semana, estabeleça um horário fixo para estudo de Torá — mesmo que seja apenas 15 minutos. Esse é seu ponto fixo de ordem.",
+      source:"Mishlei 6:6 · Rav Yisrael Salanter, Or Yisrael"
+    },
+    {
+      id:"mussar-13", level:1, tag:"HITKONENUT",
+      heb:"הִתְכּוֹנְנוּת",
+      title:"Hitkonenut: A Preparação Antes da Ação",
+      body:"O Mussar ensina que a preparação mental e espiritual antes de qualquer ato é tão importante quanto o ato em si. A Tefilá deve ser precedida por kavana. O estudo por clareza de intenção. A fala por reflexão. Agir sem preparação é como atirar com os olhos fechados.",
+      reflection:"'Aquele que se prepara come. Aquele que não se prepara — o que comerá?' — Mishlei 6:8 (comentário do Vilna Gaon)",
+      exercise:"Antes de uma conversa importante hoje, pare 2 minutos e pergunte: 'Qual é meu objetivo? Que tom quero usar? O que quero que a outra pessoa sinta?'",
+      source:"Orchot Tzadikim, Shaar HaCheshbon · Mishlei 6:8"
+    },
+    {
+      id:"mussar-14", level:1, tag:"YIRAH",
+      heb:"רֵאשִׁית חָכְמָה יִרְאַת יְהוָה",
+      title:"Yirat Shamayim: O Temor dos Céus",
+      body:"O começo de toda sabedoria é o Yirat Shamayim — temor dos Céus. Mas o Mussar é preciso: não é medo de punição, mas reverência diante da grandeza infinita de HaShem. É a postura da alma que sabe que está sempre diante de HaShem.",
+      reflection:"'Saber que você está diante do Rei não te paralisa — te eleva.' — Rav Chaim de Volozhin",
+      exercise:"Esta manhã, ao acordar, passe 1 minuto em silêncio com a consciência: 'Estou diante de HaShem.' Observe como isso muda sua postura no dia.",
+      source:"Tehilim 111:10 · Nefesh HaChaim, Shaar 3"
+    },
+    {
+      id:"mussar-15", level:1, tag:"CHESED",
+      heb:"וְחֶסֶד יְהוָה מֵעוֹלָם וְעַד עוֹלָם",
+      title:"Chessed: Bondade sem Cálculo",
+      body:"O Chessed — bondade — difere da Tzedaká: Tzedaká é dar o que a pessoa merece; Chessed é dar além do merecido, com amor e sem expectativa de retorno. O Mussar ensina que o Chessed é o atributo mais semelhante ao de HaShem.",
+      reflection:"'O mundo foi criado com Chessed. Portanto, quem pratica Chessed está participando da obra da criação.' — Talmud, Sotá 14a",
+      exercise:"Hoje, faça um ato de Chessed que ninguém saberá que foi você. Observe o que acontece com sua sensação interior.",
+      source:"Tehilim 103:17 · Sotá 14a · Orchot Tzadikim, Shaar HaChessed"
+    },
+    {
+      id:"mussar-16", level:1, tag:"KEVOD ATZMO",
+      heb:"אַל תִּבְטַח בְּעַצְמְךָ",
+      title:"Não Confies em Ti Mesmo Até o Dia de Tua Morte",
+      body:"Pirkei Avot adverte: 'Não confies em ti mesmo até o dia de tua morte.' Esta humildade não é fraqueza — é sabedoria. O Mussar ensina que a autoconfiança excessiva fecha a pessoa ao crescimento e à correção.",
+      reflection:"'O homem mais perigoso é aquele que acredita não precisar mais crescer.' — Rav Yisrael Salanter",
+      exercise:"Hoje, identifique uma área da sua vida onde a autoconfiança excessiva pode estar impedindo seu crescimento. Escreva uma linha sobre isso.",
+      source:"Pirkei Avot 2:4 · Or Yisrael, Rav Yisrael Salanter"
+    },
+    {
+      id:"mussar-17", level:1, tag:"ANAVA",
+      heb:"מֹשֶׁה עָנָו מְאֹד",title:"A Humildade de Moshê: O Modelo do Mussar",
+      body:"A Torá testemunha que Moshê era o mais humilde de todos os homens da terra. E Moshê era também o maior líder, o maior profeta, o homem que falou com HaShem 'face a face'. O Mussar ensina: grandeza real e humildade real não se excluem — se complementam.",
+      reflection:"'Humildade não é pensar menos de si. É pensar menos em si.' — C.S. Lewis (citado no Mussar moderno como verdade universal)",
+      exercise:"Hoje, quando receber um elogio, não o deflita com falsidade, mas tampouco se infle com orgulho. Simplesmente receba com gratidão e diga: 'Baruch HaShem.'",
+      source:"Bamidbar 12:3 · Maharal, Tiferet Yisrael"
+    },
+    {
+      id:"mussar-18", level:1, tag:"CHESHBON HANEFESH",
+      heb:"חֶשְׁבּוֹן הַנֶּפֶשׁ",
+      title:"Cheshbon HaNefesh: O Inventário da Alma",
+      body:"O Cheshbon HaNefesh (obra de Rav Menachem Mendel Lefin) propõe uma prática central do Mussar: o inventário diário da alma. Ao final do dia, examine suas ações — não para se destruir, mas para crescer com consciência.",
+      reflection:"'Quem não examina sua vida não a vive. Quem a examina com rigor, mas sem amor, a destrói. O equilíbrio é: examinar com amor.' — Rav Simcha Zissel Ziv",
+      exercise:"Esta noite, reserve 5 minutos antes de dormir. Revise o dia: onde cresceu? Onde pode melhorar? Escreva uma linha sobre cada.",
+      source:"Cheshbon HaNefesh, Rav Menachem Mendel Lefin · Mishlei 4:26"
+    },
+    {
+      id:"mussar-19", level:1, tag:"TZAAR BAALE CHAIM",
+      heb:"צַעַר בַּעֲלֵי חַיִּים",
+      title:"Compaixão aos Animais: Reflexo do Caráter Interior",
+      body:"A proibição de causar sofrimento desnecessário a animais (Tzaar Baale Chaim) revela algo sobre o caráter humano: quem é cruel com seres menores revela crueldade no coração. O Mussar ensina que a compaixão é músculo — quanto mais exercida, mais forte.",
+      reflection:"'O modo como tratamos aqueles que não podem nos prejudicar revela quem realmente somos.' — Rav Shamshon Rafael Hirsch",
+      exercise:"Observe hoje como trata os seres mais vulneráveis ao seu redor — animais, crianças, idosos, funcionários. Que revela sobre você?",
+      source:"Shulchan Aruch, OC 167:1 · Rav S.R. Hirsch, Horeb"
+    },
+    {
+      id:"mussar-20", level:1, tag:"TZNIUT",
+      heb:"הַצְנֵעַ לֶכֶת",
+      title:"Tzniut Interior: A Modéstia da Alma",
+      body:"O Mussar ensina que a verdadeira Tzniut vai muito além da roupa. É a postura da alma que não precisa de aprovação externa, não performa para plateia e não se expõe além do necessário. A pessoa com Tzniut interior age da mesma forma visto ou não visto.",
+      reflection:"'Age sempre como se HaShem estivesse olhando — porque está.' — Shulchan Aruch, OC 1:1",
+      exercise:"Hoje, faça algo bom em segredo — algo que ninguém, absolutamente ninguém, saberá que você fez.",
+      source:"Micha 6:8 · Messilat Yesharim, cap. 19"
+    },
+    {
+      id:"mussar-21", level:1, tag:"TOCHACHA",
+      heb:"הוֹכֵחַ תּוֹכִיחַ אֶת עֲמִיתֶךָ",
+      title:"Toachecha: Repreender com Amor",
+      body:"A mitzvá de repreender (Tochacha) é uma das mais delicadas do Mussar. Repreender sem amor é crueldade disfarçada de virtude. Repreender sem coragem é conivência disfarçada de gentileza. O caminho do Mussar é a repreensão amorosa e privada.",
+      reflection:"'Antes de repreender alguém, verifique se está fazendo isso pelo bem dele ou pelo prazer de ter razão.' — Rav Shlomo Wolbe",
+      exercise:"Se existe alguém a quem você precisa dar um feedback difícil: pense hoje em como fazê-lo com amor genuíno e sem julgamento.",
+      source:"Levítico 19:17 · Alei Shur, vol. 1"
+    },
+    {
+      id:"mussar-22", level:1, tag:"EMUNAH",
+      heb:"וְהַצַּדִּיק בֶּאֱמוּנָתוֹ יִחְיֶה",
+      title:"Emunah Chaya: A Fé Viva que Sustenta a Vida",
+      body:"O Mussar ensina que a Emunah não deve ser apenas crença intelectual — deve ser 'chayá', viva, pulsante, que penetra na carne e no sangue. Uma Emunah que não muda o comportamento é apenas teoria.",
+      reflection:"'A Emunah verdadeira não é o que você diz acreditar. É o que você faz quando ninguém está olhando.' — Rav Yisrael Salanter",
+      exercise:"Identifique um comportamento que você tem quando está sozinho e que seria diferente se sentisse a presença de HaShem. Mude-o hoje.",
+      source:"Havakuk 2:4 · Or Yisrael, Rav Yisrael Salanter"
+    },
+    {
+      id:"mussar-23", level:1, tag:"KAVANA",
+      heb:"כָּל מַעֲשֶׂיךָ יִהְיוּ לְשֵׁם שָׁמַיִם",
+      title:"Lishem Shamayim: Agir pelo Nome dos Céus",
+      body:"'Todos os seus atos sejam para o Nome dos Céus.' O Mussar ensina que a intenção (Kavana) transforma um ato físico comum em serviço divino. Comer, dormir, trabalhar — tudo pode ser Avodá se feito com a intenção correta.",
+      reflection:"'A mesma ação pode ser sagrada ou mundana dependendo apenas da intenção com que é feita.' — Rav Moshe Chaim Luzzatto",
+      exercise:"Escolha hoje uma atividade cotidiana (comer, trabalhar, caminhar) e conscientemente dedique-a 'l'shem Shamayim' — 'pelo Nome dos Céus'. Observe a diferença.",
+      source:"Pirkei Avot 2:12 · Messilat Yesharim, cap. 1"
+    },
+    {
+      id:"mussar-24", level:1, tag:"SHLOM BAYIT",
+      heb:"שָׁלוֹם בַּיִת",
+      title:"Shalom Bayit: A Paz do Lar como Prioridade",
+      body:"O Mussar ensina que o lar é o campo de batalha espiritual mais importante. A pessoa que é gentil na rua e áspera em casa confunde prioridades. A Shechiná habita apenas onde há Shalom — e começa dentro de casa.",
+      reflection:"'Se há paz em seu lar, há paz em sua alma. Se há guerra em seu lar, não há paz em nenhum lugar.' — Rav Shlomo Wolbe",
+      exercise:"Hoje, faça um ato específico de gentileza para alguém do seu lar — não porque é obrigado, mas porque o lar merece o melhor de você.",
+      source:"Shabbat 23b · Alei Shur, vol. 2"
+    },
+    {
+      id:"mussar-25", level:1, tag:"TESHUVÁ",
+      heb:"שׁוּבָה יִשְׂרָאֵל עַד יְהוָה אֱלֹהֶיךָ",
+      title:"Teshuvá: O Retorno é Sempre Possível",
+      body:"O Mussar não pede perfeição — pede honestidade e direção. O Rambam ensina que Teshuvá completa é quando a pessoa se encontra na mesma situação em que antes pecou e desta vez escolhe diferente. Esse é o sinal — e o horizonte.",
+      reflection:"'HaShem não deseja a morte do pecador, mas que ele se volte e viva.' — Ezequiel 33:11",
+      exercise:"Identifique uma área da sua vida onde você caiu repetidamente. Não se julgue. Pergunte apenas: 'Que pequeno passo posso dar hoje na direção certa?'",
+      source:"Hoshea 14:2 · Rambam, Hilchot Teshuvá 2:1"
+    },
+
+    /* ── NÍVEL 2: MIDOT SOCIAIS E RELACIONAIS (26–50) ── */
+    {
+      id:"mussar-26", level:2, tag:"KIBBUD AV",
+      heb:"כַּבֵּד אֶת אָבִיךָ",
+      title:"Honrar os Pais: O Laboratório do Mussar",
+      body:"O Mussar clássico ensina que honrar os pais é o maior teste de Midot porque nenhuma relação exige tanto enquanto oferece tão pouco reconhecimento visível. O pai e a mãe são os primeiros 'outros' — aprender a honrá-los é aprender a se relacionar.",
+      reflection:"'Aquele que honra seus pais honra a HaShem. Aquele que os desonra, mesmo que ore muito, tem algo de podre na raiz.' — Kidushin 30b",
+      exercise:"Faça hoje um ato específico de honra para um dos seus pais — ou se falecidos, para preservar sua memória de forma concreta.",
+      source:"Shemot 20:12 · Kidushin 30b · Orchot Tzadikim"
+    },
+    {
+      id:"mussar-27", level:2, tag:"DAN LECHAF ZCHUT",
+      heb:"הֱוֵי דָן אֶת כָּל הָאָדָם לְכַף זְכוּת",
+      title:"Dan Lechaf Zechut: Julgue o Outro Favoravelmente",
+      body:"'Seja aquele que julga toda pessoa pelo lado favorável.' O Mussar ensina que a tendência de julgar negativamente os outros revela Yetzer HaRá ativo e Anavá insuficiente. Quem se conhece profundamente tende a ter mais compaixão pelos erros alheios.",
+      reflection:"'Antes de julgar alguém, caminhe uma milha nos sapatos dele.' — Ensinamento universal adotado pelo Mussar",
+      exercise:"Hoje, quando notar que está julgando alguém negativamente, pare e formule conscientemente 3 possíveis explicações favoráveis para o comportamento dessa pessoa.",
+      source:"Pirkei Avot 1:6 · Orchot Tzadikim, Shaar HaCheshbon"
+    },
+    {
+      id:"mussar-28", level:2, tag:"ANAVAH UVEIN ADAM",
+      heb:"אֲנִי לְדוֹדִי וְדוֹדִי לִי",
+      title:"Relacionamentos: Dar antes de Receber",
+      body:"O Rav Eliyahu Dessler em Michtav Me'Eliyahu ensina o princípio mais revolucionário do Mussar relacional: amor não é o que você sente antes de dar — é o que você sente depois de dar. Damos aos filhos e os amamos; não os amamos e portanto damos.",
+      reflection:"'O amor verdadeiro flui do ato de dar, não o ato de dar do sentimento de amor.' — Rav Dessler, Michtav Me'Eliyahu",
+      exercise:"Identifique um relacionamento onde você espera receber antes de dar. Hoje, dê primeiro — sem condição e sem expectativa.",
+      source:"Michtav Me'Eliyahu, vol. 1 · Shir HaShirim 6:3"
+    },
+    {
+      id:"mussar-29", level:2, tag:"KIBBUD TALMID CHACHAM",
+      heb:"מִפְּנֵי שֵׂיבָה תָּקוּם",
+      title:"Respeito aos Sábios: Reconhecer a Grandeza",
+      body:"O Mussar ensina que a incapacidade de reconhecer grandeza nos outros é sintoma de vaidade. Levantar-se diante de um Talmid Chacham não é submissão — é o reconhecimento de que a Torá é maior do que eu.",
+      reflection:"'Quem não reconhece grandeza nos outros não pode crescer, pois para crescer é preciso ter para onde olhar.' — Rav Shlomo Wolbe",
+      exercise:"Hoje, identifique alguém que é superior a você em alguma área. Expresse explicitamente seu reconhecimento dessa grandeza — a essa pessoa ou a alguém próximo.",
+      source:"Levítico 19:32 · Alei Shur, vol. 1"
+    },
+    {
+      id:"mussar-30", level:2, tag:"RIBUY SHALOM",
+      heb:"הֱוֵי מִתַּלְמִידָיו שֶׁל אַהֲרֹן",
+      title:"Buscar a Paz: O Caminho de Aharon",
+      body:"Pirkei Avot ordena: 'Seja dos discípulos de Aharon — ama a paz, busca a paz.' Aharon é o modelo do Mussar social: mediador entre pessoas em conflito, suavizador de desentendimentos, construtor de pontes.",
+      reflection:"'A paz entre pessoas não acontece sozinha — alguém precisa construí-la. Seja essa pessoa.' — Rav Avraham Yitzhak Kook",
+      exercise:"Existe hoje algum conflito entre duas pessoas que você conhece? Pense em como poderia ser um instrumento de paz entre elas.",
+      source:"Pirkei Avot 1:12 · Rav Kook, Orot"
+    },
+    {
+      id:"mussar-31", level:2, tag:"EILU VEILU",
+      heb:"וְאֵלֶּה הַדְּבָרִים",
+      title:"Eilu VeEilu: Respeitar Opiniões Divergentes",
+      body:"O Mussar talmúdico ensina que Beit Hillel e Beit Shammai, apesar de divergirem em praticamente tudo, citavam a opinião do outro antes de apresentar a própria. Este modelo de debate — reconhecer a validade do outro — é uma Midá espiritual de primeira ordem.",
+      reflection:"'Humildade intelectual não é concordar com tudo. É reconhecer que outros têm uma perspectiva que pode enriquecer a minha.' — Eruvin 13b",
+      exercise:"Em uma discussão hoje, antes de apresentar seu ponto de vista, reformule o ponto de vista do outro de forma que ele se reconheceria. Só então apresente o seu.",
+      source:"Eruvin 13b · Pirkei Avot 5:17"
+    },
+    {
+      id:"mussar-32", level:2, tag:"GENEIVAT DAAT",
+      heb:"אַל תִּגְנֹב דַּעַת הַבְּרִיּוֹת",
+      title:"Geneivat Daat: Não Roube a Mente do Próximo",
+      body:"O Mussar identifica uma forma de desonestidade mais sutil que a mentira direta: Geneivat Daat — criar uma impressão falsa, mesmo sem mentir. Convidar alguém para parecer gentil sabendo que não poderá comparecer. Presentear alguém esperando retorno sem declarar.",
+      reflection:"'A desonestidade mais perigosa é aquela que nem o próprio desonesto reconhece como desonestidade.' — Rav Yisrael Salanter",
+      exercise:"Revise hoje uma promessa ou convite que fez. Você foi completamente honesto sobre suas intenções? Se não, corrija.",
+      source:"Chulin 94a · Or Yisrael"
+    },
+    {
+      id:"mussar-33", level:2, tag:"HISTAPKUT",
+      heb:"מִי הָעָשִׁיר הַשָּׂמֵחַ בְּחֶלְקוֹ",
+      title:"Histapkut: A Satisfação com o que Se Tem",
+      body:"'Quem é rico? Aquele que está satisfeito com o que possui.' O Mussar de Pirkei Avot é radical: a riqueza verdadeira é interior. A Histapkut (satisfação) não é resignação passiva, mas a conquista de um estado interior que não depende de mais.",
+      reflection:"'O homem insatisfeito com o que tem não ficará satisfeito com o dobro.' — Kohelet Rabah 1:13",
+      exercise:"Hoje, ao sentir o desejo de 'mais' de qualquer coisa, pause e pergunte: 'O que já tenho que estou subestimando?'",
+      source:"Pirkei Avot 4:1 · Orchot Tzadikim, Shaar HaSimchah"
+    },
+    {
+      id:"mussar-34", level:2, tag:"TZAAR HAMAKOM",
+      heb:"כִּבְסַנְגְּלָה בָּאֵשׁ תִּהְיֶה",
+      title:"Identificar o Sofrimento Alheio",
+      body:"O Mussar ensina que a insensibilidade ao sofrimento alheio é deficiência espiritual séria. Não se trata de resolver tudo — mas de ser capaz de sentir o que o outro sente. A empatia é Midá treinavelm não dom inato.",
+      reflection:"'A alma que não sangra com o sofrimento alheio está adormecida.' — Rav Shlomo Wolbe, Alei Shur",
+      exercise:"Hoje, ao encontrar alguém que parece estar sofrendo, pare. Pergunte-se: 'Como ele está se sentindo?' Então pergunte a ele.",
+      source:"Alei Shur, vol. 2 · Mishlei 14:10"
+    },
+    {
+      id:"mussar-35", level:2, tag:"KEVOD ATZMO",
+      heb:"אַל תְּהִי בָּז לְכָל אָדָם",
+      title:"Não Desprezar Ninguém",
+      body:"'Não desprezes nenhum ser humano.' O Mussar ensina que o desprezo — mesmo silencioso, mesmo interno — é violência espiritual. E mais: muitas vezes, a pessoa que desprezamos tem algo que precisamos aprender.",
+      reflection:"'Pirkei Avot diz: não há homem que não tenha sua hora. O que você despreza hoje pode ser quem te ajudará amanhã.' — Pirkei Avot 4:3",
+      exercise:"Pense em alguém que você desdenha ou considera insignificante. Identifique hoje uma qualidade genuína nessa pessoa.",
+      source:"Pirkei Avot 4:3 · Orchot Tzadikim"
+    },
+    {
+      id:"mussar-36", level:2, tag:"MAASIM TOVIM",
+      heb:"לֹא הַמִּדְרָשׁ הוּא הָעִקָּר אֶלָּא הַמַּעֲשֶׂה",
+      title:"O Ato é o Essencial, Não o Estudo",
+      body:"'Não o estudo é o essencial — mas a ação.' Pirkei Avot é claro: o conhecimento sem prática é árvore sem frutos. O Mussar nasce precisamente desta tensão: saber não basta — é preciso transformar o conhecimento em vida.",
+      reflection:"'Mil teorias não valem um único ato de bondade genuíno.' — Rav Yisrael Salanter",
+      exercise:"Identifique um ensinamento que você conhece bem mas ainda não colocou em prática. Hoje, dê o primeiro passo concreto.",
+      source:"Pirkei Avot 1:17 · Or Yisrael"
+    },
+    {
+      id:"mussar-37", level:2, tag:"NIKAYON",
+      heb:"נִקָּיוֹן",
+      title:"Nikayon: Pureza e Limpeza como Serviço Espiritual",
+      body:"O Mussar ensina que a limpeza do espaço físico reflete a limpeza interior. Um lar ordenado e limpo não é luxo — é ambiente que favorece crescimento espiritual. A Shechiná não habita onde há sujeira ou desordem.",
+      reflection:"'A mente clara habita no espaço limpo.' — Ensinamento do Mussar de Kelm",
+      exercise:"Hoje, organize um espaço físico que está desordenado. Observe o efeito que isso tem no seu estado interno.",
+      source:"Avoda Zara 20b · Rav Simcha Zissel Ziv, Chochmah UMussar"
+    },
+    {
+      id:"mussar-38", level:2, tag:"KAVOD HAMET",
+      heb:"לְוָיַת הַמֵּת",
+      title:"Acompanhar os Mortos: Chesed shel Emet",
+      body:"O acompanhamento aos mortos é chamado de Chesed shel Emet — bondade verdadeira, pois o morto não pode retribuir. O Mussar ensina que a capacidade de honrar quem não pode mais nos dar nada revela o nível mais puro de Chessed.",
+      reflection:"'O que você faz pelos que não podem mais te dar nada revela quem você verdadeiramente é.' — Rav Shlomo Wolbe",
+      exercise:"Reflita: como você tratou ou falou de pessoas que faleceram? Honrar os mortos começa em falar bem de quem já partiu.",
+      source:"Alei Shur, vol. 2 · Sotá 14a"
+    },
+    {
+      id:"mussar-39", level:2, tag:"RACHAMIM",
+      heb:"כְּרַחֵם אָב עַל בָּנִים",
+      title:"Rachamim: Misericórdia como Traço Divino",
+      body:"'Como um pai tem misericórdia dos filhos, assim HaShem tem misericórdia de quem o teme.' O Mussar ensina que cultivar Rachamim — misericórdia — é imitar HaShem. A dureza desnecessária não é força; é ausência de desenvolvimento espiritual.",
+      reflection:"'O coração de pedra não é sinal de Midot fortes — é sinal de Midot não trabalhadas.' — Rav Shamshon Rafael Hirsch",
+      exercise:"Hoje, em uma situação onde sua reação natural seria dureza ou indiferença, escolha conscientemente a resposta da misericórdia.",
+      source:"Tehilim 103:13 · Rav S.R. Hirsch, Horeb"
+    },
+    {
+      id:"mussar-40", level:2, tag:"EMES BELEV",
+      heb:"אֱמֶת בַּלֵּב",
+      title:"Emet BaLev: Ser Verdadeiro Consigo Mesmo",
+      body:"O Mussar de Novardok (Rav Yosef Yozel Horowitz) insistia que a maior falsidade não é para os outros — é para si mesmo. A pessoa que se engana sobre seus próprios motivos, fraquezas e verdades é a mais difícil de corrigir.",
+      reflection:"'Conhece-te a ti mesmo — e conhecerás os caminhos de HaShem.' — Adaptação do princípio socrático ao Mussar",
+      exercise:"Hoje, identifique uma história que conta a si mesmo que pode não ser completamente verdadeira. Questione-a honestamente.",
+      source:"Or Yisrael · Rav Yosef Yozel Horowitz, Madrégat HaAdam"
+    },
+    {
+      id:"mussar-41", level:2, tag:"TZAAR BAALE CHAIM",
+      heb:"רַחֲמָיו עַל כָּל מַעֲשָׂיו",
+      title:"Compaixão Universal: As Misericórdias de HaShem sobre Todas as Suas Obras",
+      body:"'As misericórdias de HaShem são sobre todas as Suas obras.' O Mussar ensina que um judeu deve cultivar compaixão não apenas pelos judeus, mas por todo ser criado. A dureza de coração começa com os pequenos e se expande.",
+      reflection:"'A bondade que praticamos com os animais educa o coração para bondade maior.' — Rav S.R. Hirsch",
+      exercise:"Observe hoje sua atitude em relação a seres dependentes de você — plantas, animais, pessoas vulneráveis. Há onde cultivar mais cuidado?",
+      source:"Tehilim 145:9 · Rav S.R. Hirsch, Dezenove Epístolas"
+    },
+    {
+      id:"mussar-42", level:2, tag:"BITACHON UMAASE",
+      heb:"בְּטַח בַּיהוָה וַעֲשֵׂה טוֹב",
+      title:"Confiar e Agir: Os Dois Pés do Bitachon",
+      body:"O erro clássico é separar Bitachon (confiança em HaShem) de Hishtadlut (esforço humano). O Mussar é preciso: Bitachon sem ação é preguiça disfarçada de fé. Ação sem Bitachon é ansiedade disfarçada de diligência. O ideal é agir com plena energia e confiar o resultado.",
+      reflection:"'Faz o que te compete. O resto, deixa a HaShem.' — Ensinamento do Chovot HaLevavot",
+      exercise:"Identifique algo onde você está usando 'Bitachon' como desculpa para não agir — ou usando 'ação' como desculpa para não confiar. Corrija o desequilíbrio hoje.",
+      source:"Tehilim 37:3 · Chovot HaLevavot, Shaar HaBitachon, cap. 4"
+    },
+    {
+      id:"mussar-43", level:2, tag:"KIBBUD MELACHIM",
+      heb:"כַּבֵּד אֶת הַמֶּלֶךְ",
+      title:"Respeitar as Autoridades: Darchei HaMelech",
+      body:"O Mussar ensina respeito às autoridades legítimas não por subserviência, mas por reconhecimento de que a ordem social é um presente de HaShem. Rmurmúrio contra liderança legítima é sintoma de arrogância espiritual.",
+      reflection:"'O rebelde contra a autoridade justa revela que não aceita limitação alguma — nem divina.' — Rav Shlomo Wolbe",
+      exercise:"Reflita hoje sobre como fala de líderes — na sinagoga, no trabalho, no governo. Sua fala reflete respeito pela ordem ou rebeldia pelo ego?",
+      source:"Pirkei Avot 3:2 · Alei Shur"
+    },
+    {
+      id:"mussar-44", level:2, tag:"BEIN KAVOD LEBUSHA",
+      heb:"בּוּשָׁה וְכָבוֹד",
+      title:"Busha e Kavod: Vergonha e Honra Equilibradas",
+      body:"O Mussar distingue dois tipos de vergonha: a Busha saudável — que nos impede de pecar — e a Busha doentia — que nos impede de crescer por medo do julgamento alheio. A Busha espiritual nos protege; a social nos aprisiona.",
+      reflection:"'Sinta vergonha dos seus pecados, não das suas virtudes.' — Orchot Tzadikim, Shaar HaBushah",
+      exercise:"Existe algo bom que você evita fazer por vergonha do que os outros pensarão? Examine se essa vergonha é espiritual (protetora) ou social (aprisionante).",
+      source:"Orchot Tzadikim, Shaar HaBushah · Berachot 12b"
+    },
+    {
+      id:"mussar-45", level:2, tag:"KOACH HAMAASE",
+      heb:"לֹא תַעֲמֹד עַל דַּם רֵעֶךָ",
+      title:"Não Te Quedar Diante do Sangue do Teu Próximo",
+      body:"'Não te quedarás diante do sangue do teu próximo.' A inação diante do sofrimento alheio quando você pode agir é transgressão ativa no Mussar. A passividade cúmplice não é neutralidade — é escolha.",
+      reflection:"'O mundo não foi destruído pelos maus, mas pelos bons que calaram.' — Adaptação do ensinamento de Rav Kook",
+      exercise:"Existe alguém em sua vida que está sofrendo e que você poderia ajudar, mas não agiu? O que impede? Aja hoje.",
+      source:"Levítico 19:16 · Rav Kook, Orot"
+    },
+    {
+      id:"mussar-46", level:2, tag:"MACHLOKET",
+      heb:"אֵיזוֹהִי מַחֲלֹקֶת שֶׁאֵינָהּ לְשֵׁם שָׁמַיִם",
+      title:"Fuja do Conflito Desnecessário",
+      body:"O Mussar é severo com conflitos egocêntricos. A disputa de Korach foi 'não pelo nome do Céu' — era pelo poder, pelo ego, pelo ressentimento. O teste: se o conflito terminar e você estiver satisfeito por ter 'ganhado', provavelmente não era pelo nome do Céu.",
+      reflection:"'A paz que cede um pouco de razão é mais valiosa que a vitória que perde a relação.' — Rav Shlomo Wolbe",
+      exercise:"Existe um conflito atual em sua vida? Pergunte honestamente: estou buscando a verdade ou estou buscando vencer?",
+      source:"Pirkei Avot 5:17 · Bamidbar 16"
+    },
+    {
+      id:"mussar-47", level:2, tag:"CHAZAK VAAMATZ",
+      heb:"חֲזַק וֶאֱמָץ",
+      title:"Chazak VeAmatz: Força e Coragem Espiritual",
+      body:"'Sê forte e corajoso.' O Mussar ensina que a covardia espiritual — recuar do crescimento por medo da dificuldade — é uma das formas mais comuns de paralisia. O crescimento sempre tem custo; a questão é se você está disposto a pagá-lo.",
+      reflection:"'Cada nível espiritual que você alcança exigiu que você deixasse para trás o nível anterior. Crescer é sempre uma forma de morte e renascimento.' — Rav Nachman de Breslov",
+      exercise:"Identifique hoje um desafio espiritual que você tem evitado por ser difícil. Dê um passo em sua direção.",
+      source:"Yehoshua 1:9 · Likutei Moharan I:25"
+    },
+    {
+      id:"mussar-48", level:2, tag:"CHIDUSH",
+      heb:"חִדּוּשׁ",
+      title:"Chidush: A Renovação Constante da Alma",
+      body:"O Mussar ensina que a alma que não se renova se estagna. O Chidush — novidade, renovação — é a capacidade de encontrar profundidade em algo que se tornou rotina. Recitar o Shemá pela 10.000ª vez como se fosse a primeira.",
+      reflection:"'A pessoa mais viva é aquela que consegue se maravilhar com o que todos os outros já ignoram.' — Rav Avraham Yitzhak Kook",
+      exercise:"Escolha hoje uma prática espiritual que se tornou automática. Realize-a com atenção total — como se fosse a primeira vez.",
+      source:"Eicha 3:23 · Rav Kook, Orot HaTeshuvá"
+    },
+    {
+      id:"mussar-49", level:2, tag:"SEDER HAYOM",
+      heb:"בֹּקֶר בֹּקֶר",
+      title:"Seder HaYom: A Santidade da Rotina",
+      body:"O Mussar clássico valorizava muito o Seder HaYom — a estrutura do dia. Acordar no mesmo horário, estudar nos mesmos horários, orar, trabalhar, descansar. A rotina sagrada não mata a espontaneidade — liberta energia para ela.",
+      reflection:"'O homem de rotinas sagradas tem mais liberdade que o homem que vive sem ordem — porque sabe onde está sua âncora.' — Rav Simcha Zissel Ziv",
+      exercise:"Descreva (no papel se possível) o seu dia ideal segundo os valores do Mussar. Quantos elementos desse dia você pratica hoje?",
+      source:"Lamentações 3:23 · Chochmah UMussar, Rav Simcha Zissel Ziv"
+    },
+    {
+      id:"mussar-50", level:2, tag:"MUSSAR KLAL",
+      heb:"אֵיזֶהוּ גִבּוֹר הַכּוֹבֵשׁ אֶת יִצְרוֹ",
+      title:"O Verdadeiro Herói: Quem Conquista Seu Próprio Impulso",
+      body:"'Quem é herói? Aquele que conquista seu próprio impulso.' Pirkei Avot redefine heroísmo: não é quem conquista cidades, mas quem conquista a si mesmo. O Mussar inteiro pode ser resumido nesta frase.",
+      reflection:"'Toda guerra exterior é apenas reflexo da guerra interior. O verdadeiro campo de batalha é a alma.' — Rav Yisrael Salanter",
+      exercise:"Identifique hoje o seu maior Yetzer HaRá pessoal — o impulso que mais te desafia. Não para destruí-lo, mas para conhecê-lo bem e aprender a guiá-lo.",
+      source:"Pirkei Avot 4:1 · Or Yisrael, Rav Yisrael Salanter"
+    },
+
+    /* ── NÍVEL 3: GRANDES MESTRES DO MUSSAR (51–75) ── */
+    {
+      id:"mussar-51", level:3, tag:"RAV SALANTER",
+      heb:"רַב יִשְׂרָאֵל סָלַנְטֶר",
+      title:"Rav Yisrael Salanter: O Fundador do Movimento do Mussar",
+      body:"Rav Yisrael Lipkin Salanter (1809–1883) fundou o movimento do Mussar moderno com uma percepção revolucionária: o estudo da Torá sem trabalho nas Midot (traços de caráter) pode produzir eruditos com pecados refinados, mas não pessoas completas. A Torá deve ser estudada para transformar.",
+      reflection:"'O mais difícil no mundo não é aprender o que é certo — é transformar o que você sabe em quem você é.' — Rav Yisrael Salanter",
+      exercise:"Leia hoje uma das cartas de Rav Yisrael Salanter em 'Or Yisrael'. Escolha uma frase e medite nela por 5 minutos.",
+      source:"Or Yisrael · Tenuat HaMussar, Rav Dov Katz"
+    },
+    {
+      id:"mussar-52", level:3, tag:"MESSILAT YESHARIM",
+      heb:"מְסִלַּת יְשָׁרִים",
+      title:"Messilat Yesharim: O Caminho dos Retos",
+      body:"O Messilat Yesharim (Rav Moshe Chaim Luzzatto, 1707–1746) é considerado o livro de Mussar mais completo e sistemático da história judaica. Apresenta uma escala de crescimento espiritual: Zehirut (vigilância) → Zrizut → Nekiut → Perishut → Taharah → Chassidut → Anavah → Yirat Chet → Kedushah.",
+      reflection:"'O ser humano foi criado apenas para o seu mundo. Mas qual mundo? O espiritual.' — Messilat Yesharim, cap. 1",
+      exercise:"Leia o capítulo 1 do Messilat Yesharim hoje. O Ramchal pergunta: 'O que é o dever do ser humano neste mundo?' Escreva sua própria resposta antes de ler a dele.",
+      source:"Messilat Yesharim, Rav Moshe Chaim Luzzatto · Avoda Zara 19a"
+    },
+    {
+      id:"mussar-53", level:3, tag:"ORCHOT TZADIKIM",
+      heb:"אָרְחוֹת צַדִּיקִים",
+      title:"Orchot Tzadikim: Os Caminhos dos Justos",
+      body:"O Orchot Tzadikim (século XV, autor anônimo) é um tratado sistemático das Midot — analisando cada traço de caráter em seus aspectos positivos e negativos. É estruturado em pares: Shaar HaAnavah (humildade) confrontado com Shaar HaGavah (orgulho), etc.",
+      reflection:"'Toda midá tem sua sombra. O homem completo não elimina a sombra — aprende a iluminá-la.' — Orchot Tzadikim, introdução",
+      exercise:"Escolha hoje uma das 'portas' do Orchot Tzadikim (humildade, alegria, tristeza, etc.) e leia pelo menos meia página sobre ela.",
+      source:"Orchot Tzadikim · Sec. XV"
+    },
+    {
+      id:"mussar-54", level:3, tag:"CHOVOT HALEVAVOT",
+      heb:"חוֹבוֹת הַלְּבָבוֹת",
+      title:"Chovot HaLevavot: Os Deveres dos Corações",
+      body:"O Chovot HaLevavot (Rav Bachya ibn Paquda, séc. XI) distingue entre as mitzvot dos membros (ações externas) e as mitzvot do coração (estados internos). Sua tese: cumprir as mitzvot externas sem os estados internos correspondentes é como corpo sem alma.",
+      reflection:"'As mitzvot do coração são as raízes; as das mãos são os ramos. Sem raízes, os ramos caem com o primeiro vento.' — Chovot HaLevavot, Introdução",
+      exercise:"Identifique uma mitzvá que você cumpre externamente mas sem o estado interno correspondente. Ex: Birkat HaMazon recitado mecanicamente. Hoje, faça-a com plena kavana.",
+      source:"Chovot HaLevavot, Rav Bachya ibn Paquda · Sec. XI"
+    },
+    {
+      id:"mussar-55", level:3, tag:"SIMCHA ZISSEL",
+      heb:"הַסַּבָּא מִקֶּלְמֶה",
+      title:"O Sabá de Kelm: Rav Simcha Zissel Ziv",
+      body:"Rav Simcha Zissel Ziv de Kelm (1824–1898) foi o discípulo mais sistemático de Rav Yisrael Salanter. Fundou a escola de Mussar de Kelm, conhecida por seu rigor, ordem e meditação profunda. Seu ensinamento central: o autoconhecimento é o início de toda Avodat HaShem.",
+      reflection:"'Toda grande mudança começa por um momento de pausa e observação honesta.' — Rav Simcha Zissel Ziv",
+      exercise:"Pratique hoje o 'stop' de Kelm: em algum momento do dia, pare completamente por 2 minutos. Não faça nada. Apenas observe seus pensamentos.",
+      source:"Chochmah UMussar, Rav Simcha Zissel Ziv · Tenuat HaMussar"
+    },
+    {
+      id:"mussar-56", level:3, tag:"NOVARDOK",
+      heb:"בִּטּוּל הַיֵּצֶר",
+      title:"A Escola de Novardok: Guerra Ao Ego",
+      body:"A escola de Mussar de Novardok (Rav Yosef Yozel Horowitz, 1847–1920) era a mais radical: seus alunos praticavam exercícios deliberados de humilhação pessoal para quebrar o ego. Entrar numa farmácia e pedir um pão. Deitar no meio da rua. O objetivo: libertar-se da escravidão da opinião alheia.",
+      reflection:"'O homem que não se importa com o que pensam dele é o homem mais livre que existe.' — Rav Yosef Yozel Horowitz",
+      exercise:"Hoje, faça algo que seu ego normalmente evitaria por medo do julgamento alheio — algo completamente legítimo, mas que te expõe. Observe como se sente.",
+      source:"Madrégat HaAdam, Rav Yosef Yozel Horowitz · Tenuat HaMussar"
+    },
+    {
+      id:"mussar-57", level:3, tag:"SLABODKA",
+      heb:"גְּדוּלַּת הָאָדָם",
+      title:"A Escola de Slabodka: A Grandeza do Ser Humano",
+      body:"Em contraste com Novardok, a escola de Slabodka (Rav Noson Tzvi Finkel, 1849–1927) enfatizava Gadlut HaAdam — a grandeza do ser humano. A humildade verdadeira nasce não da destruição do ego, mas do reconhecimento da enorme dignidade e responsabilidade de ser humano.",
+      reflection:"'Quando você sabe o quanto vale, torna-se impossível agir de forma pequena.' — Rav Noson Tzvi Finkel (o Alter de Slabodka)",
+      exercise:"Escreva hoje 5 coisas genuínas que você aprecia em si mesmo — não como orgulho, mas como reconhecimento da dádiva que HaShem lhe deu.",
+      source:"Or HaTzafon, Rav Noson Tzvi Finkel · Tenuat HaMussar"
+    },
+    {
+      id:"mussar-58", level:3, tag:"MICHTAV MELIYAHU",
+      heb:"מִכְתָּב מֵאֵלִיָּהוּ",
+      title:"Michtav Me'Eliyahu: Rav Dessler e o Mundo Interior",
+      body:"Rav Eliyahu Dessler (1892–1953) escreveu o Michtav Me'Eliyahu — uma das obras mais profundas do Mussar do séc. XX. Seu conceito central: o 'Nekudat HaBechirah' (ponto de livre-arbítrio) — que cada pessoa tem um ponto único onde sua batalha espiritual realmente acontece.",
+      reflection:"'A batalha real não está onde você é fraco e sabe disso. Está onde você acha que já dominou.' — Michtav Me'Eliyahu, vol. 1",
+      exercise:"Identifique seu Nekudat HaBechirah atual: onde realmente está sua batalha espiritual mais intensa neste momento da vida?",
+      source:"Michtav Me'Eliyahu, Rav Eliyahu Dessler · 4 vols."
+    },
+    {
+      id:"mussar-59", level:3, tag:"ALEI SHUR",
+      heb:"עֲלֵי שׁוּר",
+      title:"Alei Shur: A Obra Síntese do Mussar Moderno",
+      body:"Rav Shlomo Wolbe (1914–2005) escreveu o Alei Shur — considerada a obra de Mussar mais importante do séc. XX. Combina Mussar clássico com psicologia moderna, abordando o crescimento espiritual com sofisticação e profundidade excepcionais.",
+      reflection:"'Crescimento espiritual não é alcançado por esforço heroico ocasional, mas por pequenos passos constantes e conscientes.' — Rav Shlomo Wolbe, Alei Shur",
+      exercise:"Leia hoje uma página do Alei Shur (vol. 1, qualquer capítulo). Escreva uma frase que te tocou.",
+      source:"Alei Shur, Rav Shlomo Wolbe · 2 vols."
+    },
+    {
+      id:"mussar-60", level:3, tag:"TANYA E MUSSAR",
+      heb:"נֶפֶשׁ הַבְּהֵמִית וְנֶפֶשׁ הָאֱלֹהִית",
+      title:"A Nefesh HaBehamit e a Nefesh HaElohit no Tanya",
+      body:"O Tanya (Alter Rebbe) apresenta o modelo chassídico mais preciso do conflito interno: a alma animal (Nefesh HaBehamit) contra a alma divina (Nefesh HaElohit). A vida espiritual é a batalha constante entre elas — e o objetivo não é destruir a alma animal, mas sublimá-la ao serviço divino.",
+      reflection:"'O Benoni (pessoa intermediária) não é alguém sem tentações — é alguém que não age segundo elas.' — Tanya, cap. 12",
+      exercise:"Identifique hoje um conflito interno entre sua 'alma animal' e sua 'alma divina'. Observe-o sem julgamento. Que revelou?",
+      source:"Tanya, cap. 1–12 · Alter Rebbe, Rav Schneur Zalman de Liadi"
+    },
+    {
+      id:"mussar-61", level:3, tag:"CHESHBON HANEFESH",
+      heb:"חֶשְׁבּוֹן הַנֶּפֶשׁ — מְנַחֵם מֶנְדֶל",
+      title:"O Livro Cheshbon HaNefesh: 13 Midot para Trabalhar",
+      body:"Rav Menachem Mendel Lefin de Satanov (1749–1826) escreveu o Cheshbon HaNefesh — inspirado (curiosamente) em Benjamin Franklin — propondo trabalhar uma Midá por semana, anotando diariamente os sucessos e falhas. É um dos métodos mais práticos do Mussar.",
+      reflection:"'A mudança que não é medida, não é real.' — Rav Menachem Mendel Lefin",
+      exercise:"Escolha uma das 13 Midot do Cheshbon HaNefesh (Emet, Zrizut, Savlanut, etc.) para trabalhar esta semana. Anote hoje sua situação inicial.",
+      source:"Cheshbon HaNefesh, Rav Menachem Mendel Lefin · 1812"
+    },
+    {
+      id:"mussar-62", level:3, tag:"PIRKEI AVOT",
+      heb:"פִּרְקֵי אָבוֹת",
+      title:"Pirkei Avot: O Livro de Mussar por Excelência",
+      body:"Os Pirkei Avot (Capítulos dos Pais) são considerados o texto de Mussar mais antigo e central do judaísmo. Lido nos Shabatot entre Pessach e Shavuot, contém os ensinamentos éticos e espirituais dos grandes Tannaim. É o manual básico de toda vida judaica.",
+      reflection:"'Se não agora, quando?' — Hillel, Pirkei Avot 1:14",
+      exercise:"Leia hoje um capítulo dos Pirkei Avot. Escolha uma frase e passe o dia meditando sobre ela.",
+      source:"Pirkei Avot · Mishná, Néziquin"
+    },
+    {
+      id:"mussar-63", level:3, tag:"YETZER HARÁ",
+      heb:"לֵב טוֹב",
+      title:"Dominar o Yetzer HaRá: A Metodologia do Mussar",
+      body:"O Mussar foi criado precisamente para combater o Yetzer HaRá. A metodologia de Rav Salanter: estudo de textos de Mussar com voz alta e emoção (Hitpa'alut) para penetrar no inconsciente — porque o Yetzer HaRá opera principalmente nas camadas profundas do ser.",
+      reflection:"'O Yetzer HaRá não é externo a você — é parte de você. Por isso não se pode ignorá-lo: precisa ser redirecionado, não suprimido.' — Rav Yisrael Salanter",
+      exercise:"Leia hoje um parágrafo de Mussar em voz alta, com emoção. Observe a diferença entre ler em silêncio e ler com voz e sentimento.",
+      source:"Or Yisrael · Kidushin 30b"
+    },
+    {
+      id:"mussar-64", level:3, tag:"MESIRAT NEFESH",
+      heb:"וְנַפְשׁוֹ חִיֵּב בְּמִצְוָה",
+      title:"Mesirat Nefesh: Dedicação Total",
+      body:"O Mussar ensina que o maior nível espiritual é a Mesirat Nefesh — a entrega total da alma. Não necessariamente o martírio físico, mas a disposição de colocar HaShem acima de qualquer conforto, conveniência ou interesse pessoal.",
+      reflection:"'A pessoa que nunca sacrificou nada por HaShem ainda não testou sua fé.' — Rav Dessler",
+      exercise:"Existe algo que você retém de HaShem — algo que diz 'isto não estou disposto a ceder'? Examine honestamente essa fronteira.",
+      source:"Michtav Me'Eliyahu, vol. 1 · Berachot 61b"
+    },
+    {
+      id:"mussar-65", level:3, tag:"HUMILDADE RADICAL",
+      heb:"לִפְנֵי מִי אַתָּה עוֹמֵד",
+      title:"Diante de Quem Estás: A Humildade Diante do Infinito",
+      body:"A Chasidut ensina que toda humildade verdadeira nasce desta pergunta: 'Diante de quem estás?' Quando a resposta é 'diante do Infinito', toda vaidade se dissolve naturalmente — não por esforço, mas por percepção.",
+      reflection:"'Não é preciso trabalhar para ser humilde. É preciso apenas ver com clareza.' — Baal Shem Tov",
+      exercise:"Hoje, em um momento de orgulho ou irritação, pause e pergunte: 'Diante de quem estou?' Observe o efeito.",
+      source:"Baal Shem Tov, Keter Shem Tov · Berachot 28b"
+    },
+    {
+      id:"mussar-66", level:3, tag:"AHAVAS YISRAEL",
+      heb:"וְאָהַבְתָּ לְרֵעֲךָ כָּמוֹךָ",
+      title:"Ahavat Yisrael: O Coração do Mussar Social",
+      body:"O Baal Shem Tov ensinou que o amor a Israel é caminho para o amor a HaShem. O Mussar aprofunda: amar genuinamente requer um nível de Anavá (humildade) que dissolve as fronteiras do ego — porque o orgulho e o amor genuíno não coexistem.",
+      reflection:"'Não se pode amar genuinamente enquanto se está preocupado com a própria imagem.' — Rav Wolbe, Alei Shur",
+      exercise:"Pense hoje em um judeu — ou qualquer ser humano — que você acha difícil de amar. Ore por ele. O ato de orar por alguém frequentemente precede o sentimento de amor.",
+      source:"Levítico 19:18 · Baal Shem Tov · Alei Shur"
+    },
+    {
+      id:"mussar-67", level:3, tag:"KIBBUSH HAYETZER",
+      heb:"כִּבּוּשׁ הַיֵּצֶר",
+      title:"Kibbush HaYetzer: Conquista, Não Supressão",
+      body:"O Mussar é cuidadoso: o objetivo não é 'matar' o Yetzer HaRá — que seria impossível e indesejável (pois o Yetzer fornece energia vital) — mas Kibbush (conquista): redirecioná-lo ao serviço divino.",
+      reflection:"'O homem que suprime o Yetzer fica neutro. O que o redireciona fica poderoso.' — Rav Yisrael Salanter",
+      exercise:"Identifique um impulso negativo recorrente. Em vez de tentar suprimi-lo, pergunte: 'Há alguma energia legítima aqui que posso redirecionar para algo sagrado?'",
+      source:"Or Yisrael · Kidushin 30b · Bereshit 4:7"
+    },
+    {
+      id:"mussar-68", level:3, tag:"HITPA'ALUT",
+      heb:"הִתְפַּעֲלוּת",
+      title:"Hitpa'alut: Estudo com Emoção que Transforma",
+      body:"A metodologia central de Rav Salanter: estudo de textos de Mussar com Hitpa'alut — emoção, volume, ritmo — para que os ensinamentos penetrem além do intelecto e alcancem as camadas inconscientes do ser, onde o Yetzer HaRá realmente opera.",
+      reflection:"'Um ensinamento lido uma vez com coração partido vale mais que mil leituras técnicas.' — Rav Yisrael Salanter",
+      exercise:"Escolha uma frase do Mussar que te toca profundamente. Repita-a em voz alta 10 vezes, com emoção crescente. Observe o que acontece.",
+      source:"Or Yisrael, Rav Yisrael Salanter · Igeret HaMussar"
+    },
+    {
+      id:"mussar-69", level:3, tag:"SHIRAT HANEFESH",
+      heb:"רַנְּנוּ צַדִּיקִים בַּיהוָה",
+      title:"A Canção da Alma: Alegria como Coração do Mussar",
+      body:"O Mussar de Slabodka e o Chassidismo convergem: a alegria não é prêmio do crescimento espiritual — é sua condição. Uma alma que cresce com tristeza está construindo sobre areia. A Simchá é o solo em que todas as Midot florescem.",
+      reflection:"'Cantai ao Eterno com alegria.' A palavra 'ranenu' (cantai) é mais intensa que 'shiru' — indica alegria transbordante, incontrolável. Este é o estado que HaShem deseja de nós.' — Tehilim 33:1",
+      exercise:"Hoje, antes de estudar Torá ou de orar, passe um minuto cultivando deliberadamente um sentimento de alegria — por qualquer motivo genuíno.",
+      source:"Tehilim 33:1 · Rav Noson Tzvi Finkel, Or HaTzafon"
+    },
+    {
+      id:"mussar-70", level:3, tag:"TALMUD TORÁ LIMUSSAR",
+      heb:"תַּלְמוּד תּוֹרָה לְשֵׁם שָׁמַיִם",
+      title:"Estudar Torá para Transformar, Não para Saber",
+      body:"O Mussar faz uma distinção crucial: estudo de Torá 'Lishem Shamayim' (pelo Nome dos Céus) visa transformação; estudo para impressionar ou acumular conhecimento pode fortalecer o ego sem fortalecer o caráter.",
+      reflection:"'Quem estuda e não pratica — seria melhor que não tivesse nascido.' — Yevamot 109b (no espírito do Mussar)",
+      exercise:"Ao estudar hoje, antes de começar, formule a intenção: 'Estou estudando para que isso mude como ajo — não apenas como penso.'",
+      source:"Pirkei Avot 1:17 · Or Yisrael"
+    },
+    {
+      id:"mussar-71", level:3, tag:"PACHAD VE'AHAVAH",
+      heb:"פַּחַד וְאַהֲבָה",
+      title:"Yirah e Ahavah: Os Dois Pilares da Vida Espiritual",
+      body:"O Mussar identifica dois motores espirituais: Yirah (temor reverencial a HaShem) e Ahavah (amor a HaShem). A Yirah nos impede de pecar; a Ahavah nos motiva a crescer. O ser humano completo cultiva ambas.",
+      reflection:"'Quem serve a HaShem apenas por temor não foi ainda tocado pela Sua grandeza. Quem serve apenas por amor pode não ter ainda a seriedade necessária.' — Chovot HaLevavot",
+      exercise:"Em qual dos dois você é mais fraco hoje — Yirah ou Ahavah? Identifique e trabalhe especificamente no mais fraco.",
+      source:"Devarim 6:5 · Chovot HaLevavot, Shaar Ahavat HaShem"
+    },
+    {
+      id:"mussar-72", level:3, tag:"TZELEM ELOKIM",
+      heb:"בְּצֶלֶם אֱלֹהִים בָּרָא אֹתוֹ",
+      title:"Tzelem Elokim: A Responsabilidade de Ser Imagem Divina",
+      body:"O Mussar ensina que ser criado 'à imagem de HaShem' não é apenas dignidade — é responsabilidade. Cada ato que degrada o ser humano é uma profanação do Tselem Elokim. Cada ato que o eleva honra o Criador.",
+      reflection:"'Quando você se degrada, não degrada apenas a si mesmo — você degrada a imagem de Seu Criador.' — Rav Simcha Zissel Ziv",
+      exercise:"Hoje, quando estiver prestes a agir de forma pequena, lembre: 'Sou imagem de HaShem.' Observe como isso muda a escolha.",
+      source:"Bereshit 1:27 · Chochmah UMussar"
+    },
+    {
+      id:"mussar-73", level:3, tag:"TIKUN HAMIDOT",
+      heb:"תִּקּוּן הַמִּדּוֹת",
+      title:"Tikun HaMidot: A Correção dos Traços é o Tikun Olam Pessoal",
+      body:"O Arizal ensina que cada pessoa vem ao mundo com um conjunto específico de Midot para corrigir — e que esse é seu Tikun pessoal, sua missão particular na criação. O Mussar e a Kabbalah convergem aqui: autoconhecimento é autoconhecimento espiritual.",
+      reflection:"'Você não foi posto neste mundo para ser perfeito — foi posto aqui para trabalhar sua imperfeição específica.' — Rav Moshe Chaim Luzzatto",
+      exercise:"Reflita: qual a Midá que mais desafia você ao longo da vida? Essa é provavelmente seu Tikun central.",
+      source:"Messilat Yesharim, cap. 3 · Arizal, Shaar HaGilgulim"
+    },
+    {
+      id:"mussar-74", level:3, tag:"SHMIRAT HABRIT",
+      heb:"שְׁמִירַת הַבְּרִית",
+      title:"Pureza Moral: Fundamento de Toda Kedushah",
+      body:"O Mussar clássico e o Chassidismo concordam: a pureza moral (Shmirat HaBrit) é o fundamento sobre o qual toda a espiritualidade é construída. Comprometê-la derruba os andares superiores do edifício espiritual.",
+      reflection:"'O alicerce precede a estrutura. Quem constrói sem alicerce, constrói para cair.' — Messilat Yesharim, cap. 26",
+      exercise:"Examine hoje os conteúdos que você consome: filmes, internet, conversas. Há algo que compromete sua pureza interior? Faça uma escolha consciente.",
+      source:"Messilat Yesharim, cap. 26 · Rav Nachman, Likutei Moharan I:2"
+    },
+    {
+      id:"mussar-75", level:3, tag:"BINYAN HA'ADAM",
+      heb:"בִּנְיַן הָאָדָם",
+      title:"Binyan HaAdam: A Construção do Ser Humano",
+      body:"Rav Shlomo Wolbe dedicou o Alei Shur ao conceito de Binyan HaAdam — a construção do ser humano como obra espiritual. Assim como um edifício precisa de fundações, estrutura e acabamento, o desenvolvimento humano tem seus estágios — e pular etapas gera estruturas instáveis.",
+      reflection:"'Não existe atalho para a construção do caráter. Existe o caminho — e a pressa que destrói o que foi construído.' — Rav Shlomo Wolbe",
+      exercise:"Identifique em qual 'andar' de seu desenvolvimento espiritual você está agora. Esse andar está bem fundado? O que ainda precisa consolidar antes de subir?",
+      source:"Alei Shur, vol. 1 · Rav Shlomo Wolbe"
+    },
+
+    /* ── NÍVEL 4: MUSSAR APLICADO E SÍNTESE (76–100) ── */
+    {
+      id:"mussar-76", level:4, tag:"MIDOT AVRAHAM",
+      heb:"אַבְרָהָם אָבִינוּ",
+      title:"As Midot de Avraham: O Modelo de Chessed",
+      body:"O Mussar examina os patriarcas como modelos de Midot. Avraham representa o Chessed supremo: correu para receber hóspedes mesmo estando em recuperação após a Brit Milá, a seus 99 anos, no pico do calor do dia. O Chessed genuíno não espera condições ideais.",
+      reflection:"'Avraham não perguntou se os hóspedes mereciam. Chessed genuíno não calcula merecimento.' — Rav Dessler",
+      exercise:"Hoje, faça um ato de hospitalidade ou Chessed numa circunstância que normalmente usaria como desculpa para não fazer (cansaço, ocupação, inconveniência).",
+      source:"Bereshit 18:1–8 · Michtav Me'Eliyahu, vol. 1"
+    },
+    {
+      id:"mussar-77", level:4, tag:"MIDOT YITZHAK",
+      heb:"יִצְחָק אָבִינוּ",
+      title:"As Midot de Yitzhak: Gevurá e Autodisciplina",
+      body:"Yitzhak representa a Gevurá — autodisciplina, contenção, força interior. Subiu ao monte com seu pai sem resistência, pois havia cultivado total submissão à vontade divina. O Mussar aprende com Yitzhak: a força maior não é a que derruba o outro, mas a que governa o próprio ser.",
+      reflection:"'A contenção de Yitzhak não era passividade — era poder governado.' — Rav Shlomo Wolbe",
+      exercise:"Hoje, identifique uma situação onde você normalmente reage impulsivamente. Pratique a Gevurá: contenha a reação, responda com deliberação.",
+      source:"Bereshit 22 · Alei Shur, vol. 2"
+    },
+    {
+      id:"mussar-78", level:4, tag:"MIDOT YAAKOV",
+      heb:"יַעֲקֹב אָבִינוּ",
+      title:"As Midot de Yaakov: Emet e Persistência",
+      body:"Yaakov representa o Emet — a verdade absoluta que persiste apesar de todas as dificuldades externas. Trabalhou 14 anos por Rajel. Lutou com o anjo até o amanhecer. O Mussar aprende: a pessoa de Emet não desiste da sua verdade interior diante de nenhuma pressão externa.",
+      reflection:"'Yaakov foi chamado Israel — aquele que luta com Elohim — porque não cedeu mesmo diante do Divino. A luta honesta com a verdade é sagrada.' — Rashi, Bereshit 32",
+      exercise:"Existe uma verdade sobre si mesmo que você tem evitado encarar? Hoje, enfrente-a com a coragem de Yaakov.",
+      source:"Bereshit 32 · Rashi · Messilat Yesharim"
+    },
+    {
+      id:"mussar-79", level:4, tag:"MIDOT MOSHÊ",
+      heb:"מֹשֶׁה רַבֵּנוּ",
+      title:"As Midot de Moshê: Humildade e Liderança",
+      body:"Moshê era o mais humilde dos homens e ao mesmo tempo o maior líder que existiu. O Mussar aprende: humildade e liderança não são opostos — a verdadeira liderança só é possível quando o ego não está no caminho. Moshê não liderava para si — liderava para o povo e para HaShem.",
+      reflection:"'A liderança de Moshê foi possível porque ele não precisava dela.' — Rav Avraham Yitzhak Kook",
+      exercise:"Reflita sobre uma posição de responsabilidade que você tem. Está liderando para HaShem e para os outros, ou para sua própria satisfação?",
+      source:"Bamidbar 12:3 · Rav Kook, Orot"
+    },
+    {
+      id:"mussar-80", level:4, tag:"MUSSAR E KABBALAH",
+      heb:"סוֹד וּמוּסָר",
+      title:"Mussar e Kabbalah: Dois Caminhos para a Mesma Montanha",
+      body:"O Mussar trabalha as Midot de baixo para cima — através do esforço humano consciente. A Kabbalah chassídica trabalha de cima para baixo — através da meditação na grandeza divina que dissolve naturalmente o ego. Os grandes mestres ensinaram que os dois caminhos são complementares.",
+      reflection:"'O Mussar diz: muda porque é errado. A Chassidut diz: quando você vê a luz, a escuridão se dissolve sozinha.' — Rav Wolbe, sobre a Chassidut",
+      exercise:"Experimente hoje os dois: faça um esforço consciente de Mussar (corrigir uma Midá) E faça uma meditação de 2 minutos na grandeza de HaShem.",
+      source:"Alei Shur, vol. 1 · Tanya, Iggeret HaKodesh"
+    },
+    {
+      id:"mussar-81", level:4, tag:"NEKUDAT HABECHIRAH",
+      heb:"נְקוּדַת הַבְּחִירָה",
+      title:"Nekudat HaBechirah: O Ponto Real de Escolha",
+      body:"O conceito mais sofisticado do Mussar moderno, segundo Rav Dessler: o livre-arbítrio real de cada pessoa não opera em todas as áreas — opera no ponto específico onde sua batalha espiritual atual está acontecendo. Abaixo desse ponto, está consolidado. Acima, ainda não chegou.",
+      reflection:"'Sua batalha real não é onde você já venceu nem onde ainda nem começou. É exatamente onde está agora, no limite do que já conquistou.' — Michtav Me'Eliyahu",
+      exercise:"Mapeie seu Nekudat HaBechirah atual: que Midá está no limiar? Não a mais fácil nem a mais difícil — a que está no ponto certo de trabalho.",
+      source:"Michtav Me'Eliyahu, vol. 1 · Rav Dessler"
+    },
+    {
+      id:"mussar-82", level:4, tag:"AVODAT HAYOM",
+      heb:"עֲבוֹדַת הַיּוֹם",
+      title:"Avodat HaYom: A Avodá Específica de Cada Dia",
+      body:"O Mussar de Kelm ensinou a prática da Avodat HaYom — a tarefa espiritual específica de cada dia. Não tentar mudar tudo de uma vez, mas identificar: 'Qual é a Midá que HaShem colocou diante de mim hoje para trabalhar?' E focar nela.",
+      reflection:"'Quem tenta mudar tudo ao mesmo tempo não muda nada. Quem muda uma coisa por vez, eventualmente muda tudo.' — Rav Simcha Zissel Ziv",
+      exercise:"Esta manhã, pergunte: 'Qual é minha Avodat HaYom?' Escolha uma única Midá para o dia. Ao fim do dia, avalie.",
+      source:"Chochmah UMussar · Rav Simcha Zissel Ziv"
+    },
+    {
+      id:"mussar-83", level:4, tag:"LACHZOR BETESHUVÁ",
+      heb:"שׁוּב שׁוּב",
+      title:"Voltar, Voltar: A Teshuvá como Prática Constante",
+      body:"O Mussar não trata a Teshuvá como evento anual — trata-a como prática diária. Cair e voltar, cair e voltar — não com desespero, mas com constância serena. Rav Nachman ensinou: 'Não importa onde você caiu — você pode começar de onde está.'",
+      reflection:"'A pessoa que nunca cai nunca cresceu o suficiente para cair. A pessoa que cai e não volta, perdeu o propósito da queda.' — Rav Nachman de Breslov",
+      exercise:"Identifique onde você 'caiu' recentemente em alguma Midá. Sem dramatismo, sem autodepreciação: simplesmente volte. Hoje.",
+      source:"Likutei Moharan I:6 · Rav Nachman de Breslov"
+    },
+    {
+      id:"mussar-84", level:4, tag:"HAKANAT HALEVAV",
+      heb:"הַכְנַעַת הַלֵּב",
+      title:"Hachna'at HaLev: A Submissão do Coração",
+      body:"O Mussar de Novardok ensinava a Hachna'at HaLev — a submissão do coração, não à força, mas ao reconhecimento genuíno de que HaShem é maior. Esta Midá não é humilhação, mas a libertação que vem quando o ego para de lutar pela supremacia.",
+      reflection:"'Enquanto o coração não se submete, a mente estuda sobre HaShem. Quando o coração se submete, a mente estuda para HaShem.' — Rav Yosef Yozel Horowitz",
+      exercise:"Em um momento de resistência interior hoje (relutância em pedir desculpas, em admitir erro, em ceder), pergunte: 'O que meu coração está protegendo?' E deixe partir.",
+      source:"Madrégat HaAdam · Rav Yosef Yozel Horowitz"
+    },
+    {
+      id:"mussar-85", level:4, tag:"DIBBUR BAAVODAH",
+      heb:"וּדְבָרַי אֲשֶׁר שַׂמְתִּי בְּפִיךָ",
+      title:"A Fala como Avodá: Transformar as Palavras",
+      body:"O Mussar avançado ensina que a fala é o indicador mais preciso do estado interior da alma. As palavras que você usa, o tom, a velocidade, o que escolhe não dizer — tudo revela. Trabalhar a fala é trabalhar diretamente o coração.",
+      reflection:"'Mostre-me como você fala quando está com raiva e te mostrarei quem você realmente é.' — Rav Wolbe, Alei Shur",
+      exercise:"Hoje, preste atenção especial ao seu padrão de fala quando está sob pressão ou irritado. Observe sem julgamento. Esse é seu ponto de trabalho.",
+      source:"Alei Shur, vol. 1 · Mishlei 18:21"
+    },
+    {
+      id:"mussar-86", level:4, tag:"CHAKIRAT HALEVAV",
+      heb:"חֲקִירַת הַלֵּב",
+      title:"Chakirat HaLev: Investigação Profunda do Coração",
+      body:"O nível mais avançado do Mussar não é corrigir comportamentos — é investigar os motivos por trás deles. Por que faço o que faço? Por que me irrito com isso e não com aquilo? O Mussar profundo é arqueologia espiritual.",
+      reflection:"'Os motivos mais honestos são os mais difíceis de ver. O Yetzer HaRá os cobre com justificativas nobres.' — Rav Yisrael Salanter",
+      exercise:"Escolha hoje um comportamento recorrente — positivo ou negativo. Vá fundo: qual o motivo real por trás dele? Continue perguntando 'por quê?' até chegar ao nível mais honesto.",
+      source:"Or Yisrael · Orchot Tzadikim, Shaar HaCheshbon"
+    },
+    {
+      id:"mussar-87", level:4, tag:"ANAVA UVIGDULAH",
+      heb:"גְּדֻלַּת הָאָדָם וּשְׁפָלוּתוֹ",
+      title:"Grandeza e Pequenez Simultâneas",
+      body:"O Mussar mais profundo — especialmente de Slabodka — ensina a paradoxal coexistência: cada pessoa deve sentir-se simultaneamente grande ('fui criado para isso, tenho missão única') e pequena ('sou pó e cinzas diante do Infinito'). Esta tensão não se resolve — se habita.",
+      reflection:"'Por isso o ser humano foi criado sozinho — para cada um dizer: o mundo foi criado para mim.' — Sanhedrin 37a (grandeza) · 'Avraham disse: sou pó e cinzas.' — Bereshit 18:27 (pequenez)",
+      exercise:"Passe 2 minutos sentindo sua grandeza (missão, unicidade). Passe 2 minutos sentindo sua pequenez (diante do Infinito). Observe como as duas coexistem.",
+      source:"Sanhedrin 37a · Bereshit 18:27 · Or HaTzafon"
+    },
+    {
+      id:"mussar-88", level:4, tag:"TIKKUN HADIBBUR",
+      heb:"הַמָּוֶת וְהַחַיִּים בְּיַד הַלָּשׁוֹן",
+      title:"Tikun HaDibbur: Morte e Vida nas Mãos da Língua",
+      body:"'Morte e vida estão nas mãos da língua.' O Mussar avançado sobre a fala trabalha não apenas o que se diz, mas como se diz, quando se diz, para quem se diz e por que se diz. O Tikun HaDibbur completo é obra de uma vida inteira.",
+      reflection:"'A pessoa que domina sua fala domina seu mundo interior. Pois a fala é a expressão mais direta do estado da alma.' — Chofetz Chaim",
+      exercise:"Por 24 horas, aplique a regra dos 3 filtros antes de falar: 1) É verdadeiro? 2) É necessário? 3) É gentil? Se não passar nos 3, silencie.",
+      source:"Mishlei 18:21 · Chofetz Chaim, Shmirat HaLashon"
+    },
+    {
+      id:"mussar-89", level:4, tag:"AVODÁ TAMID",
+      heb:"תָּמִיד",
+      title:"Tamid: A Avodá Constante como Ideal do Mussar",
+      body:"A menorá do Templo ardia 'tamid' — constantemente. O Mussar ensina que a Avodá espiritual mais elevada não é a do pico — é a constante. Não a meditação profunda semanal, mas a consciência diária, a pequena vigília de cada momento.",
+      reflection:"'Não é o heróico que transforma — é o constante. Uma vela que arde sempre ilumina mais que mil fogos de artifício.' — Rav Simcha Zissel Ziv",
+      exercise:"Escolha uma prática espiritual pequena que você pode comprometer-se a fazer TODOS os dias — por menor que seja. Constância, não grandiosidade.",
+      source:"Shemot 27:20 · Chochmah UMussar"
+    },
+    {
+      id:"mussar-90", level:4, tag:"SIPUK VEHAVCHANA",
+      heb:"הַשְׂכֵּל וְדַעַת",
+      title:"Seichel: A Razão a Serviço da Alma",
+      body:"O Mussar valoriza o Seichel — a razão — como instrumento espiritual. Mas a razão a serviço do ego justifica qualquer coisa. A razão a serviço da neshamá esclarece, direciona e protege. O trabalho é colocar o Seichel no lugar certo: servidor, não senhor.",
+      reflection:"'O homem mais inteligente pode ser o mais enganado — por si mesmo.' — Rav Yisrael Salanter",
+      exercise:"Hoje, quando perceber que está usando sua inteligência para justificar algo que no fundo sabe ser errado, pare. Reconheça o auto-engano.",
+      source:"Yirmiyahu 9:22 · Or Yisrael"
+    },
+    {
+      id:"mussar-91", level:4, tag:"ZECHIRAT HAMAVET",
+      heb:"זְכֹר אֶת יוֹם הַמָּוֶת",
+      title:"Zechirat HaMavet: Lembrar a Morte para Viver Melhor",
+      body:"O Mussar clássico usava a Zechirat HaMavet — lembrança da morte — não para deprimir, mas para clarear. Quando você sabe que sua vida é finita, as prioridades se reorganizam automaticamente. O que parecia urgente muitas vezes não é importante; o que parecia trivial muitas vezes é essencial.",
+      reflection:"'Viva cada dia como se fosse o último — não em desespero, mas em clareza.' — Orchot Tzadikim",
+      exercise:"Hoje, pergunte-se: 'Se hoje fosse o último dia, o que mudaria em como estou vivendo?' Identifique uma coisa concreta e ajuste.",
+      source:"Orchot Tzadikim, Shaar HaZechirah · Kohelet 12:1"
+    },
+    {
+      id:"mussar-92", level:4, tag:"KEDUSHAH PRATIT",
+      heb:"קְדֻשָּׁה פְּרָטִית",
+      title:"Kedushah Pratit: Santidade Personalizada",
+      body:"O Mussar avançado ensina que a santidade não tem tamanho único. A Kedushah de Avraham não era a de Moshê. A de cada pessoa é única, moldada pela sua neshamá, seu Tikun, sua história. O maior erro é imitar a santidade de outro em vez de desenvolver a sua.",
+      reflection:"'Seja o melhor Zushya que você pode ser — não o menor Moshê.' — Rav Zushya de Anipoli",
+      exercise:"Reflita: qual a forma de kedushah que é mais natural para você — que emerge quando está no melhor de si? Cultive especialmente essa.",
+      source:"Likutei Moharan · Rav Zushya de Anipoli"
+    },
+    {
+      id:"mussar-93", level:4, tag:"EILU VAELU BAMUSSAR",
+      heb:"כָּל אֶחָד וְאֶחָד",
+      title:"A Pluralidade dos Caminhos do Mussar",
+      body:"O Mussar reconhece a pluralidade: há quem cresça mais através do rigor de Kelm, outros pela alegria de Slabodka, outros pela quebra de Novardok, outros pela profundidade do Michtav Me'Eliyahu. Conhecer qual caminho ressoa com sua neshamá é já um ato de autoconhecimento.",
+      reflection:"'Não existe um único caminho para a montanha. Existe o caminho que foi criado para você.' — Rav Wolbe, Alei Shur",
+      exercise:"De qual escola de Mussar você mais se beneficia? Aprofunde-se nessa escola esta semana.",
+      source:"Alei Shur, vol. 1 · Rav Shlomo Wolbe"
+    },
+    {
+      id:"mussar-94", level:4, tag:"HESHBON SHANA",
+      heb:"חֶשְׁבּוֹן שָׁנָה",
+      title:"Cheshbon HaShanah: O Balanço do Ano",
+      body:"Além do Cheshbon HaNefesh diário, o Mussar institui o balanço anual — especialmente antes de Rosh HaShaná. Examinar o ano: onde cresci? Onde regredi? Que Midot melhoraram? Que padrões persistem? Não para se destruir, mas para estabelecer uma direção para o próximo ano.",
+      reflection:"'Quem não examina seu ano vive o próximo ano igual ao anterior.' — Rav Simcha Zissel Ziv",
+      exercise:"Faça hoje um breve Cheshbon HaShanah: escolha 3 Midot e avalie honestamente sua evolução nelas no último ano.",
+      source:"Chochmah UMussar · Orchot Tzadikim"
+    },
+    {
+      id:"mussar-95", level:4, tag:"SHAAR HABITACHON",
+      heb:"שַׁעַר הַבִּטָּחוֹן",
+      title:"O Portal do Bitachon: A Paz que Transcende",
+      body:"O Shaar HaBitachon do Chovot HaLevavot descreve o estado do homem com Bitachon verdadeiro: não é afetado pelos altos e baixos da fortuna, mantém o mesmo estado interno na riqueza e na pobreza, no sucesso e no fracasso — porque sua ancoragem é HaShem, não as circunstâncias.",
+      reflection:"'O homem de Bitachon não precisa de mais nada porque tem tudo — HaShem.' — Chovot HaLevavot, Shaar HaBitachon, cap. 1",
+      exercise:"Identifique hoje o que mais abala seu equilíbrio interno — o que tira sua paz com mais facilidade. Essa é sua maior área para desenvolver Bitachon.",
+      source:"Chovot HaLevavot, Shaar HaBitachon, cap. 1–4"
+    },
+    {
+      id:"mussar-96", level:4, tag:"TIKKUN HAOLAM BEMUSSAR",
+      heb:"תִּקּוּן עוֹלָם דֶּרֶךְ הַמּוּסָר",
+      title:"Tikun Olam começa pelo Tikun HaNefesh",
+      body:"O Mussar ensina que a ordem é essencial: primeiro Tikun HaNefesh (correção da alma individual), depois Tikun Hamidot (correção dos traços), depois Tikun HaBayit (correção do lar), depois Tikun HaKehilah (correção da comunidade), então Tikun Olam. Pular etapas é ilusão.",
+      reflection:"'Quem quer mudar o mundo sem mudar a si mesmo não muda nada — apenas move os problemas de lugar.' — Rav Yisrael Salanter",
+      exercise:"Avalie hoje: você está mais focado em mudar o mundo ou em mudar a si mesmo? O equilíbrio está correto?",
+      source:"Or Yisrael · Rav Yisrael Salanter"
+    },
+    {
+      id:"mussar-97", level:4, tag:"OSHER AMITI",
+      heb:"אֵיזֶהוּ עָשִׁיר",
+      title:"A Riqueza Real: A Visão do Mussar sobre Prosperidade",
+      body:"'Quem é rico? Aquele que está satisfeito com o que tem.' O Mussar oferece uma redefinição radical de riqueza — não como acúmulo externo, mas como estado interno de suficiência. Isto não é conformismo passivo; é a conquista espiritual mais elevada na dimensão material.",
+      reflection:"'O homem mais pobre não é o que tem menos — é o que deseja mais.' — Rav Shlomo Wolbe, adaptando Pirkei Avot",
+      exercise:"Hoje, enumere 10 riquezas que já possui — não materiais necessariamente. Observe como isso muda seu senso de abundância.",
+      source:"Pirkei Avot 4:1 · Alei Shur, vol. 1"
+    },
+    {
+      id:"mussar-98", level:4, tag:"CHIUCH VEHALEV",
+      heb:"לֵב שָׂמֵחַ יֵיטִב גֵּהָה",
+      title:"O Coração Alegre Cura: Psicologia do Mussar",
+      body:"'Um coração alegre faz bem como remédio.' O Mussar — séculos antes da psicologia moderna — reconhecia a conexão entre estado interior e saúde. A Simchá não é luxo espiritual — é necessidade fisiológica, psicológica e espiritual.",
+      reflection:"'A tristeza não apenas prejudica a alma — prejudica o corpo. A alegria não apenas beneficia a alma — beneficia o corpo.' — Messilat Yesharim, cap. 22",
+      exercise:"Identifique hoje uma fonte de alegria genuína — não hedonismo, mas alegria espiritual — e cultive-a conscientemente. Uma música, uma frase, uma memória.",
+      source:"Mishlei 17:22 · Messilat Yesharim, cap. 22"
+    },
+    {
+      id:"mussar-99", level:4, tag:"MUSSAR BEYISRAEL",
+      heb:"יִשְׂרָאֵל הוֹלֵךְ וּמִתְגַּדֵּל",
+      title:"O Mussar como Projeto Geracional",
+      body:"O Mussar não é trabalho de uma geração — é projeto geracional. Rav Salanter começou. Seus discípulos (Simcha Zissel, Itzele Petersburger) aprofundaram. A geração seguinte (Rav Wolbe, Rav Dessler) adaptou ao séc. XX. O trabalho continua — e você é parte dele.",
+      reflection:"'Cada geração recebe o Mussar da geração anterior e tem a obrigação de transmiti-lo à próxima — mais vivo, não menos.' — Rav Shlomo Wolbe",
+      exercise:"Pense: de quem você recebeu valores morais e espirituais (pais, professores, rabinos)? A quem você os transmitirá? Como?",
+      source:"Alei Shur, vol. 2 · Tenuat HaMussar"
+    },
+    {
+      id:"mussar-100", level:4, tag:"ACHARIT HAYAMIM",
+      heb:"בְּאַחֲרִית הַיָּמִים",
+      title:"O Mussar nos Tempos Finais: A Urgência do Crescimento",
+      body:"O Rav Yisrael Salanter dizia que a geração do fim dos tempos precisaria de Mussar mais do que qualquer outra — porque a tentação seria maior, a distração mais intensa, o ego mais inflado. O Mussar não é opcional em nossa época — é o antídoto que a geração precisa.",
+      reflection:"'Em nosso tempo, quem não trabalha as Midot ativamente está regredindo — porque as forças que puxam para baixo são mais fortes do que nunca.' — Rav Yisrael Salanter",
+      exercise:"Comprometa-se hoje com um programa de Mussar para os próximos 30 dias: um ensinamento por dia, uma Midá por semana, um Cheshbon HaNefesh a cada noite.",
+      source:"Or Yisrael · Rav Yisrael Salanter"
+    }
+  ];
+
+  /* ── QUESTÕES DO QUIZ ─────────────────────────────────── */
+  const QUIZ_QUESTIONS = [
+    { level:1, q:"Qual ensinamento descreve 'Cheshbon HaNefesh'?", opts:["Distribuição de Tzedaká","Inventário diário da alma e exame do caráter","Leitura semanal da Parashá","Preparação para o Shabat"], ans:1, exp:"Cheshbon HaNefesh (inventário da alma) é a prática central do Mussar: examinar diariamente as próprias ações, intenções e traços de caráter para crescimento espiritual." },
+    { level:1, q:"O que é 'Anavá' no Mussar?", opts:["Estudo intensivo da Torá","Jejum espiritual","Humildade genuína — reconhecer o valor do outro sem deflacionar o próprio","Alegria constante"], ans:2, exp:"Anavá é a humildade genuína: não a negação do próprio valor, mas o reconhecimento real do valor de cada ser humano, criado à imagem de HaShem." },
+    { level:1, q:"Segundo o Mussar, o que é 'Hakarat HaTov'?", opts:["Reconhecer o bem recebido e expressar gratidão","Evitar lashon hará","Praticar jejuns regulares","Estudar Kabbalah"], ans:0, exp:"Hakarat HaTov — reconhecer o bem — é considerado o fundamento de toda vida espiritual. Quem não reconhece o bem humano não reconhece o bem divino." },
+    { level:1, q:"O que Pirkei Avot diz sobre quem é o verdadeiro herói?", opts:["Quem conquista muitas cidades","Quem estuda mais horas","Quem conquista seu próprio impulso","Quem jejua com frequência"], ans:2, exp:"'Quem é herói? Aquele que conquista seu próprio impulso.' (Pirkei Avot 4:1) — O heroísmo do Mussar é interno, não externo." },
+    { level:1, q:"Qual é a metodologia central de estudo proposta por Rav Yisrael Salanter?", opts:["Estudo em silêncio absoluto","Hitpa'alut — estudo com emoção e voz alta para penetrar o inconsciente","Memorização de textos","Jejum durante o estudo"], ans:1, exp:"Rav Salanter ensinou a Hitpa'alut — ler textos de Mussar com voz e emoção para que os ensinamentos penetrem além do intelecto, alcançando as camadas profundas onde o Yetzer HaRá opera." },
+    { level:2, q:"O que Rav Dessler ensina sobre o amor nos relacionamentos?", opts:["Amor precede o ato de dar","Amor nasce do ato de dar, não o precede","Amor é puramente espiritual","Amor e Mussar são incompatíveis"], ans:1, exp:"Rav Dessler (Michtav Me'Eliyahu) ensina que amamos porque damos, não damos porque amamos. O ato de dar cria o amor — por isso amamos nossos filhos: porque damos a eles constantemente." },
+    { level:2, q:"Qual é o princípio de Pirkei Avot sobre julgar os outros?", opts:["Julgue com rigor para proteger a comunidade","Seja aquele que julga toda pessoa pelo lado favorável","Não julgue ninguém — nunca","Julgue apenas seus iguais"], ans:1, exp:"'Hevei dan et kol ha'adam lechaf zechut' — 'Seja aquele que julga toda pessoa pelo lado favorável.' (Pirkei Avot 1:6)" },
+    { level:2, q:"O que distingue a escola de Mussar de Novardok?", opts:["Ênfase na grandeza do ser humano","Estudo filosófico da Torá","Exercícios radicais de humilhação do ego para libertar da opinião alheia","Foco exclusivo no estudo do Talmud"], ans:2, exp:"Novardok (Rav Yosef Yozel Horowitz) era a escola mais radical do Mussar, praticando exercícios deliberados de humilhação para quebrar a escravidão da opinião alheia e fortalecer o caráter." },
+    { level:3, q:"Qual é o conceito central do Messilat Yesharim?", opts:["Os 13 princípios de fé","Uma escada de crescimento espiritual: Zehirut, Zrizut, Nekiut... até Kedushah","As leis do Shabat","Os segredos da Kabbalah"], ans:1, exp:"O Messilat Yesharim (Ramchal) apresenta uma escada de crescimento espiritual: Zehirut (vigilância) → Zrizut → Nekiut → Perishut → Taharah → Chassidut → Anavah → Yirat Chet → Kedushah." },
+    { level:3, q:"O que é o 'Nekudat HaBechirah' segundo Rav Dessler?", opts:["O ponto onde a alma deixa o corpo","O ponto específico onde o livre-arbítrio real de cada pessoa opera — sua batalha espiritual atual","O centro da meditação cabalística","O momento de maior intensidade da oração"], ans:1, exp:"Rav Dessler ensina que o livre-arbítrio real não opera em toda área — opera no 'Nekudat HaBechirah', o ponto específico do limite espiritual atual de cada pessoa. Acima está o que ainda não alcançou; abaixo, o que já consolidou." },
+    { level:4, q:"Qual é a distinção principal entre as escolas de Slabodka e Novardok?", opts:["Slabodka era ortodoxa, Novardok era hassídica","Slabodka enfatizava a grandeza do ser humano (Gadlut HaAdam); Novardok enfatizava a quebra do ego","Slabodka era para homens, Novardok para mulheres","Slabodka estudava Kabbalah, Novardok não"], ans:1, exp:"Slabodka (Rav Noson Tzvi Finkel) ensinava Gadlut HaAdam — a grandeza humana como motivação para crescer. Novardok ensinava a quebra radical do ego. Ambas buscavam o mesmo resultado por caminhos opostos." },
+    { level:4, q:"O que significa 'Binyan HaAdam' segundo Rav Wolbe?", opts:["Construção do Templo de Yerushalayim","A construção do ser humano como obra espiritual ordenada e progressiva","O estudo do Chumash","A construção da comunidade judaica"], ans:1, exp:"Rav Shlomo Wolbe (Alei Shur) ensina que o desenvolvimento humano é como uma construção: precisa de fundações sólidas, estrutura e acabamento. Pular etapas gera estruturas instáveis. O crescimento é uma obra que exige ordem." }
+  ];
+
+  /* ── 3. APPSTATE ──────────────────────────────────────── */
+  /*
+   * Dados salvos no Firestore (coleção: mussar_progress, doc: uid):
+   *   readIds        — Set de ids lidos ("mussar-01", ...)
+   *   points         — pontuação total
+   *   streak         — dias consecutivos
+   *   lastStudyDate  — última data (YYYY-MM-DD)
+   *   quiz.total     — total de quizzes realizados
+   *   quiz.best      — melhor % geral
+   *   quiz.scores    — array {date, score, level}
+   *   quiz.byLevel   — {1: %, 2: %, 3: %, 4: %}
+   */
+  const AppState = {
+    uid:           null,
+    readIds:       new Set(),
+    points:        0,
+    streak:        0,
+    lastStudyDate: null,
+    activeLevel:   1,
+    quizFilter:    0,
+
+    quiz: {
+      total:   0,
+      best:    null,
+      scores:  [],
+      byLevel: { 1:null, 2:null, 3:null, 4:null }
+    },
+
+    levelTitle() {
+      const p = this.points;
+      if (p <  100) return 'Talmid';
+      if (p <  300) return 'Ben Mussar';
+      if (p <  600) return 'Yosher Lev';
+      if (p < 1000) return 'Baal Midot';
+      return 'Tzaddik';
+    },
+
+    toFirestore() {
+      return {
+        readIds:       [...this.readIds],
+        points:        this.points,
+        streak:        this.streak,
+        lastStudyDate: this.lastStudyDate,
+        quiz: {
+          total:   this.quiz.total,
+          best:    this.quiz.best,
+          scores:  this.quiz.scores,
+          byLevel: this.quiz.byLevel
+        }
+      };
+    },
+
+    fromFirestore(d) {
+      this.readIds       = new Set(d.readIds || []);
+      this.points        = d.points || 0;
+      this.streak        = d.streak || 0;
+      this.lastStudyDate = d.lastStudyDate || null;
+      if (d.quiz) {
+        this.quiz.total   = d.quiz.total   || 0;
+        this.quiz.best    = d.quiz.best    || null;
+        this.quiz.scores  = d.quiz.scores  || [];
+        this.quiz.byLevel = d.quiz.byLevel || { 1:null, 2:null, 3:null, 4:null };
+      }
+    }
+  };
+
+  /* ── 4. FIRESYNC ──────────────────────────────────────── */
+  const FireSync = {
+    COLLECTION: 'mussar_progress',
+
+    save() {
+      if (!AppState.uid) return;
+      db.collection(this.COLLECTION)
+        .doc(AppState.uid)
+        .set(AppState.toFirestore())
+        .catch(err => console.warn('[FireSync] save error:', err));
+    },
+
+    load(uid) {
+      AppState.uid = uid;
+      db.collection(this.COLLECTION).doc(uid).get()
+        .then(doc => {
+          if (doc.exists) AppState.fromFirestore(doc.data());
+          Progress.checkStreak();
+          UI.render();
+        })
+        .catch(() => { Progress.checkStreak(); UI.render(); });
+    }
+  };
+
+  /* ── 5. PROGRESS ──────────────────────────────────────── */
+  const Progress = {
+    checkStreak() {
+      const today = new Date().toISOString().split('T')[0];
+      if (!AppState.lastStudyDate) { AppState.lastStudyDate = today; return; }
+      const diff = Math.floor(
+        (new Date(today) - new Date(AppState.lastStudyDate)) / 86400000
+      );
+      if (diff === 1)    { AppState.streak++; AppState.lastStudyDate = today; }
+      else if (diff > 1) { AppState.streak = 1; AppState.lastStudyDate = today; }
+    },
+
+    markRead(id) {
+      if (AppState.readIds.has(id)) return false;
+      AppState.readIds.add(id);
+      AppState.points += 10;
+      Progress.checkStreak();
+      FireSync.save();
+      UI.render();
+      return true;
+    },
+
+    recordQuiz(score, pct, levelFilter) {
+      AppState.quiz.total++;
+      AppState.quiz.scores.push({
+        date:  new Date().toISOString().split('T')[0],
+        score: pct,
+        level: levelFilter
+      });
+      if (AppState.quiz.best === null || pct > AppState.quiz.best)
+        AppState.quiz.best = pct;
+      if (levelFilter > 0) {
+        const prev = AppState.quiz.byLevel[levelFilter];
+        if (prev === null || pct > prev) AppState.quiz.byLevel[levelFilter] = pct;
+      }
+      AppState.points += score * 5;
+      FireSync.save();
+    }
+  };
+
+  /* ── 6. UI ────────────────────────────────────────────── */
+  const UI = {
+    render() {
+      this.renderProgress();
+      this.renderLevelSelector();
+      this.renderCards();
+      this.renderQuizStats();
+    },
+
+    renderProgress() {
+      const total = TEACHINGS.length;
+      const read  = AppState.readIds.size;
+      document.getElementById('mussar-read-count').textContent  = `${read} / ${total}`;
+      document.getElementById('mussar-points').textContent      = AppState.points;
+      document.getElementById('mussar-level-title').textContent = AppState.levelTitle();
+      document.getElementById('mussar-streak').textContent      = `${AppState.streak} dia${AppState.streak !== 1 ? 's' : ''}`;
+      document.getElementById('mussar-bar-fill').style.width    = `${total > 0 ? (read/total)*100 : 0}%`;
+    },
+
+    renderLevelSelector() {
+      const LEVELS = [
+        { heb:'א', id:1, title:'AS MIDOT FUNDAMENTAIS',      range:'Ensinamentos 01–25' },
+        { heb:'ב', id:2, title:'MIDOT SOCIAIS E RELACIONAIS', range:'Ensinamentos 26–50' },
+        { heb:'ג', id:3, title:'GRANDES MESTRES DO MUSSAR',   range:'Ensinamentos 51–75' },
+        { heb:'ד', id:4, title:'MUSSAR APLICADO E SÍNTESE',   range:'Ensinamentos 76–100' }
+      ];
+      document.getElementById('mussar-level-selector').innerHTML = LEVELS.map(l => {
+        const ids     = TEACHINGS.filter(t => t.level === l.id).map(t => t.id);
+        const allRead = ids.every(id => AppState.readIds.has(id));
+        const active  = AppState.activeLevel === l.id;
+        return `
+          <div class="mussar-level-card ${active ? 'is-active' : ''} ${allRead ? 'is-complete' : ''}"
+               onclick="UI.selectLevel(${l.id})">
+            <div class="mussar-level-card__num">${l.heb}</div>
+            <div class="mussar-level-card__title">${l.title}</div>
+            <div class="mussar-level-card__range">${l.range}</div>
+            <div class="mussar-level-card__badge">✓ COMPLETO</div>
+          </div>`;
+      }).join('');
+    },
+
+    renderCards() {
+      const items = TEACHINGS.filter(t => t.level === AppState.activeLevel);
+      document.getElementById('mussar-grid').innerHTML = items.map(t => {
+        const read = AppState.readIds.has(t.id);
+        return `
+          <div class="mussar-card ${read ? 'is-read' : ''}"
+               id="${t.id}"
+               onclick="Modal.open('${t.id}')">
+            <div class="mussar-card__header">
+              <span class="mussar-card__num">${t.id.replace('mussar-', 'Nº ')}</span>
+              <span class="mussar-card__tag">${t.tag}</span>
+            </div>
+            <div class="mussar-card__heb">${t.heb}</div>
+            <div class="mussar-card__title">${t.title}</div>
+            <div class="mussar-card__body">${t.body.substring(0, 110)}…</div>
+            <div class="mussar-card__source">${t.source}</div>
+            <div class="mussar-card__read">✓ LIDO</div>
+          </div>`;
+      }).join('');
+    },
+
+    renderQuizStats() {
+      const q   = AppState.quiz;
+      const avg = q.scores.length
+        ? Math.round(q.scores.reduce((a, b) => a + b.score, 0) / q.scores.length) + '%'
+        : '—';
+      document.getElementById('mussar-quiz-total').textContent = q.total;
+      document.getElementById('mussar-quiz-best').textContent  = q.best !== null ? q.best + '%' : '—';
+      document.getElementById('mussar-quiz-avg').textContent   = avg;
+    },
+
+    selectLevel(l) {
+      AppState.activeLevel = l;
+      this.renderLevelSelector();
+      this.renderCards();
+    },
+
+    switchTab(name) {
+      document.querySelectorAll('.ohr-panel').forEach(p => p.classList.remove('is-active'));
+      document.querySelectorAll('.ohr-tab').forEach(b => b.classList.remove('is-active'));
+      document.getElementById(`mussar-panel-${name}`).classList.add('is-active');
+      document.getElementById(`mussar-tab-${name}`).classList.add('is-active');
+    }
+  };
+  window.UI = UI;
+
+  /* ── 7. MODAL ─────────────────────────────────────────── */
+  const Modal = {
+    open(id) {
+      const t = TEACHINGS.find(x => x.id === id);
+      if (!t) return;
+      const isRead = AppState.readIds.has(id);
+      /*
+       * INTEGRAÇÃO RAV HAOHR:
+       * URL: rav.html?contexto=TITULO&modulo=mussar&id=mussar-01
+       * O rav.html lê: new URLSearchParams(location.search).get('contexto')
+       */
+      const ravUrl = `rav.html?contexto=${encodeURIComponent(t.title)}&modulo=mussar&id=${t.id}`;
+
+      document.getElementById('mussar-modal-content').innerHTML = `
+        <div class="mussar-modal__meta">
+          MUSSAR ${t.id.replace('mussar-', 'Nº ')} · NÍVEL ${t.level} · ${t.tag}
+        </div>
+        <div class="mussar-modal__heb">${t.heb}</div>
+        <div class="mussar-modal__title">${t.title}</div>
+        <div class="mussar-modal__divider"></div>
+        <p class="mussar-modal__text">${t.body}</p>
+        <div class="mussar-modal__reflection">
+          <strong>PARA MEDITAÇÃO — CHESHBON HANEFESH</strong>
+          ${t.reflection}
+        </div>
+        <div class="mussar-modal__exercise">
+          <strong>EXERCÍCIO PRÁTICO — AVODAT HAYOM</strong>
+          ${t.exercise}
+        </div>
+        <div class="mussar-modal__source">Fonte: ${t.source}</div>
+        <div class="mussar-modal__actions">
+          <button class="btn-primary"
+                  onclick="Modal.markRead('${t.id}')"
+                  ${isRead ? 'disabled style="opacity:.5;cursor:default;"' : ''}>
+            ${isRead ? '✓ LIDO' : '+ MARCAR COMO LIDO (+10 pts)'}
+          </button>
+          <a href="${ravUrl}" class="btn-secondary">✦ PERGUNTAR AO RAV HAOHR</a>
+        </div>
+      `;
+      document.getElementById('mussar-modal').classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    },
+
+    close() {
+      document.getElementById('mussar-modal').classList.remove('is-open');
+      document.body.style.overflow = '';
+    },
+
+    closeOutside(e) {
+      if (e.target === document.getElementById('mussar-modal')) this.close();
+    },
+
+    markRead(id) {
+      const marked = Progress.markRead(id);
+      if (marked) this.open(id);
+    }
+  };
+  window.Modal = Modal;
+
+  /* ── 8. QUIZ ──────────────────────────────────────────── */
+  const Quiz = {
+    _level:   0,
+    _state:   { active:false, questions:[], current:0, score:0, answers:[] },
+    _LETTERS: ['A','B','C','D'],
+
+    setLevel(l, btn) {
+      this._level = l;
+      document.querySelectorAll('.mussar-quiz__filter').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    },
+
+    start() {
+      let pool = this._level === 0
+        ? QUIZ_QUESTIONS
+        : QUIZ_QUESTIONS.filter(q => q.level === this._level);
+      if (!pool.length) pool = QUIZ_QUESTIONS;
+      const questions = [...pool].sort(() => Math.random() - 0.5).slice(0, 10);
+      this._state = { active:true, questions, current:0, score:0, answers:[] };
+
+      document.getElementById('mussar-quiz-home').style.display   = 'none';
+      document.getElementById('mussar-quiz-result').style.display = 'none';
+      document.getElementById('mussar-quiz-play').style.display   = 'block';
+      this._renderQuestion();
+    },
+
+    _renderQuestion() {
+      const { questions, current } = this._state;
+      if (current >= questions.length) { this._showResult(); return; }
+      const q = questions[current];
+
+      const dots = questions.map((_, i) => {
+        let cls = 'mussar-quiz__dot';
+        if (i < current)        cls += this._state.answers[i] ? ' is-correct' : ' is-wrong';
+        else if (i === current) cls += ' is-current';
+        return `<div class="${cls}"></div>`;
+      }).join('');
+
+      document.getElementById('mussar-quiz-play').innerHTML = `
+        <div class="mussar-quiz__question-wrap">
+          <div class="mussar-quiz__progress-dots">${dots}</div>
+          <div class="mussar-quiz__q-label">QUESTÃO ${current+1} DE ${questions.length}</div>
+          <div class="mussar-quiz__q-text">${q.q}</div>
+          <div class="mussar-quiz__options">
+            ${q.opts.map((o, i) => `
+              <div class="mussar-quiz__option" data-index="${i}" onclick="Quiz._answer(${i})">
+                <span class="mussar-quiz__option-letter">${this._LETTERS[i]}</span>${o}
+              </div>`).join('')}
+          </div>
+          <div class="mussar-quiz__feedback" id="mussar-quiz-feedback"></div>
+          <button class="btn-primary"
+                  id="mussar-quiz-next"
+                  style="display:none;margin-top:.5rem;"
+                  onclick="Quiz._next()">
+            PRÓXIMA →
+          </button>
+        </div>`;
+    },
+
+    _answer(i) {
+      const q       = this._state.questions[this._state.current];
+      const correct = i === q.ans;
+      document.querySelectorAll('.mussar-quiz__option').forEach((o, idx) => {
+        o.style.pointerEvents = 'none';
+        if (idx === q.ans)              o.classList.add('is-correct');
+        else if (idx === i && !correct) o.classList.add('is-wrong');
+      });
+      if (correct) this._state.score++;
+      this._state.answers.push(correct);
+      const fb = document.getElementById('mussar-quiz-feedback');
+      fb.textContent = (correct ? '✓ Correto — ' : '✗ Incorreto — ') + q.exp;
+      fb.classList.add('is-shown');
+      document.getElementById('mussar-quiz-next').style.display = 'block';
+    },
+
+    _next() {
+      this._state.current++;
+      this._renderQuestion();
+    },
+
+    _showResult() {
+      const { score, questions } = this._state;
+      const pct = Math.round((score / questions.length) * 100);
+      Progress.recordQuiz(score, pct, this._level);
+      UI.renderQuizStats();
+
+      const MSGS = [
+        [0,  39, '"O Mussar se constrói tijolo a tijolo. Continue — cada queda é parte do caminho."'],
+        [40, 69, '"Bom esforço! Revise os ensinamentos e retorne. A constância é tudo." — Rav Wolbe'],
+        [70, 89, '"Muito bem! Seu coração está sendo trabalhado. Continue com alegria." — Rav Nachman'],
+        [90, 100, '"Excepcional! \'O justo cai sete vezes e se levanta.\' Você está de pé." — Mishlei 24:16']
+      ];
+      const msg  = MSGS.find(m => pct >= m[0] && pct <= m[1]);
+      const icon = pct >= 90 ? '✡' : pct >= 70 ? '🕯️' : '📖';
+
+      document.getElementById('mussar-quiz-play').style.display   = 'none';
+      const res = document.getElementById('mussar-quiz-result');
+      res.style.display = 'block';
+      res.innerHTML = `
+        <div class="mussar-quiz__result">
+          <div class="mussar-quiz__result-icon">${icon}</div>
+          <div class="mussar-quiz__result-score">${score} / ${questions.length}</div>
+          <div class="mussar-quiz__result-pct">${pct}% de acerto · +${score * 5} pontos</div>
+          <div class="mussar-quiz__result-msg">${msg[2]}</div>
+          <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;">
+            <button class="btn-secondary" onclick="Quiz._retry()">TENTAR NOVAMENTE</button>
+            <button class="btn-primary"   onclick="Quiz._goStudy()">VOLTAR AO ESTUDO</button>
+          </div>
+        </div>`;
+    },
+
+    _retry()   {
+      document.getElementById('mussar-quiz-result').style.display = 'none';
+      document.getElementById('mussar-quiz-home').style.display   = 'block';
+    },
+    _goStudy() {
+      document.getElementById('mussar-quiz-result').style.display = 'none';
+      document.getElementById('mussar-quiz-home').style.display   = 'block';
+      UI.switchTab('study');
+    }
+  };
+  window.Quiz = Quiz;
+
+  /* ── 9. INIT ──────────────────────────────────────────── */
+  auth.onAuthStateChanged(user => {
+    if (user) FireSync.load(user.uid);
+    else      UI.render();
+  });
+
+})();
+</script>
+</body>
+</html>
