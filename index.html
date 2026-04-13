@@ -803,19 +803,262 @@
       to { opacity: 1; }
     }
 
+    
+    .account-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      min-height: 40px;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(200,168,75,0.28);
+      background: linear-gradient(135deg, rgba(200,168,75,0.18), rgba(200,168,75,0.08));
+      box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+      color: var(--parchment);
+      text-transform: none !important;
+      min-width: unset;
+    }
+
+    .account-chip .account-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      box-shadow: 0 2px 12px rgba(200,168,75,0.25);
+      flex-shrink: 0;
+    }
+
+    .account-chip .account-meta {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.05;
+    }
+
+    .account-chip .account-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      color: var(--ink);
+      opacity: 0.95;
+    }
+
+    .account-chip .account-subtitle {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      opacity: 0.9;
+      text-transform: none;
+      letter-spacing: 0.02em;
+    }
+
+    .quick-profile {
+      max-width: 1100px;
+      margin: 0 auto 3rem;
+      display: none;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .quick-profile.is-visible {
+      display: grid;
+      animation: fadeInUp 0.7s ease both;
+    }
+
+    .quick-profile-card,
+    .quick-profile-side {
+      background: linear-gradient(135deg, rgba(200,168,75,0.1), rgba(200,168,75,0.03));
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.35rem 1.4rem;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.22);
+    }
+
+    .quick-profile-kicker {
+      font-family: 'Cinzel', serif;
+      font-size: 0.64rem;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+
+    .quick-profile-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .quick-profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,168,75,0.35);
+      background: radial-gradient(circle at 30% 30%, rgba(232,204,122,0.35), rgba(200,168,75,0.09));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1.7rem;
+      color: var(--gold-light);
+      flex-shrink: 0;
+    }
+
+    .quick-profile-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      color: var(--parchment);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.15rem;
+    }
+
+    .quick-profile-email {
+      color: var(--parchment-dark);
+      opacity: 0.82;
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+
+    .quick-profile-copy {
+      color: var(--parchment-dark);
+      opacity: 0.86;
+      font-size: 0.98rem;
+      margin-bottom: 1rem;
+    }
+
+    .quick-profile-actions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .quick-stat {
+      border: 1px solid rgba(200,168,75,0.15);
+      background: rgba(200,168,75,0.05);
+      border-radius: 6px;
+      padding: 0.9rem 0.75rem;
+      text-align: center;
+    }
+
+    .quick-stat-value {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 1.35rem;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .quick-stat-label {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+    }
+
+    .quick-profile-side h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      color: var(--gold-light);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .quick-profile-list {
+      list-style: none;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .quick-profile-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.8rem;
+      border-bottom: 1px solid rgba(200,168,75,0.12);
+      padding-bottom: 0.75rem;
+      color: var(--parchment-dark);
+      font-size: 0.95rem;
+    }
+
+    .quick-profile-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .quick-profile-list strong {
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .pillar-card-link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .pillar-card-link:focus-visible .pillar-card,
+    .pillar-card-link:hover .pillar-card {
+      background: linear-gradient(135deg, rgba(200,168,75,0.1) 0%, rgba(200,168,75,0.04) 100%);
+      transform: translateY(-4px);
+      border-color: rgba(200,168,75,0.5);
+    }
+
+    .pillar-card-link:focus-visible .pillar-card::before,
+    .pillar-card-link:hover .pillar-card::before {
+      opacity: 1;
+    }
+
+    .pillar-card-link .pillar-card {
+      height: 100%;
+    }
+
+    .nav-mobile-account {
+      display: none;
+      text-decoration: none;
+    }
+
     @media (max-width: 900px) {
       .rav-inner { grid-template-columns: 1fr; }
       .rav-points { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
+      nav { padding: 1rem 1.1rem; gap: 0.7rem; }
       .nav-links { display: none; }
+      .nav-mobile-account { display: inline-flex; }
+      .nav-logo .brand-name { font-size: 0.85rem; letter-spacing: 0.11em; }
       .hero { padding: 7rem 1.5rem 4rem; }
       .pillars, .courses, .about, .rav-section { padding: 4rem 1.5rem; }
       .quote-section { padding: 3.5rem 1.5rem; }
       footer { padding: 2.5rem 1.5rem; }
       .rav-main, .rav-side { padding: 1.5rem; }
+      .quick-profile.is-visible { grid-template-columns: 1fr; }
+      .quick-mini-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .account-chip { padding: 0.4rem 0.7rem; }
+      .account-chip .account-title { font-size: 0.6rem; }
+      .account-chip .account-subtitle { font-size: 0.76rem; }
     }
   </style>
 </head>
@@ -834,6 +1077,7 @@
       <li><a href="contato.html">Contato</a></li>
       <li><a href="login.html" class="nav-cta" id="navAccountLink">Entrar</a></li>
     </ul>
+    <a href="login.html" class="nav-cta nav-mobile-account" id="navMobileAccountLink">Entrar</a>
   </nav>
 
   <section class="hero">
@@ -864,6 +1108,53 @@
     </div>
   </section>
 
+  <section class="pillars" style="padding-top: 3rem;">
+    <div class="quick-profile" id="quickProfilePanel">
+      <div class="quick-profile-card">
+        <span class="quick-profile-kicker">Presença da Conta</span>
+        <div class="quick-profile-top">
+          <div class="quick-profile-avatar" id="quickProfileAvatar">א</div>
+          <div>
+            <div class="quick-profile-name" id="quickProfileName">Aluno do Ohr</div>
+            <div class="quick-profile-email" id="quickProfileEmail">Entre para acompanhar seu progresso, pontos e estudo.</div>
+          </div>
+        </div>
+        <p class="quick-profile-copy" id="quickProfileCopy">
+          Seu painel pessoal mostra progresso, pontuação, lições e o caminho já percorrido dentro do Beit Midrash.
+        </p>
+        <div class="quick-profile-actions">
+          <a href="perfil.html" class="btn-primary" id="quickProfileButton">ABRIR PERFIL</a>
+          <a href="quiz.html" class="btn-secondary">CONTINUAR ESTUDO</a>
+        </div>
+
+        <div class="quick-mini-stats">
+          <div class="quick-stat">
+            <span class="quick-stat-value" id="quickPoints">—</span>
+            <span class="quick-stat-label">Pontos</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-value" id="quickLessons">—</span>
+            <span class="quick-stat-label">Lições</span>
+          </div>
+          <div class="quick-stat">
+            <span class="quick-stat-value" id="quickQuizzes">—</span>
+            <span class="quick-stat-label">Quizzes</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="quick-profile-side">
+        <h3>Painel de Jornada</h3>
+        <ul class="quick-profile-list">
+          <li><strong>Status</strong><span id="quickStatus">Visitante</span></li>
+          <li><strong>Conta</strong><span id="quickAccountType">Aguardando login</span></li>
+          <li><strong>Última leitura</strong><span id="quickLastRead">Sincronização futura</span></li>
+          <li><strong>Próximo passo</strong><span id="quickNextStep">Entre para abrir seu perfil e continuar o estudo</span></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
   <section class="pillars">
     <div class="section-header">
       <span class="section-label">Os Pilares do Ohr</span>
@@ -872,36 +1163,48 @@
     </div>
 
     <div class="pillars-grid">
-      <div class="pillar-card">
-        <span class="pillar-icon">תּוֹרָה</span>
-        <h3>TORÁ</h3>
-        <p>Estudo direto das fontes — Pentateuco, Profetas e Escritos. A base de tudo que existe.</p>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">הֲלָכָה</span>
-        <h3>HALACHÁ</h3>
-        <p>A lei judaica viva, prática e aplicada ao cotidiano. Do Shulchan Aruch à vida real.</p>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">מוּסָר</span>
-        <h3>MUSSAR</h3>
-        <p>Ética judaica e aperfeiçoamento do caráter segundo os grandes mestres da tradição.</p>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">פַּרְשָׁה</span>
-        <h3>PARASHÁ</h3>
-        <p>Estudo semanal da porção da Torá com comentários clássicos e insights profundos.</p>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">בְּנֵי נֹחַ</span>
-        <h3>BNEI NOACH</h3>
-        <p>As Sete Leis de Noé e o caminho espiritual para os filhos de todas as nações.</p>
-      </div>
-      <div class="pillar-card">
-        <span class="pillar-icon">גִּיּוּר</span>
-        <h3>GIYUR</h3>
-        <p>Orientação rigorosa e amorosa para aqueles que caminham em direção ao povo judeu.</p>
-      </div>
+      <a href="torah.html" class="pillar-card-link">
+        <div class="pillar-card">
+          <span class="pillar-icon">תּוֹרָה</span>
+          <h3>TORÁ</h3>
+          <p>Estudo direto das fontes — Pentateuco, Profetas e Escritos. A base de tudo que existe.</p>
+        </div>
+      </a>
+      <a href="halacha.html" class="pillar-card-link">
+        <div class="pillar-card">
+          <span class="pillar-icon">הֲלָכָה</span>
+          <h3>HALACHÁ</h3>
+          <p>A lei judaica viva, prática e aplicada ao cotidiano. Do Shulchan Aruch à vida real.</p>
+        </div>
+      </a>
+      <a href="mussar.html" class="pillar-card-link">
+        <div class="pillar-card">
+          <span class="pillar-icon">מוּסָר</span>
+          <h3>MUSSAR</h3>
+          <p>Ética judaica e aperfeiçoamento do caráter segundo os grandes mestres da tradição.</p>
+        </div>
+      </a>
+      <a href="parasha.html" class="pillar-card-link">
+        <div class="pillar-card">
+          <span class="pillar-icon">פַּרְשָׁה</span>
+          <h3>PARASHÁ</h3>
+          <p>Estudo semanal da porção da Torá com comentários clássicos e insights profundos.</p>
+        </div>
+      </a>
+      <a href="bnei-noach.html" class="pillar-card-link">
+        <div class="pillar-card">
+          <span class="pillar-icon">בְּנֵי נֹחַ</span>
+          <h3>BNEI NOACH</h3>
+          <p>As Sete Leis de Noé e o caminho espiritual para os filhos de todas as nações.</p>
+        </div>
+      </a>
+      <a href="giyur.html" class="pillar-card-link">
+        <div class="pillar-card">
+          <span class="pillar-icon">גִּיּוּר</span>
+          <h3>GIYUR</h3>
+          <p>Orientação rigorosa e amorosa para aqueles que caminham em direção ao povo judeu.</p>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -1089,6 +1392,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
@@ -1104,32 +1408,145 @@
     }
 
     const ADMIN_EMAIL = "orhatorabrasil@gmail.com";
+    const db = firebase.firestore();
     const navAccountLink = document.getElementById("navAccountLink");
+    const navMobileAccountLink = document.getElementById("navMobileAccountLink");
     const footerAccountLink = document.getElementById("footerAccountLink");
+    const quickProfilePanel = document.getElementById("quickProfilePanel");
+    const quickProfileAvatar = document.getElementById("quickProfileAvatar");
+    const quickProfileName = document.getElementById("quickProfileName");
+    const quickProfileEmail = document.getElementById("quickProfileEmail");
+    const quickProfileCopy = document.getElementById("quickProfileCopy");
+    const quickProfileButton = document.getElementById("quickProfileButton");
+    const quickPoints = document.getElementById("quickPoints");
+    const quickLessons = document.getElementById("quickLessons");
+    const quickQuizzes = document.getElementById("quickQuizzes");
+    const quickStatus = document.getElementById("quickStatus");
+    const quickAccountType = document.getElementById("quickAccountType");
+    const quickLastRead = document.getElementById("quickLastRead");
+    const quickNextStep = document.getElementById("quickNextStep");
 
-    function updateAccountLinks(text, href) {
+    function renderAccountChip(target, initial, title, subtitle, href) {
+      if (!target) return;
+      target.innerHTML = `
+        <span class="account-chip">
+          <span class="account-avatar">${initial}</span>
+          <span class="account-meta">
+            <span class="account-title">${title}</span>
+            <span class="account-subtitle">${subtitle}</span>
+          </span>
+        </span>
+      `;
+      target.href = href;
+    }
+
+    function updateLoggedOutState() {
       if (navAccountLink) {
-        navAccountLink.textContent = text;
-        navAccountLink.href = href;
+        navAccountLink.textContent = "Entrar";
+        navAccountLink.href = "login.html";
+      }
+      if (navMobileAccountLink) {
+        navMobileAccountLink.textContent = "Entrar";
+        navMobileAccountLink.href = "login.html";
       }
       if (footerAccountLink) {
-        footerAccountLink.textContent = text;
-        footerAccountLink.href = href;
+        footerAccountLink.textContent = "Entrar";
+        footerAccountLink.href = "login.html";
+      }
+      if (quickProfilePanel) {
+        quickProfilePanel.classList.add("is-visible");
+      }
+      if (quickProfileAvatar) quickProfileAvatar.textContent = "א";
+      if (quickProfileName) quickProfileName.textContent = "Aluno do Ohr";
+      if (quickProfileEmail) quickProfileEmail.textContent = "Entre com sua conta para acompanhar pontos, perfil e progresso.";
+      if (quickProfileCopy) quickProfileCopy.textContent = "Seu painel pessoal mostra progresso, pontuação, lições e o caminho já percorrido dentro do Beit Midrash.";
+      if (quickProfileButton) {
+        quickProfileButton.textContent = "ENTRAR NO OHR";
+        quickProfileButton.href = "login.html";
+      }
+      if (quickPoints) quickPoints.textContent = "—";
+      if (quickLessons) quickLessons.textContent = "—";
+      if (quickQuizzes) quickQuizzes.textContent = "—";
+      if (quickStatus) quickStatus.textContent = "Visitante";
+      if (quickAccountType) quickAccountType.textContent = "Aguardando login";
+      if (quickLastRead) quickLastRead.textContent = "Sincronização futura";
+      if (quickNextStep) quickNextStep.textContent = "Entre para abrir seu perfil e continuar o estudo";
+    }
+
+    function getStatValue(data, keys, fallback = "0") {
+      for (const key of keys) {
+        const value = data?.[key];
+        if (value !== undefined && value !== null && value !== "") return String(value);
+      }
+      return fallback;
+    }
+
+    async function loadUserProfileData(user) {
+      const email = (user.email || "").toLowerCase();
+      const isAdmin = email === ADMIN_EMAIL.toLowerCase();
+      const baseName = user.displayName || email.split("@")[0] || "Aluno";
+      const initial = baseName.charAt(0).toUpperCase();
+
+      renderAccountChip(navAccountLink, initial, "Conta", "Perfil", "perfil.html");
+      renderAccountChip(navMobileAccountLink, initial, "Conta", "Perfil", "perfil.html");
+
+      if (footerAccountLink) {
+        footerAccountLink.textContent = "Perfil";
+        footerAccountLink.href = "perfil.html";
+      }
+
+      if (quickProfilePanel) quickProfilePanel.classList.add("is-visible");
+      if (quickProfileAvatar) quickProfileAvatar.textContent = initial;
+      if (quickProfileName) quickProfileName.textContent = baseName.toUpperCase();
+      if (quickProfileEmail) quickProfileEmail.textContent = user.email || "Conta conectada";
+      if (quickProfileButton) {
+        quickProfileButton.textContent = "ABRIR PERFIL";
+        quickProfileButton.href = "perfil.html";
+      }
+
+      let profileData = {};
+      try {
+        const uidDoc = await db.collection("users").doc(user.uid).get();
+        if (uidDoc.exists) {
+          profileData = uidDoc.data() || {};
+        } else {
+          const emailQuery = await db.collection("users").where("email", "==", email).limit(1).get();
+          if (!emailQuery.empty) {
+            profileData = emailQuery.docs[0].data() || {};
+          }
+        }
+      } catch (error) {
+        console.warn("Não foi possível carregar dados do perfil na home.", error);
+      }
+
+      const points = getStatValue(profileData, ["score", "points", "pontuacao", "pontuação"], "0");
+      const lessons = getStatValue(profileData, ["lessons", "licoes", "lições", "coursesCompleted", "completedLessons"], "0");
+      const quizzes = getStatValue(profileData, ["quizzes", "quizCount", "quizzesDone", "answeredQuizzes"], "0");
+      const plan = getStatValue(profileData, ["plan", "plano", "tier"], isAdmin ? "Admin" : "Aluno");
+      const lastRead = getStatValue(profileData, ["lastRead", "ultimaLeitura", "últimaLeitura", "syncedReading"], "Sincronizado");
+      const nextStep = getStatValue(profileData, ["nextStep", "proximoPasso", "próximoPasso"], "Continue sua jornada no perfil e nos cursos");
+
+      if (quickPoints) quickPoints.textContent = points;
+      if (quickLessons) quickLessons.textContent = lessons;
+      if (quickQuizzes) quickQuizzes.textContent = quizzes;
+      if (quickStatus) quickStatus.textContent = isAdmin ? "Administrador reconhecido" : "Aluno ativo";
+      if (quickAccountType) quickAccountType.textContent = plan;
+      if (quickLastRead) quickLastRead.textContent = lastRead;
+      if (quickNextStep) quickNextStep.textContent = nextStep;
+
+      if (quickProfileCopy) {
+        quickProfileCopy.textContent = isAdmin
+          ? "Sua conta está conectada. O painel inicial já exibe sua presença, pontuação e acesso rápido ao perfil."
+          : "Sua conta está conectada. O painel inicial já exibe sua presença, pontuação e acesso rápido ao perfil.";
       }
     }
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (!user) {
-        updateAccountLinks("Entrar", "login.html");
+        updateLoggedOutState();
         return;
       }
-
-      const email = (user.email || "").toLowerCase();
-      const isAdmin = email === ADMIN_EMAIL.toLowerCase();
-
-      // Na página pública inicial, o rótulo visível permanece neutro para qualquer conta.
-      // Recursos exclusivos de administrador devem aparecer apenas dentro das áreas internas protegidas.
-      updateAccountLinks("Perfil", "perfil.html");
+      loadUserProfileData(user);
     });
   </script>
 </body>
