@@ -308,7 +308,7 @@
         <span class="featured-badge">✦ CURSO EM DESTAQUE</span>
         <h2>Introdução Completa ao Judaísmo</h2>
         <p>Do começo absoluto até uma compreensão sólida da fé, prática e identidade judaica. O ponto de partida para todo estudante sério.</p>
-        <a href="login.html" class="btn-start requires-auth">COMEÇAR AGORA</a>
+        <a href="torah.html" class="btn-start requires-auth" data-target="torah.html">COMEÇAR AGORA</a>
       </div>
       <span class="featured-hebrew">תּוֹרָה</span>
     </div>
@@ -329,7 +329,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-start requires-auth">INICIAR</a>
+          <a href="bnei-noach.html" class="btn-start requires-auth" data-target="bnei-noach.html">INICIAR</a>
           <div class="progress-bar-wrap">
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
             <span class="progress-label">0%</span>
@@ -351,7 +351,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-start requires-auth">INICIAR</a>
+          <a href="mussar.html" class="btn-start requires-auth" data-target="mussar.html">INICIAR</a>
           <div class="progress-bar-wrap">
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
             <span class="progress-label">0%</span>
@@ -373,7 +373,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-start requires-auth">INICIAR</a>
+          <a href="parasha.html" class="btn-start requires-auth" data-target="parasha.html">INICIAR</a>
           <div class="progress-bar-wrap">
             <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
             <span class="progress-label">0%</span>
@@ -395,7 +395,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-outline premium-link">VER CURSO</a>
+          <a href="halacha.html" class="btn-outline premium-link" data-target="halacha.html">VER CURSO</a>
           <span class="tag premium premium-status">🔒 PREMIUM</span>
         </div>
       </div>
@@ -436,7 +436,7 @@
           </div>
         </div>
         <div class="card-footer">
-          <a href="login.html" class="btn-outline premium-link">VER CURSO</a>
+          <a href="giyur.html" class="btn-outline premium-link" data-target="giyur.html">VER CURSO</a>
           <span class="tag premium premium-status">🔒 PREMIUM</span>
         </div>
       </div>
@@ -507,11 +507,13 @@
 
       requiresAuthLinks.forEach(link => {
         link.textContent = link.dataset.originalText || link.textContent;
-        link.href = "login.html";
+        const target = link.dataset.target || "cursos.html";
+        link.href = `login.html?next=${encodeURIComponent(target)}`;
       });
 
       premiumLinks.forEach(link => {
-        link.href = "login.html";
+        const target = link.dataset.target || "perfil.html#premium";
+        link.href = `login.html?next=${encodeURIComponent(target)}`;
         link.textContent = "VER CURSO";
       });
 
@@ -540,15 +542,16 @@
         if (!link.dataset.originalText) {
           link.dataset.originalText = link.textContent;
         }
-        link.href = "perfil.html";
+        link.href = link.dataset.target || "cursos.html";
       });
 
       premiumLinks.forEach(link => {
+        const target = link.dataset.target || "perfil.html#premium";
         if (isAdmin) {
-          link.href = "perfil.html";
+          link.href = target;
           link.textContent = "ACESSO LIBERADO";
         } else {
-          link.href = "perfil.html";
+          link.href = "perfil.html#premium";
           link.textContent = "VER CURSO";
         }
       });
