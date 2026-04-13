@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Torá — Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C8A84B;
+      --gold-light: #E8CC7A;
+      --gold-dim: #8A6F2E;
+      --gold-faint: rgba(200,168,75,0.08);
+      --parchment: #F5EDD6;
+      --parchment-dark: #E8D9B5;
+      --ink: #1A1208;
+      --ink-soft: #2E2010;
+      --deep: #0D0A04;
+      --deep2: #110D05;
+      --cream: #FAF5E8;
+      --border: rgba(200,168,75,0.25);
+      --border-strong: rgba(200,168,75,0.45);
+      --level1: #C8A84B;
+      --level2: #7BB8C8;
+      --level3: #C87BB8;
+      --level4: #B8C87B;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+      background:var(--deep);
+      color:var(--parchment);
+      font-family:'EB Garamond',Georgia,serif;
+      font-size:17px;
+      line-height:1.75;
+      overflow-x:hidden;
+      min-height:100vh;
+    }
+    body::before{
+      content:'';position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none;z-index:0;opacity:0.6;
+    }
+
+    /* NAV */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:200;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 3rem;
+      background:linear-gradient(180deg,rgba(13,10,4,0.98) 0%,rgba(13,10,4,0.85) 100%);
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(12px);
+    }
+    .nav-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
+    .nav-logo .hebrew-mark{font-family:'Frank Ruhl Libre',serif;font-size:1.6rem;color:var(--gold);}
+    .nav-logo .brand-name{font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.15em;color:var(--parchment);font-weight:600;}
+    .nav-back{
+      font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;
+      color:var(--gold-light);text-decoration:none;
+      border:1px solid var(--border-strong);padding:.45rem 1.2rem;
+      transition:all .3s;
+    }
+    .nav-back:hover{background:var(--gold-faint);color:var(--gold);}
+    .nav-right{display:flex;align-items:center;gap:.8rem;}
+    .nav-account{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.12em;color:var(--ink);background:var(--gold);text-decoration:none;padding:.45rem 1rem;transition:all .3s;}
+    .nav-account:hover{background:var(--gold-light);color:var(--ink);}
+
+    /* HERO */
+    .page-hero{
+      min-height:38vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      text-align:center;padding:8rem 2rem 3rem;
+      position:relative;overflow:hidden;
+    }
+    .page-hero-bg{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%,rgba(200,168,75,0.10) 0%,transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%,rgba(200,168,75,0.05) 0%,transparent 60%);
+    }
+    .hero-float-hebrew{
+      font-family:'Frank Ruhl Libre',serif;
+      font-size:clamp(4rem,12vw,9rem);
+      color:var(--gold);opacity:.06;
+      position:absolute;top:10%;
+      letter-spacing:.3em;
+      animation:breathe 7s ease-in-out infinite;
+      user-select:none;pointer-events:none;
+    }
+    @keyframes breathe{0%,100%{opacity:.05;transform:scale(1);}50%{opacity:.10;transform:scale(1.02);}}
+    .page-label{
+      font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.3em;
+      color:var(--gold-dim);text-transform:uppercase;margin-bottom:1rem;
+      animation:fadeInDown .8s ease both;
+    }
+    .page-title{
+      font-family:'Cinzel',serif;font-size:clamp(2.2rem,5vw,4rem);
+      font-weight:700;color:var(--parchment);letter-spacing:.08em;
+      line-height:1.1;
+      animation:fadeInDown .8s .15s ease both;
+    }
+    .page-title span{color:var(--gold);display:block;}
+    .page-line{width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem auto;}
+    .page-desc{
+      font-style:italic;color:var(--parchment-dark);opacity:.85;
+      max-width:520px;font-size:1.05rem;
+      animation:fadeInDown .8s .35s ease both;
+    }
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:none;}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+    /* PROGRESS BAR */
+    .progress-strip{
+      background:rgba(13,10,4,0.95);border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      padding:.9rem 3rem;display:flex;align-items:center;gap:2.5rem;
+      position:sticky;top:72px;z-index:150;
+      backdrop-filter:blur(8px);flex-wrap:wrap;
+    }
+    .prog-item{display:flex;flex-direction:column;gap:.15rem;}
+    .prog-label{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.2em;color:var(--gold-dim);}
+    .prog-value{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--gold-light);}
+    .prog-bar-wrap{flex:1;min-width:120px;}
+    .prog-bar-bg{height:4px;background:rgba(200,168,75,0.15);border-radius:2px;}
+    .prog-bar-fill{height:4px;background:linear-gradient(90deg,var(--gold-dim),var(--gold-light));border-radius:2px;transition:width .6s ease;}
+    .streak-fire{font-size:1.2rem;}
+
+    /* TABS */
+    .tabs-section{
+      max-width:1100px;margin:0 auto;padding:3rem 2rem 1rem;
+      position:relative;z-index:1;
+    }
+    .tabs-row{
+      display:flex;gap:.5rem;flex-wrap:wrap;
+      border-bottom:1px solid var(--border);
+      margin-bottom:2.5rem;
+    }
+    .tab-btn{
+      font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.15em;
+      text-transform:uppercase;
+      padding:.6rem 1.4rem;
+      background:transparent;border:none;
+      color:var(--parchment-dark);cursor:pointer;
+      position:relative;transition:color .3s;
+      border-bottom:2px solid transparent;
+      margin-bottom:-1px;
+    }
+    .tab-btn::after{
+      content:'';position:absolute;bottom:-2px;left:0;right:0;
+      height:2px;background:var(--gold);
+      transform:scaleX(0);transition:transform .3s;
+    }
+    .tab-btn:hover{color:var(--gold-light);}
+    .tab-btn.active{color:var(--gold);}
+    .tab-btn.active::after{transform:scaleX(1);}
+    .tab-badge{
+      display:inline-block;
+      font-size:.6rem;padding:.1rem .4rem;
+      border-radius:20px;margin-left:.4rem;
+      font-family:sans-serif;
+    }
+
+    /* CONTENT PANELS */
+    .panel{display:none;}
+    .panel.active{display:block;animation:fadeIn .4s ease;}
+
+    /* LEVEL SELECTOR */
+    .level-selector{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1rem;margin-bottom:2.5rem;
+    }
+    .level-card{
+      border:1px solid var(--border);
+      padding:1.4rem;cursor:pointer;
+      transition:all .3s;position:relative;
+      overflow:hidden;background:rgba(13,10,4,0.6);
+    }
+    .level-card::before{
+      content:'';position:absolute;inset:0;
+      background:var(--lc-color,var(--gold));
+      opacity:0;transition:opacity .3s;
+    }
+    .level-card:hover::before,.level-card.active::before{opacity:.06;}
+    .level-card.active{border-color:var(--lc-color,var(--gold));}
+    .lc-num{
+      font-family:'Frank Ruhl Libre',serif;font-size:2rem;
+      color:var(--lc-color,var(--gold));opacity:.7;line-height:1;margin-bottom:.5rem;
+    }
+    .lc-title{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;color:var(--parchment);font-weight:600;}
+    .lc-range{font-size:.8rem;color:var(--parchment-dark);opacity:.6;margin-top:.3rem;}
+    .lc-check{
+      position:absolute;top:.8rem;right:.8rem;
+      font-size:.8rem;color:var(--lc-color,var(--gold));
+      opacity:0;transition:opacity .3s;
+    }
+    .level-card.done .lc-check{opacity:1;}
+
+    /* TEACHINGS GRID */
+    .teachings-grid{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+      gap:1.25rem;
+    }
+    .teaching-card{
+      border:1px solid var(--border);
+      background:rgba(17,13,5,0.8);
+      padding:1.6rem;
+      cursor:pointer;
+      transition:all .3s;position:relative;
+      overflow:hidden;
+    }
+    .teaching-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      transform:scaleX(0);transition:transform .4s;
+    }
+    .teaching-card:hover{border-color:var(--border-strong);transform:translateY(-2px);}
+    .teaching-card:hover::before{transform:scaleX(1);}
+    .teaching-card.read{border-color:rgba(200,168,75,0.35);}
+    .tc-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.8rem;}
+    .tc-num{
+      font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.15em;
+      color:var(--gold-dim);min-width:36px;
+    }
+    .tc-tag{
+      font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.1em;
+      padding:.2rem .7rem;border:1px solid var(--border);
+      color:var(--parchment-dark);opacity:.7;
+    }
+    .tc-hebrew{
+      font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;
+      color:var(--gold-light);margin-bottom:.5rem;text-align:right;
+      line-height:1.4;
+    }
+    .tc-title{
+      font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.05em;
+      color:var(--parchment);font-weight:600;margin-bottom:.6rem;
+    }
+    .tc-body{font-size:.9rem;color:var(--parchment-dark);opacity:.85;line-height:1.65;}
+    .tc-source{
+      margin-top:.8rem;font-size:.78rem;
+      font-style:italic;color:var(--gold-dim);
+      border-top:1px solid var(--border);padding-top:.6rem;
+    }
+    .tc-read-mark{
+      position:absolute;bottom:.8rem;right:.8rem;
+      font-size:.75rem;color:var(--gold);opacity:0;
+      font-family:'Cinzel',serif;letter-spacing:.1em;
+      transition:opacity .3s;
+    }
+    .teaching-card.read .tc-read-mark{opacity:.7;}
+
+    /* MODAL */
+    .modal-overlay{
+      position:fixed;inset:0;background:rgba(13,10,4,0.92);
+      z-index:1000;display:none;align-items:center;justify-content:center;
+      padding:2rem;backdrop-filter:blur(4px);
+    }
+    .modal-overlay.open{display:flex;animation:fadeIn .3s ease;}
+    .modal-box{
+      background:var(--deep2);border:1px solid var(--border-strong);
+      max-width:680px;width:100%;max-height:85vh;overflow-y:auto;
+      padding:2.5rem;position:relative;
+      animation:fadeInUp .3s ease;
+    }
+    .modal-box::-webkit-scrollbar{width:4px;}
+    .modal-box::-webkit-scrollbar-track{background:transparent;}
+    .modal-box::-webkit-scrollbar-thumb{background:var(--gold-dim);}
+    .modal-close{
+      position:absolute;top:1rem;right:1.2rem;
+      background:none;border:none;color:var(--parchment-dark);
+      font-size:1.4rem;cursor:pointer;opacity:.6;
+      transition:opacity .3s;
+    }
+    .modal-close:hover{opacity:1;}
+    .modal-num{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;color:var(--gold-dim);margin-bottom:.5rem;}
+    .modal-hebrew{font-family:'Frank Ruhl Libre',serif;font-size:1.6rem;color:var(--gold-light);text-align:right;margin-bottom:.8rem;line-height:1.4;}
+    .modal-title{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--parchment);font-weight:700;margin-bottom:1rem;}
+    .modal-line{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:1rem 0;}
+    .modal-text{font-size:1rem;color:var(--parchment-dark);line-height:1.8;margin-bottom:1rem;}
+    .modal-deep{
+      background:rgba(200,168,75,0.06);border-left:2px solid var(--gold);
+      padding:1rem 1.2rem;margin:1rem 0;font-style:italic;
+      font-size:.95rem;color:var(--parchment-dark);
+    }
+    .modal-source{font-size:.82rem;color:var(--gold-dim);font-style:italic;margin-top:1rem;}
+    .modal-actions{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;}
+    .btn-mark{
+      font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.12em;
+      padding:.6rem 1.4rem;background:var(--gold);color:var(--ink);
+      border:none;cursor:pointer;transition:all .3s;
+    }
+    .btn-mark:hover{background:var(--gold-light);}
+    .btn-quiz-now{
+      font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.12em;
+      padding:.6rem 1.4rem;background:transparent;color:var(--gold-light);
+      border:1px solid var(--border-strong);cursor:pointer;transition:all .3s;
+    }
+    .btn-quiz-now:hover{background:var(--gold-faint);}
+
+    /* QUIZ SECTION */
+    .quiz-container{max-width:700px;margin:0 auto;}
+    .quiz-header-box{
+      text-align:center;padding:2.5rem 2rem;
+      border:1px solid var(--border);
+      background:rgba(17,13,5,0.8);
+      margin-bottom:2rem;position:relative;overflow:hidden;
+    }
+    .quiz-header-box::before{
+      content:'בְּחִינָה';position:absolute;
+      font-family:'Frank Ruhl Libre',serif;font-size:5rem;
+      color:var(--gold);opacity:.05;top:50%;left:50%;
+      transform:translate(-50%,-50%);pointer-events:none;
+    }
+    .quiz-title-h{font-family:'Cinzel',serif;font-size:1.5rem;color:var(--parchment);font-weight:700;margin-bottom:.5rem;}
+    .quiz-subtitle-h{font-style:italic;color:var(--parchment-dark);opacity:.8;}
+    .quiz-stats-row{display:flex;gap:2rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;}
+    .qs-item{text-align:center;}
+    .qs-val{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--gold);font-weight:700;}
+    .qs-lbl{font-size:.75rem;color:var(--parchment-dark);opacity:.6;font-family:'Cinzel',serif;letter-spacing:.1em;}
+    .quiz-level-filter{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem;}
+    .qlf-btn{
+      font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.1em;
+      padding:.4rem 1rem;background:transparent;
+      border:1px solid var(--border);color:var(--parchment-dark);
+      cursor:pointer;transition:all .3s;
+    }
+    .qlf-btn:hover,.qlf-btn.active{border-color:var(--gold);color:var(--gold);}
+    .btn-start-quiz{
+      font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.15em;
+      padding:.9rem 2.5rem;background:var(--gold);color:var(--ink);
+      border:none;cursor:pointer;transition:all .3s;display:block;
+      margin:1.5rem auto 0;
+    }
+    .btn-start-quiz:hover{background:var(--gold-light);transform:translateY(-2px);}
+
+    /* QUIZ QUESTION */
+    .quiz-question-wrap{animation:fadeInUp .4s ease;}
+    .quiz-q-num{
+      font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.2em;
+      color:var(--gold-dim);margin-bottom:.5rem;
+    }
+    .quiz-q-text{
+      font-family:'EB Garamond',serif;font-size:1.25rem;
+      color:var(--parchment);margin-bottom:1.5rem;line-height:1.6;
+      border-left:2px solid var(--gold);padding-left:1rem;
+    }
+    .quiz-options{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem;}
+    .quiz-opt{
+      padding:1rem 1.3rem;
+      border:1px solid var(--border);
+      background:rgba(17,13,5,0.8);
+      cursor:pointer;transition:all .3s;
+      display:flex;align-items:center;gap:1rem;
+      font-size:.95rem;color:var(--parchment-dark);
+    }
+    .quiz-opt:hover{border-color:var(--border-strong);background:var(--gold-faint);}
+    .quiz-opt.correct{border-color:#4CAF50;background:rgba(76,175,80,0.1);color:#a5d6a7;}
+    .quiz-opt.wrong{border-color:#f44336;background:rgba(244,67,54,0.1);color:#ef9a9a;}
+    .opt-letter{
+      font-family:'Cinzel',serif;font-size:.8rem;
+      min-width:24px;height:24px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid var(--border);color:var(--gold-dim);
+      flex-shrink:0;
+    }
+    .quiz-feedback{
+      padding:1rem 1.3rem;margin-bottom:1rem;
+      font-size:.95rem;line-height:1.6;
+      border-left:3px solid var(--gold);
+      background:var(--gold-faint);
+      display:none;
+    }
+    .quiz-feedback.show{display:block;animation:fadeIn .3s ease;}
+    .btn-next-q{
+      font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;
+      padding:.7rem 1.8rem;background:var(--gold);color:var(--ink);
+      border:none;cursor:pointer;transition:all .3s;
+      display:none;
+    }
+    .btn-next-q.show{display:inline-block;}
+    .btn-next-q:hover{background:var(--gold-light);}
+    .quiz-progress-mini{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+    .qpm-dot{width:8px;height:8px;border-radius:50%;background:var(--border);}
+    .qpm-dot.done-c{background:#4CAF50;}
+    .qpm-dot.done-w{background:#f44336;}
+    .qpm-dot.current{background:var(--gold);animation:pulse2 1s infinite;}
+    @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+    /* QUIZ RESULT */
+    .quiz-result{text-align:center;padding:2.5rem;border:1px solid var(--border);background:rgba(17,13,5,0.8);animation:fadeIn .5s ease;}
+    .result-star{font-size:3rem;margin-bottom:1rem;}
+    .result-score{font-family:'Cinzel',serif;font-size:2.5rem;color:var(--gold);font-weight:700;}
+    .result-label{color:var(--parchment-dark);opacity:.8;margin-top:.5rem;}
+    .result-msg{font-style:italic;color:var(--gold-light);margin:1rem 0;font-size:1.05rem;}
+    .btn-retry{
+      font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.15em;
+      padding:.7rem 1.8rem;background:transparent;color:var(--gold-light);
+      border:1px solid var(--border-strong);cursor:pointer;transition:all .3s;
+      margin-top:1rem;
+    }
+    .btn-retry:hover{background:var(--gold-faint);}
+
+    /* EMPTY */
+    .empty-state{text-align:center;padding:3rem;color:var(--parchment-dark);opacity:.5;}
+    .empty-heb{font-family:'Frank Ruhl Libre',serif;font-size:2.5rem;color:var(--gold);opacity:.3;margin-bottom:.5rem;}
+
+    /* FOOTER */
+    footer{
+      border-top:1px solid var(--border);padding:2rem 3rem;
+      text-align:center;position:relative;z-index:1;margin-top:4rem;
+    }
+    .footer-copy{font-size:.78rem;color:var(--parchment-dark);opacity:.4;font-family:'Cinzel',serif;letter-spacing:.08em;}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem;}
+      .progress-strip{padding:.8rem 1.5rem;gap:1.2rem;}
+      .tabs-section{padding:2rem 1rem 1rem;}
+      .teachings-grid{grid-template-columns:1fr;}
+      .modal-box{padding:1.5rem;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="hebrew-mark">אוֹר</span>
+    <span class="brand-name">OHR BEIT MIDRASH</span>
+  </a>
+  <div class="nav-right">
+    <a href="rav.html" class="nav-back">RAV HAOHR</a>
+    <a href="index.html" class="nav-back">← INÍCIO</a>
+    <a href="login.html" class="nav-account" id="navAccountLink">ENTRAR</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="hero-float-hebrew">תּוֹרָה</div>
+  <div style="position:relative;z-index:1;">
+    <div class="page-label">Ohr Beit Midrash · Módulo I</div>
+    <h1 class="page-title">Estudo da<span>Torá</span></h1>
+    <div class="page-line"></div>
+    <p class="page-desc">"Vire-a e vire-a novamente, pois tudo está nela." — Ben Bag Bag, Pirkei Avot 5:22</p>
+  </div>
+</section>
+
+<!-- PROGRESS STRIP -->
+<div class="progress-strip" id="progressStrip">
+  <div class="prog-item">
+    <span class="prog-label">ENSINAMENTOS LIDOS</span>
+    <span class="prog-value" id="readCount">0 / 100</span>
+  </div>
+  <div class="prog-item">
+    <span class="prog-label">PONTOS</span>
+    <span class="prog-value" id="pointsDisplay">0</span>
+  </div>
+  <div class="prog-item">
+    <span class="prog-label">NÍVEL</span>
+    <span class="prog-value" id="levelDisplay">Talmid</span>
+  </div>
+  <div class="prog-item">
+    <span class="prog-label"><span class="streak-fire">🔥</span> SEQUÊNCIA</span>
+    <span class="prog-value" id="streakDisplay">0 dias</span>
+  </div>
+  <div class="prog-bar-wrap">
+    <div class="prog-label" style="margin-bottom:.3rem;">PROGRESSO GERAL</div>
+    <div class="prog-bar-bg"><div class="prog-bar-fill" id="progressBar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="tabs-section">
+
+  <!-- TABS -->
+  <div class="tabs-row">
+    <button class="tab-btn active" onclick="switchTab('study',this)">📖 ESTUDO</button>
+    <button class="tab-btn" onclick="switchTab('quiz',this)">✦ QUIZ <span class="tab-badge" id="quizBadge" style="background:rgba(200,168,75,0.2);color:var(--gold);">10 questões</span></button>
+  </div>
+
+  <!-- STUDY PANEL -->
+  <div class="panel active" id="panel-study">
+
+    <div class="level-selector">
+      <div class="level-card" style="--lc-color:var(--level1)" data-level="1" onclick="selectLevel(1,this)">
+        <div class="lc-num">א</div>
+        <div class="lc-title">NÍVEL 1 — FUNDAMENTOS</div>
+        <div class="lc-range">Ensinamentos 1–25</div>
+        <div class="lc-check">✓ COMPLETO</div>
+      </div>
+      <div class="level-card" style="--lc-color:var(--level2)" data-level="2" onclick="selectLevel(2,this)">
+        <div class="lc-num">ב</div>
+        <div class="lc-title">NÍVEL 2 — APROFUNDAMENTO</div>
+        <div class="lc-range">Ensinamentos 26–50</div>
+        <div class="lc-check">✓ COMPLETO</div>
+      </div>
+      <div class="level-card" style="--lc-color:var(--level3)" data-level="3" onclick="selectLevel(3,this)">
+        <div class="lc-num">ג</div>
+        <div class="lc-title">NÍVEL 3 — PROFUNDEZA</div>
+        <div class="lc-range">Ensinamentos 51–75</div>
+        <div class="lc-check">✓ COMPLETO</div>
+      </div>
+      <div class="level-card" style="--lc-color:var(--level4)" data-level="4" onclick="selectLevel(4,this)">
+        <div class="lc-num">ד</div>
+        <div class="lc-title">NÍVEL 4 — MESTRIA</div>
+        <div class="lc-range">Ensinamentos 76–100</div>
+        <div class="lc-check">✓ COMPLETO</div>
+      </div>
+    </div>
+
+    <div class="teachings-grid" id="teachingsGrid"></div>
+  </div>
+
+  <!-- QUIZ PANEL -->
+  <div class="panel" id="panel-quiz">
+    <div class="quiz-container">
+      <div id="quizHome">
+        <div class="quiz-header-box">
+          <div class="quiz-title-h">Quiz da Torá</div>
+          <div class="quiz-subtitle-h">Teste seu conhecimento dos ensinamentos sagrados</div>
+          <div class="quiz-stats-row">
+            <div class="qs-item"><div class="qs-val" id="qTotalDone">0</div><div class="qs-lbl">QUIZZES</div></div>
+            <div class="qs-item"><div class="qs-val" id="qBestScore">0%</div><div class="qs-lbl">MELHOR</div></div>
+            <div class="qs-item"><div class="qs-val" id="qAvgScore">0%</div><div class="qs-lbl">MÉDIA</div></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-bottom:1rem;">
+          <div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.15em;color:var(--gold-dim);margin-bottom:.8rem;">FILTRAR POR NÍVEL</div>
+          <div class="quiz-level-filter">
+            <button class="qlf-btn active" data-ql="0" onclick="setQuizLevel(0,this)">TODOS</button>
+            <button class="qlf-btn" data-ql="1" onclick="setQuizLevel(1,this)">NÍVEL 1</button>
+            <button class="qlf-btn" data-ql="2" onclick="setQuizLevel(2,this)">NÍVEL 2</button>
+            <button class="qlf-btn" data-ql="3" onclick="setQuizLevel(3,this)">NÍVEL 3</button>
+            <button class="qlf-btn" data-ql="4" onclick="setQuizLevel(4,this)">NÍVEL 4</button>
+          </div>
+        </div>
+        <button class="btn-start-quiz" onclick="startQuiz()">INICIAR QUIZ — 10 QUESTÕES</button>
+      </div>
+      <div id="quizPlay" style="display:none;"></div>
+      <div id="quizResult" style="display:none;"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="teachingModal" onclick="closeModalOutside(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<footer>
+  <p class="footer-copy">© 2025 OHR BEIT MIDRASH — לשם שמים · Construído com amor por Yisrael Yehuda</p>
+</footer>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+// ─── FIREBASE CONFIG ─────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
+  authDomain: "ohr-beit-midrash.firebaseapp.com",
+  projectId: "ohr-beit-midrash",
+  storageBucket: "ohr-beit-midrash.firebasestorage.app",
+  messagingSenderId: "173478100824",
+  appId: "1:173478100824:web:56e32e06f300bf28ccef2d"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+// ─── 100 ENSINAMENTOS DE TORÁ ─────────────────────────────────
+const TEACHINGS = [
+  // NÍVEL 1 — FUNDAMENTOS (1–25)
+  {id:1,level:1,tag:"CRIAÇÃO",heb:"בְּרֵאשִׁית בָּרָא אֱלֹהִים",title:"A Criação é o Início de Tudo",body:"O mundo não existiu por acaso. A primeira palavra da Torá — Bereshit — ensina que HaShem criou o universo com intenção e propósito. Cada criatura, cada elemento, cada ser humano foi querido.",deep:"O Rashi pergunta: por que a Torá começa com a Criação e não com a primeira mitzvá? Para ensinar que HaShem é o dono da terra — e deu a terra de Israel ao povo judeu por Sua vontade.",source:"Bereshit 1:1 · Rashi ad loc."},
+  {id:2,level:1,tag:"HUMANIDADE",heb:"בְּצֶלֶם אֱלֹהִים",title:"O Ser Humano foi Criado à Imagem Divina",body:"Cada ser humano — judeu ou não — carrega a tselem Elohim, a imagem de HaShem. Isso significa que cada vida é sagrada, inviolável e infinitamente valiosa.",deep:"O Talmud (Sanhedrin 37a) ensina: quem salva uma única vida, é como se salvasse um mundo inteiro.",source:"Bereshit 1:27 · Sanhedrin 37a"},
+  {id:3,level:1,tag:"SHABAT",heb:"וַיִּשְׁבֹּת בַּיּוֹם הַשְּׁבִיעִי",title:"O Shabat foi Santificado desde a Criação",body:"HaShem descansou no sétimo dia e o santificou. O Shabat não é apenas um dia de descanso — é um testamento da criação, um casamento semanal entre HaShem e o povo de Israel.",deep:"O Zohar ensina que quem guarda o Shabat é como se guardasse toda a Torá, pois o Shabat é a raiz de todas as mitzvot.",source:"Bereshit 2:2–3 · Shemot 20:8"},
+  {id:4,level:1,tag:"LIVRE ARBÍTRIO",heb:"וּבָחַרְתָּ בַּחַיִּים",title:"A Torá Ordena: Escolhe a Vida",body:"HaShem colocou diante do ser humano o bem e o mal, a vida e a morte — e ordenou que escolhesse a vida. O livre arbítrio é o presente mais sagrado da criação.",deep:"O Rambam ensina que sem o livre arbítrio, não haveria mérito em cumprir as mitzvot nem culpa em transgredi-las. É o fundamento de toda a ética judaica.",source:"Devarim 30:19 · Rambam, Hilchot Teshuvá 5"},
+  {id:5,level:1,tag:"AMOR A HASHEM",heb:"וְאָהַבְתָּ אֵת יְהוָה אֱלֹהֶיךָ",title:"Amar a HaShem com Toda a Alma",body:"O Shemá Israel é o coração da fé judaica. 'Amarás a HaShem teu Deus com todo teu coração, toda tua alma e toda tua força.' Este amor não é sentimento — é compromisso existencial.",deep:"O Talmud ensina: 'com toda tua alma' significa mesmo que Ele tome tua alma. Akiva HaRabbi entregou sua vida ao recitar o Shemá.",source:"Devarim 6:5 · Berachot 61b"},
+  {id:6,level:1,tag:"ESTUDO",heb:"וְהָגִיתָ בּוֹ יוֹמָם וָלַיְלָה",title:"O Estudo da Torá é uma Mitzvá Constante",body:"'Medita nela dia e noite.' O estudo da Torá não é opcional para o judeu — é uma obrigação que nunca cessa. Cada momento dedicado ao estudo é um momento de dveikut, de união com HaShem.",deep:"O Tur (Orach Chaim 155) cita que o estudo da Torá equivale a todas as outras mitzvot juntas.",source:"Yehoshua 1:8 · Pirkei Avot 1:2"},
+  {id:7,level:1,tag:"PAI E MÃE",heb:"כַּבֵּד אֶת אָבִיךָ וְאֶת אִמֶּךָ",title:"Honrar os Pais é Honrar ao Criador",body:"'Honra teu pai e tua mãe' está no grupo das mitzvot entre o ser humano e HaShem — porque os pais são parceiros de Deus na criação. Quem os honra, honra ao próprio HaShem.",deep:"O Talmud (Kidushin 30b) ensina que há três parceiros na criação de um ser humano: HaShem, o pai e a mãe.",source:"Shemot 20:12 · Kidushin 30b"},
+  {id:8,level:1,tag:"FIDELIDADE",heb:"לֹא תִגְנֹב",title:"Não Roubar é Fundamento da Sociedade",body:"'Não furtarás.' Esta proibição se aplica ao roubo de bens, mas também ao roubo de mentes — enganar alguém é proibido pela Torá. A integridade absoluta é uma exigência divina.",deep:"O Chofetz Chaim ensina que enganar em negócios é um dos maiores pecados, pois destrói a confiança que sustenta toda a sociedade.",source:"Shemot 20:13 · Levítico 19:11"},
+  {id:9,level:1,tag:"VERDADE",heb:"מִדְּבַר שֶׁקֶר תִּרְחָק",title:"Afasta-te da Falsidade",body:"A Torá não apenas proíbe mentir — ordena que nos afastemos ativamente da falsidade. O selo de HaShem é a verdade (Emet). Um judeu deve ser identificado pela sua palavra inviolável.",deep:"O Maharal de Praga explica que a mentira é anti-criação — enquanto HaShem criou o mundo com Sua palavra, a mentira destrói com a palavra.",source:"Shemot 23:7 · Shabat 55a"},
+  {id:10,level:1,tag:"TZEDAKÁ",heb:"פָּתֹחַ תִּפְתַּח אֶת יָדְךָ",title:"Abrires a Mão para o Pobre é uma Mitzvá",body:"'Abrirás amplamente tua mão para teu irmão.' A Tzedaká na Torá não é caridade opcional — é justiça obrigatória. Dar ao pobre é devolver o que pertence a HaShem.",deep:"O Rambam (Matnot Aniyim 10:7–14) descreve oito níveis de Tzedaká, sendo o mais elevado o que torna o pobre independente.",source:"Devarim 15:11 · Rambam, Hilchot Matnot Aniyim"},
+  {id:11,level:1,tag:"SHEMÁ",heb:"שְׁמַע יִשְׂרָאֵל יְהוָה אֱלֹהֵינוּ יְהוָה אֶחָד",title:"O Shemá: Declaração de Unidade Absoluta",body:"'Ouve, Israel: HaShem é nosso Deus, HaShem é Um.' Esta é a declaração central do judaísmo — a afirmação da unidade absoluta de HaShem e a negação de qualquer dualidade divina.",deep:"O Alter Rebbe (Tanya) explica que 'Um' não apenas significa que HaShem é único, mas que Ele é a única realidade verdadeira — tudo mais é apenas aparência de existência.",source:"Devarim 6:4 · Tanya, cap. 21"},
+  {id:12,level:1,tag:"MEZUZÁ",heb:"וּכְתַבְתָּם עַל מְזוּזוֹת בֵּיתֶךָ",title:"A Mezuzá Santifica o Lar",body:"'E escrevê-las nas mezuzot de tua casa.' A Mezuzá não é apenas um amuleto — é a declaração de que HaShem habita naquela casa. Cada lar judaico deve ser um Mikdash Me'at, um pequeno santuário.",deep:"O Rambam ensina que quem tem Mezuzá lembra, ao entrar e sair, a unidade de HaShem e é guardado do pecado.",source:"Devarim 6:9 · Rambam, Hilchot Mezuzá"},
+  {id:13,level:1,tag:"AMOR AO PRÓXIMO",heb:"וְאָהַבְתָּ לְרֵעֲךָ כָּמוֹךָ",title:"Amar ao Próximo como a Si Mesmo",body:"'Amarás teu próximo como a ti mesmo.' Rabi Akiva declarou este o maior princípio da Torá. Hillel o resumiu: 'O que é odioso para ti, não faças ao teu próximo — isso é toda a Torá.'",deep:"O Baal Shem Tov ensinou que amar a outro judeu é o caminho para amar a HaShem — pois HaShem habita em Seu povo.",source:"Levítico 19:18 · Shabat 31a"},
+  {id:14,level:1,tag:"KASHRUT",heb:"וְאַנְשֵׁי קֹדֶשׁ תִּהְיוּן לִי",title:"A Kashrut Santifica a Alimentação",body:"As leis de Kashrut transformam o ato físico de comer em um ato espiritual. Ao comer alimentos kosher, o judeu sublima o físico ao sagrado e demonstra que até a mesa é um altar.",deep:"O Sefer HaChinuch explica que os alimentos proibidos embotam a sensibilidade espiritual da alma — as leis da Kashrut protegem a pureza interior.",source:"Levítico 11 · Sefer HaChinuch"},
+  {id:15,level:1,tag:"TEFILÁ",heb:"וּלְעָבְדוֹ בְּכָל לְבַבְכֶם",title:"A Oração é o Serviço do Coração",body:"A Tefilá — oração — é chamada pelos sábios de 'serviço do coração'. Três vezes ao dia o judeu para tudo e reconhece a soberania de HaShem. É o ponto fixo no turbilhão do mundo.",deep:"O Ramban ensina que a Tefilá é uma expressão de emunah — quem ora admite que HaShem governa o mundo e que nossa vida depende d'Ele.",source:"Devarim 11:13 · Taanit 2a"},
+  {id:16,level:1,tag:"TEFILIN",heb:"וְקָשַׁרְתָּם לְאוֹת עַל יָדֶךָ",title:"Tefilin: Sinal entre HaShem e Israel",body:"'E atarás como sinal sobre tua mão.' Os Tefilin contêm os quatro parágrafos do Shemá e são postos no braço — voltado para o coração — e na cabeça. São um sinal da aliança viva.",deep:"O Shulchan Aruch (Orach Chaim 25) ensina que quem usa Tefilin com kavana alcança um nível de dveikut — união com HaShem — que não se alcança de outra forma.",source:"Devarim 6:8 · Shulchan Aruch OC 25"},
+  {id:17,level:1,tag:"TESHUVÁ",heb:"וְשַׁבְתָּ עַד יְהוָה אֱלֹהֶיךָ",title:"A Teshuvá: Retorno Sempre Possível",body:"'E retornarás a HaShem teu Deus.' A Teshuvá é um dos maiores presentes de HaShem. Não importa quão longe alguém se foi — a porta do retorno está sempre aberta.",deep:"O Rambam (Hilchot Teshuvá 1:1) ensina que a Teshuvá completa inclui: reconhecer o pecado, arrependimento sincero, confissão verbal e determinação de não repetir.",source:"Devarim 30:2 · Rambam, Hilchot Teshuvá 2:2"},
+  {id:18,level:1,tag:"EMUNAH",heb:"אֲנִי יְהוָה אֱלֹהֶיךָ",title:"Emunah: Fé Firme na Existência de HaShem",body:"O primeiro dos Treze Princípios do Rambam: 'Creio com fé perfeita que o Criador, bendito seja, cria e governa todas as criaturas.' A Emunah é o fundamento sobre o qual toda a vida judaica é construída.",deep:"O Rav Sadya Gaon ensina que a Emunah não é cega — é fundamentada no estudo, na reflexão e na experiência histórica do povo judeu.",source:"Shemot 20:2 · Rambam, Treze Princípios"},
+  {id:19,level:1,tag:"TORÁ ORAL",heb:"תּוֹרָה שֶׁבְּעַל פֶּה",title:"A Torá Oral: A Alma da Lei Escrita",body:"Além dos cinco livros de Moshê, HaShem entregou a Torá Oral no Sinai — a tradição interpretativa que explica como cumprir os mandamentos na prática. Sem a Torá Oral, a Torá Escrita é incompleta.",deep:"O Ramban ensina que as palavras 'e ensinarás a teus filhos' implicam uma tradição oral ininterrupta — de Moshê a Yehoshua, dos Zekenim aos Profetas, dos Profetas aos Anshei Kneset HaGedolá.",source:"Shemot 34:27 · Avot 1:1"},
+  {id:20,level:1,tag:"613 MITZVOT",heb:"תַּרְיַ\"ג מִצְוֹת",title:"As 613 Mitzvot: O Mapa Completo da Vida",body:"O povo judeu recebeu 613 mitzvot — 248 positivas ('faça') correspondendo aos membros do corpo, e 365 negativas ('não faça') correspondendo aos dias do ano. As mitzvot são o instrumento do aperfeiçoamento humano.",deep:"O Sefer HaChinuch explica que cada mitzvá foi dada para elevar o ser humano — tanto na dimensão entre pessoa e HaShem quanto entre pessoa e pessoa.",source:"Makkot 23b · Sefer HaChinuch"},
+  {id:21,level:1,tag:"CORAÇÃO",heb:"וּמַלְתֶּם אֵת עָרְלַת לְבַבְכֶם",title:"Circuncida o Teu Coração",body:"A Torá pede mais do que a circuncisão física — exige a circuncisão do coração. Remover o 'prepúcio do coração' significa eliminar a obstinação, o orgulho e a resistência ao Divino.",deep:"O Vilna Gaon ensina que o principal esforço espiritual do ser humano é dominar os traços negativos do coração — que é o verdadeiro sentido do Tikun HaMidot.",source:"Devarim 10:16 · Vilna Gaon, Comentário a Mishlei"},
+  {id:22,level:1,tag:"PROFECIA",heb:"נָבִיא מִקִּרְבְּךָ יָקִים",title:"O Profeta Fala em Nome de HaShem",body:"'Um profeta do teu meio se levantará.' O judaísmo crê na profecia — HaShem comunica Sua vontade através de homens e mulheres escolhidos. Moshê foi o maior profeta — 'face a face' com HaShem.",deep:"O Rambam (Hilchot Yesodei HaTorá 7:1) explica os níveis de profecia: desde a ruach hakodesh até o grau máximo alcançado por Moshê, único em sua espécie.",source:"Devarim 18:15 · Rambam, Yesodei HaTorá 7"},
+  {id:23,level:1,tag:"BÊNÇÃO",heb:"בָּרוּךְ אַתָּה יְהוָה",title:"A Berachá: Abrir os Canais Divinos",body:"Cada Berachá — bênção — começa reconhecendo a soberania de HaShem. Os sábios instituíram que um judeu deve recitar 100 brachot por dia — para manter constante a consciência do Divino.",deep:"O Baal Shem Tov ensinou que cada Berachá, quando dita com kavana real, abre canais espirituais que transformam a realidade física.",source:"Berachot 35a · Shulchan Aruch OC 46"},
+  {id:24,level:1,tag:"ALIANÇA",heb:"בְּרִיתִי אֲשֶׁר כָּרַתִּי אִתָּךְ",title:"A Aliança entre HaShem e Israel é Eterna",body:"A Brit — aliança — entre HaShem e o povo judeu foi firmada no Sinai e é eterna. Ela não depende do mérito do povo — mas da fidelidade infinita de HaShem à Sua própria palavra.",deep:"O Rav Yehuda HaLevi (Kuzari) ensina que a Brit é a prova histórica mais sólida da escolha divina — um povo que sobreviveu ao impossível por causa de uma promessa.",source:"Shemot 19:5 · Kuzari I"},
+  {id:25,level:1,tag:"ESPERANÇA",heb:"כִּי יֵשׁ תִּקְוָה לְאַחֲרִיתֵךְ",title:"Há Esperança para o Fim dos Teus Dias",body:"'Pois há esperança para o teu futuro.' A Torá é uma mensagem de esperança radical. Não importa o quanto o povo tenha sofrido ou errado — o final da história é a redenção.",deep:"O Rav Nachman de Breslov ensina: 'É uma grande mitzvá estar sempre alegre.' A esperança não é ingenuidade — é fé fundamentada na promessa divina.",source:"Yirmiyahu 31:17 · Likutei Moharan I:282"},
+
+  // NÍVEL 2 — APROFUNDAMENTO (26–50)
+  {id:26,level:2,tag:"PARASHÁ",heb:"פָּרָשַׁת הַשָּׁבוּעַ",title:"A Parashá: Vivendo a Torá Semana a Semana",body:"Cada semana o povo judeu lê uma porção da Torá — a Parashá. Esta prática criou um ciclo eterno de renovação: a Torá não é lida uma vez e guardada — é vivida, volta e meia, de geração em geração.",deep:"O Rav Avraham Yitzhak Kook ensina que a Parashá contém a 'energia espiritual' daquela semana — quem estuda a Parashá se sintoniza com o pulso divino do tempo.",source:"Pirkei Avot 5:22 · Rav Kook"},
+  {id:27,level:2,tag:"TESTEMUNHO",heb:"עֵדוּת יְהוָה נֶאֱמָנָה",title:"O Povo Judeu é Testemunho de HaShem",body:"'Vós sois minhas testemunhas, diz HaShem.' O povo judeu, por sua própria existência, é um testemunho vivo da realidade de HaShem na história. A sobrevivência judaica é prova divina.",deep:"O Maharal explica que Israel não sobreviveu por causas naturais — cada tentativa de seu extermínio falhou porque Sua existência é sustentada por HaShem diretamente.",source:"Yeshayahu 43:10 · Maharal, Netzach Yisrael"},
+  {id:28,level:2,tag:"TZNIUT",heb:"הַצְנֵעַ לֶכֶת עִם אֱלֹהֶיךָ",title:"A Tzniut: Modéstia como Grandeza",body:"'Caminhar humildemente com teu Deus.' A Tzniut não é apenas vestimenta — é uma postura de vida. Ela protege o interior do ser humano, preserva o sagrado e impede que o profundo seja banalizado.",deep:"O Rav Shamshon Rafael Hirsch ensina que a Tzniut é a expressão externa da convicção interna de que não sou definido pelo que o mundo vê de mim, mas pelo que HaShem sabe de mim.",source:"Micha 6:8 · Rav S. R. Hirsch"},
+  {id:29,level:2,tag:"KIPPUR",heb:"כִּי בַיּוֹם הַזֶּה יְכַפֵּר עֲלֵיכֶם",title:"Yom Kippur: O Dia da Grande Purificação",body:"'Pois neste dia expiará por vós, para vos purificar de todos os vossos pecados.' Yom Kippur é o pico espiritual do ano judaico — o dia em que HaShem perdoa, purifica e renova a alma.",deep:"O Zohar ensina que em Yom Kippur as almas dos judeus alcançam um nível similar ao dos anjos — livres das impurezas do corpo — e é por isso que não comemos nem bebemos.",source:"Levítico 16:30 · Zohar, Emor"},
+  {id:30,level:2,tag:"KORBANOT",heb:"וְהִקְרִיב אֶת קָרְבָּנוֹ",title:"Os Korbanot: A Aproximação ao Divino",body:"As oferendas do Templo eram chamadas Korbanot — de 'karov', aproximar. Cada oferenda era um ato de aproximação a HaShem, uma sublimação do material ao espiritual.",deep:"O Rambam (Moreh Nevuchim III:32) explica que as oferendas foram ordenadas para elevar o povo acima dos sacrifícios pagãos — redirecionando o impulso humano de oferecer ao serviço do Único Deus.",source:"Levítico 1:2 · Moreh Nevuchim III:32"},
+  {id:31,level:2,tag:"MISHPAT",heb:"בְּצֶדֶק תִּשְׁפֹּט עֲמִיתֶךָ",title:"Julgar com Justiça Absoluta",body:"'Com justiça julgarás teu semelhante.' A Torá exige que os juízes sejam imparciais — nem favorecendo os pobres nem os ricos. A justiça da Torá é cega ao status social.",deep:"O Talmud (Sanhedrin 17a) exige que um juiz do Sanhedrin saiba 70 línguas — para nunca depender de tradutores que possam distorcer as palavras de um acusado.",source:"Levítico 19:15 · Sanhedrin 17a"},
+  {id:32,level:2,tag:"CHUKKIM",heb:"אֶת מִשְׁפָּטַי תַּעֲשׂוּ וְאֶת חֻקֹּתַי",title:"Chukim: As Leis que Transcendem a Razão",body:"A Torá contém Mishpatim — leis de razão clara — e Chukim — decretos cuja razão não é aparente. Os Chukim revelam que a obediência ao Criador vai além da compreensão humana.",deep:"O Rashi explica que o Yetzer HaRá (instinto do mal) ataca especialmente os Chukim dizendo 'para que isso serve?' — e é precisamente por isso que cumpri-los tem enorme mérito.",source:"Levítico 18:4 · Rashi ad loc."},
+  {id:33,level:2,tag:"ROSH HASHANÁ",heb:"יוֹם תְּרוּעָה",title:"Rosh HaShaná: O Dia do Julgamento",body:"No primeiro de Tishrei, todos os seres passam diante de HaShem como um rebanho. Seus atos do ano passado são pesados e o decreto para o próximo ano é escrito. É o dia de coroar HaShem como Rei.",deep:"O Arizal ensina que o toque do Shofar desperta as almas do sono espiritual — suas ondas sonoras quebram os 'klipot' (cascas de impureza) que envolvem a alma.",source:"Bamidbar 29:1 · Rosh HaShaná 16a"},
+  {id:34,level:2,tag:"SUKKOT",heb:"בַּסֻּכֹּת תֵּשְׁבוּ שִׁבְעַת יָמִים",title:"Sukot: Habitando sob as Nuvens da Glória",body:"Durante sete dias habitamos na Suká — uma cabana frágil que nos lembra da proteção divina no deserto. Sukot ensina que a verdadeira segurança não está nas paredes de pedra, mas em HaShem.",deep:"O Baal Shem Tov ensinou que ao entrar na Suká, recebemos a presença das sete 'ushpizin' — os sete convidados sagrados: Avraham, Yitzhak, Yaakov, Moshê, Aharon, Yosef e David.",source:"Levítico 23:42 · Zohar, Emor"},
+  {id:35,level:2,tag:"PESSACH",heb:"וְהִגַּדְתָּ לְבִנְךָ",title:"Pessach: Narrar a Saída a Cada Geração",body:"'E contarás a teu filho.' A Hagadá de Pessach é mais do que um livro — é uma experiência viva de liberdade. Cada geração deve sentir como se ela própria tivesse saído do Egito.",deep:"O Lubavitcher Rebbe ensina que o 'Mitzraim' (Egito) interior — os limites que impomos à nossa própria alma — é o que cada pessoa deve retirar a cada Pessach.",source:"Shemot 13:8 · Hagadá de Pessach"},
+  {id:36,level:2,tag:"SHAVUOT",heb:"יוֹם הַבִּכּוּרִים",title:"Shavuot: O Casamento entre HaShem e Israel",body:"Shavuot é o aniversário da entrega da Torá no Sinai. Os sábios a descrevem como um casamento entre HaShem (o noivo) e Israel (a noiva). A Torá é a ketubá — o contrato nupcial.",deep:"É costume ficar acordado a noite toda de Shavuot estudando Torá — para reparar o erro das gerações que dormiram antes de receber a Torá.",source:"Shemot 19 · Magen Avraham, OC 494"},
+  {id:37,level:2,tag:"MIKDASH",heb:"וְעָשׂוּ לִי מִקְדָּשׁ",title:"O Mikdash: HaShem Quer Habitar Conosco",body:"'E farão para Mim um santuário e habitarei em seu interior.' O Templo não era apenas um edifício — era o ponto de encontro entre o Infinito e o finito. Sua destruição é a maior perda da história.",deep:"O Rav Yosef Dov Soloveitchik ensina que ao estudar as leis do Mikdash, é como se o construíssemos de novo — pois o estudo tem o poder de invocar a presença divina.",source:"Shemot 25:8 · Menachot 110a"},
+  {id:38,level:2,tag:"GALUT",heb:"וְהֵפִיץ יְהוָה אֶתְכֶם בָּעַמִּים",title:"O Exílio e Seu Propósito Espiritual",body:"O exílio (Galut) não foi abandono — foi missão. Ao ser disperso entre as nações, o povo judeu levou as faíscas de santidade para os cantos mais remotos do mundo.",deep:"O Lubavitcher Rebbe ensina que cada judeu em exílio estava ali para 'elevar as faíscas sagradas' (nitotzot) presentes naquele lugar — e a Geulá final será quando todas as faíscas retornarem.",source:"Devarim 28:64 · Tanya, cap. 37"},
+  {id:39,level:2,tag:"GEULÁ",heb:"אֲנִי יְהוָה וְהוֹצֵאתִי אֶתְכֶם",title:"A Geulá: Redenção é a Meta da Criação",body:"'Eu sou HaShem e vos tirei do Egito.' A saída do Egito é o protótipo de todas as redenções. A história judaica caminha em linha reta: da escravidão à liberdade, do Galut à Geulá.",deep:"O Sfat Emet ensina que as quatro expressões de redenção em Shemot 6:6-7 correspondem às quatro taças do Seder de Pessach — e cada uma representa um estágio da redenção espiritual.",source:"Shemot 6:6 · Sfat Emet, Shemot"},
+  {id:40,level:2,tag:"MASHIACH",heb:"הִנֵּה יָמִים בָּאִים",title:"Mashiach: A Era da Perfeição Final",body:"A vinda do Mashiach é um dos 13 Princípios do Rambam. Naquele tempo, toda a humanidade reconhecerá HaShem, o Templo será reconstruído e o conhecimento de HaShem cobrirá a terra como as águas cobrem o mar.",deep:"O Rambam (Hilchot Melachim 12) ensina que no tempo do Mashiach não haverá fome nem guerra — o único 'ocio' do mundo será conhecer a HaShem.",source:"Yirmiyahu 31:31 · Rambam, Hilchot Melachim 12"},
+  {id:41,level:2,tag:"CHEVRÁ",heb:"לֹא טוֹב הֱיוֹת הָאָדָם לְבַדּוֹ",title:"O Ser Humano Não foi Criado para a Solidão",body:"'Não é bom que o ser humano esteja só.' A Torá ensina que a comunidade é necessidade humana fundamental. O judaísmo não é uma religião de ermitões — é de famílias, comunidades e gerações.",deep:"O Talmud (Taanit 23a) diz: 'Ou a companhia ou a morte.' O isolamento espiritual enfraquece — a força do judeu está na sua comunidade.",source:"Bereshit 2:18 · Taanit 23a"},
+  {id:42,level:2,tag:"KEDUSHA",heb:"קְדֹשִׁים תִּהְיוּ",title:"Sereis Santos: A Kedusha como Meta Constante",body:"'Sereis santos, porque Eu, HaShem vosso Deus, sou Santo.' A Kedusha não é estado — é processo. Cada ato de separação do pecado e de dedicação a HaShem é um passo na santificação.",deep:"O Ramban explica que 'sereis santos' vai além das mitzvot específicas — exige que sejamos 'kadosh' na totalidade de nossa vida, evitando até o que é tecnicamente permitido quando prejudicial.",source:"Levítico 19:2 · Ramban ad loc."},
+  {id:43,level:2,tag:"LOSHEN HARÁ",heb:"לֹא תֵלֵךְ רָכִיל בְּעַמֶּיךָ",title:"Loshon HaRá: O Poder Destrutivo da Fala",body:"A proibição de Loshon HaRá (fala maliciosa) é uma das mais sérias da Torá. A língua pode matar — não fisicamente, mas destruir reputações, relacionamentos e comunidades.",deep:"O Chofetz Chaim (Rav Yisrael Meir Kagan) dedicou sua vida a ensinar as leis de Loshon HaRá. Ele ensinou que transgredi-la viola entre 17 e 31 mandamentos da Torá simultaneamente.",source:"Levítico 19:16 · Chofetz Chaim"},
+  {id:44,level:2,tag:"ONIAH",heb:"לֹא תוֹנוּ אִישׁ אֶת עֲמִיתוֹ",title:"Proibido Magoar com Palavras",body:"'Não oprimirás teu companheiro.' O Talmud ensina que 'onat devarim' — oprimir com palavras — é mais sério que a opressão financeira. Envergonhar alguém em público é como derramar sangue.",deep:"O Talmud (Bava Metzia 58b) enseina: 'É melhor que um homem se atire a uma fornalha ardente do que envergonhar seu semelhante em público.'",source:"Levítico 25:17 · Bava Metzia 58b"},
+  {id:45,level:2,tag:"OLAM HABÁ",heb:"וְאֵלֶּה יֵלְכוּ לְחַיֵּי עוֹלָם",title:"Olam HaBá: O Mundo Vindouro é Real",body:"O judaísmo crê no Olam HaBá — o Mundo Vindouro onde as almas recebem a recompensa pelos seus atos. Este mundo é o corredor; o Olam HaBá é a sala de festas.",deep:"O Rambam (Hilchot Teshuvá 8:1) descreve o Olam HaBá como 'a vida sem morte, o bem sem mal' — almas que se deleitam no resplendor da Shechiná.",source:"Daniel 12:2 · Rambam, Hilchot Teshuvá 8"},
+  {id:46,level:2,tag:"GAN EDEN",heb:"גַּן בְּעֵדֶן",title:"Gan Eden e Gehinom: Purificação e Recompensa",body:"Após a morte, a alma passa por um processo: Gan Eden para os justos — um estado de sublime consciência divina — e Gehinnom, uma purificação de até 12 meses para aqueles que precisam ser refinados.",deep:"O Zohar descreve Gan Eden como tendo divisões ascendentes — quanto mais uma pessoa trabalhou em sua alma neste mundo, mais elevado é seu lugar no Gan Eden.",source:"Bereshit 2:8 · Zohar, Vayeshev"},
+  {id:47,level:2,tag:"NESHAMA",heb:"וַיִּפַּח בְּאַפָּיו נִשְׁמַת חַיִּים",title:"A Neshamá: Sopro Direto de HaShem",body:"'E soprou em suas narinas o sopro de vida.' A Neshamá humana é um sopro direto de HaShem — e quem sopra, sopra de seu interior. A neshamá é literalmente uma parte de HaShem.",deep:"O Tanya (cap. 2) explica: 'Como uma vela arrancada de uma tocha, a neshamá foi retirada do interior de HaShem.' É por isso que a alma aspira eternamente ao retorno à sua Fonte.",source:"Bereshit 2:7 · Tanya, cap. 2"},
+  {id:48,level:2,tag:"YETZER HÁ",heb:"יֵצֶר לֵב הָאָדָם רַע מִנְּעֻרָיו",title:"O Yetzer HaRá: O Inimigo Interior",body:"'A inclinação do coração humano é para o mal desde a sua juventude.' O Yetzer HaRá — instinto do mal — acompanha cada ser humano. Mas a Torá foi dada exatamente para domá-lo.",deep:"O Talmud (Kidushin 30b) cita HaShem dizendo: 'Criei o Yetzer HaRá e criei a Torá como seu antídoto.' Sem o Yetzer HaRá, não haveria construção, casamento nem filhos — ele é também força vital.",source:"Bereshit 8:21 · Kidushin 30b"},
+  {id:49,level:2,tag:"MUSSAR",heb:"קַבֵּל אֶת הָאֱמֶת מִמִּי שֶׁאָמְרָהּ",title:"Aceita a Verdade de Quem Quer que a Diga",body:"Um dos princípios centrais do Mussar: a verdade não pertence a ninguém — ela pertence a HaShem. Devemos aceitá-la de qualquer pessoa, humilde ou grande, amigo ou adversário.",deep:"Rambam (Prologium ao Pirke Avot): 'Ouve a verdade de quem quer que a diga.' Os mestres do Mussar ensinavam que o orgulho é o maior obstáculo ao crescimento espiritual.",source:"Rambam, Shmoneh Perakim · Pirkei Avot 4:1"},
+  {id:50,level:2,tag:"TALMUD",heb:"תַּלְמוּד תּוֹרָה כְּנֶגֶד כֻּלָּם",title:"O Talmud Torah Equivale a Todas as Mitzvot",body:"'O estudo da Torá equivale a todas as mitzvot.' Não porque as outras mitzvot sejam menos — mas porque o estudo da Torá leva ao cumprimento de todas as outras. O estudo é o coração do judaísmo.",deep:"O Rav Chaim de Volozhin (Nefesh HaChaim) ensina que o estudo da Torá sustenta o mundo — cada palavra estudada com sinceridade é como uma coluna que impede o colapso da criação.",source:"Pirkei Avot 1:2 · Nefesh HaChaim, Shaar 4"},
+
+  // NÍVEL 3 — PROFUNDEZA (51–75)
+  {id:51,level:3,tag:"KABBALAH",heb:"עֶשֶׂר סְפִירוֹת",title:"As Dez Sefirot: Estrutura da Criação",body:"A Kabbalah ensina que HaShem se manifesta no mundo através de dez Sefirot — atributos divinos que são os canais pelos quais a força criadora flui para toda a existência.",deep:"O Etz Chaim do Arizal descreve como as Sefirot se organizam no 'Adam Kadmon' — o protótipo espiritual do ser humano — revelando que o microcosmo humano espelha o macrocosmo divino.",source:"Sefer Yetzirah · Etz Chaim, Arizal"},
+  {id:52,level:3,tag:"EIN SOF",heb:"אֵין סוֹף",title:"Ein Sof: O Infinito Sem Limites",body:"Antes de qualquer criação, há apenas o Ein Sof — 'Sem Fim'. Não tem nome, não tem atributo, não pode ser pensado. A criação surge quando o Ein Sof, por amor infinito, abre um espaço — o Tzimtzum.",deep:"O Alter Rebbe (Tanya, Shaar HaYichud) explica que o Tzimtzum não foi literal — o Ein Sof não 'se retirou' fisicamente, mas criou a ilusão de um espaço vazio para que criaturas pudessem existir.",source:"Tanya, Shaar HaYichud VehaEmunah · Etz Chaim"},
+  {id:53,level:3,tag:"DVEIKUT",heb:"וּלְדָבְקָה בוֹ",title:"Dveikut: A União da Alma com HaShem",body:"'E a Ele te apegarás.' O objetivo espiritual mais elevado do judaísmo é o Dveikut — a adesão constante, o estar sempre ligado a HaShem. Não apenas nos momentos de oração, mas em cada ação.",deep:"O Baal Shem Tov ensinou que o Dveikut pode ser alcançado até em meio às atividades cotidianas — comer, trabalhar, caminhar — quando feitos 'para o Nome de HaShem'.",source:"Devarim 10:20 · Baal Shem Tov, Toledot Yaakov Yosef"},
+  {id:54,level:3,tag:"TIKKUN",heb:"לְתַקֵּן עוֹלָם בְּמַלְכוּת שַׁדַּי",title:"Tikkun Olam: Reparar o Mundo pelo Ato",body:"'Reparar o mundo sob o reinado de Shadai.' Cada mitzvá cumprida repara um fragmento do mundo espiritual. As almas judaicas foram enviadas ao mundo com uma missão específica de Tikkun.",deep:"O Arizal ensina que cada neshamá vem ao mundo com um conjunto específico de Nitzotzot (faíscas) para elevar — e uma combinação única de mitzvot para cumprir.",source:"Aleinu LeShabéach · Arizal, Shaar HaGilgulim"},
+  {id:55,level:3,tag:"GILGUL",heb:"גִּלְגּוּל נְשָׁמוֹת",title:"Gilgul: A Transmigração das Almas",body:"A tradição cabalística ensina o Gilgul — a reencarnação das almas. Uma alma retorna ao mundo físico para completar a missão não realizada ou para reparar o que foi danificado.",deep:"O Arizal (Shaar HaGilgulim) ensina que a maior parte das almas em nosso tempo são gilgulim — almas antigas em novos corpos, carregando tanto os méritos quanto os tikkunim de encarnações anteriores.",source:"Shaar HaGilgulim, Arizal · Zohar III, 216b"},
+  {id:56,level:3,tag:"ORAÇÃO INTERNA",heb:"שִׁפְכִי כַמַּיִם לִבֵּךְ",title:"Derrama o Teu Coração Diante de HaShem",body:"A Hitbonenut — meditação profunda na grandeza de HaShem — é a base da oração autêntica. Antes de pedir, contempla. Antes de falar, escuta. A oração real começa no silêncio.",deep:"O Rav Nachman de Breslov ensinou a Hitbodedut — conversa diária e pessoal com HaShem em linguagem própria. 'Fala com Ele como se falavas com teu melhor amigo.'",source:"Lamentações 2:19 · Likutei Moharan II:25"},
+  {id:57,level:3,tag:"SHECHINÁ",heb:"וְשָׁכַנְתִּי בְּתוֹכָם",title:"A Shechiná: A Presença Divina no Mundo",body:"'E habitarei em seu interior.' A Shechiná — a manifestação da presença divina — habita onde há Torá, mitzvot e santidade. Ela segue o povo judeu no exílio e chora com ele.",deep:"O Talmud (Megillah 29a) ensina que a Shechiná foi ao exílio com Israel — e quando Israel for redimido, a Shechiná também retornará. 'Em toda a angústia deles, Ele foi angustiado.'",source:"Shemot 25:8 · Megillah 29a"},
+  {id:58,level:3,tag:"ATZILUT",heb:"אֲצִילוּת בְּרִיאָה יְצִירָה עֲשִׂיָּה",title:"Os Quatro Mundos: Da Emanação à Ação",body:"A Kabbalah ensina que a criação se dá em quatro mundos: Atzilut (Emanação), Beriyá (Criação), Yetzirah (Formação) e Assiyah (Ação). O mundo físico que habitamos é Assiyah — o mais denso.",deep:"O Tanya (Shaar HaYichud) explica que mesmo em Assiyah — o mundo mais baixo — a presença de HaShem não é menor, apenas mais oculta. 'Não há lugar vazio d'Ele.'",source:"Tanya, Shaar HaYichud · Etz Chaim"},
+  {id:59,level:3,tag:"PIDYON",heb:"פִּדְיוֹן הַנֶּפֶשׁ",title:"Pidyon HaNefesh: Resgatar a Alma",body:"O conceito de Pidyon HaNefesh — resgate da alma — ensina que atos de Tzedaká e Teshuvá podem literalmente 'resgatar' a alma de decretos difíceis. A Tzedaká 'livra da morte'.",deep:"O Vilna Gaon explica que a Tzedaká opera na estrutura espiritual da criação — quando elevamos o mundo material através do ato de dar, criamos méritos que abrem canais de Brachá.",source:"Mishlei 10:2 · Bava Batra 10a"},
+  {id:60,level:3,tag:"KIDUSH HASHEM",heb:"וְנִקְדַּשְׁתִּי בְּתוֹךְ בְּנֵי יִשְׂרָאֵל",title:"Kidush HaShem: Santificar o Nome Divino",body:"A mais elevada das obrigações judaicas é o Kidush HaShem — santificar o Nome de HaShem através das ações. E o oposto — Chilul HaShem — é o pior dos pecados.",deep:"O Rambam (Yesodei HaTorá 5) ensina que há situações onde o judeu deve entregar a própria vida (Yehareg Veal Yaavor) a fim de não profanar o nome divino.",source:"Levítico 22:32 · Rambam, Yesodei HaTorá 5"},
+  {id:61,level:3,tag:"TZADDIK",heb:"צַדִּיק יְסוֹד עוֹלָם",title:"O Tzaddik: O Justo que Sustenta o Mundo",body:"'O justo é o fundamento do mundo.' Na visão chassídica, o Tzaddik é o canal através do qual a bênção divina flui para o povo. Conectar-se ao Tzaddik é conectar-se à fonte.",deep:"O Baal Shem Tov ensinou que o Tzaddik não apenas ensina — ele literalmente eleva as almas dos seus seguidores, carregando seus pecados e intercedendo por eles perante HaShem.",source:"Mishlei 10:25 · Baal Shem Tov"},
+  {id:62,level:3,tag:"SIMCHÁ",heb:"עִבְדוּ אֶת יְהוָה בְּשִׂמְחָה",title:"A Alegria é uma Obrigação Espiritual",body:"'Sirva a HaShem com alegria.' A Simchá — alegria — não é consequência do sucesso espiritual — é ferramenta. A tristeza fecha os canais; a alegria os abre. O Yetzer HaRá age primariamente através da depressão.",deep:"O Rav Nachman de Breslov ensinou: 'É uma grande mitzvá estar sempre alegre.' A alegria espiritual não nega a dor — ela a transcende, ancorando a alma em sua Fonte divina.",source:"Tehilim 100:2 · Likutei Moharan I:282"},
+  {id:63,level:3,tag:"HUMILDADE",heb:"וְהָאִישׁ מֹשֶׁה עָנָו מְאֹד",title:"Moshê foi o Mais Humilde dos Homens",body:"'E o homem Moshê era muito humilde, mais do que qualquer pessoa sobre a face da terra.' A humildade não é subestimar-se — é conhecer o próprio lugar com precisão, sem inflação nem deflação.",deep:"O Maharal explica que a humildade de Moshê era o que o tornava apto ao maior grau de profecia. Quanto mais vazio de ego, mais espaço para a presença divina habitar.",source:"Bamidbar 12:3 · Maharal, Tiferet Yisrael"},
+  {id:64,level:3,tag:"SULAM",heb:"סֻלָּם מֻצָּב אַרְצָה",title:"A Escada de Yaakov: O Mundo é uma Escada",body:"Yaakov sonhou com uma escada cujos pés tocavam a terra e cuja cabeça alcançava os céus. Este sonho é o mapa da missão judaica: elevar o físico ao espiritual sem abandonar nenhum dos dois.",deep:"O Baal Shem Tov ensinou que os anjos que subiam e desciam na escada representam as orações que sobem e as bênçãos que descem — e o judeu é o elo que mantém essa conexão viva.",source:"Bereshit 28:12 · Baal Shem Tov"},
+  {id:65,level:3,tag:"CHESSED",heb:"עוֹלָם חֶסֶד יִבָּנֶה",title:"O Mundo foi Construído sobre o Chessed",body:"'O mundo é construído sobre o Chessed.' Bondade não é apenas uma virtude — é a estrutura ontológica da criação. HaShem criou o mundo por Chessed puro — sem nenhuma obrigação.",deep:"O Alter Rebbe (Tanya, Iggeret HaKodesh) ensina que o Chessed humano reflecte o Chessed divino — e cada ato de bondade genuína cria uma ressonância no mundo espiritual que nunca se apaga.",source:"Tehilim 89:3 · Tanya, Iggeret HaKodesh 14"},
+  {id:66,level:3,tag:"HITLAHABUT",heb:"כְּאֵשׁ בּוֹעֶרֶת",title:"Hitlahabut: O Ardor Espiritual da Alma",body:"O Hitlahabut — inflamação espiritual — é o estado em que a alma arde de amor a HaShem. É o cume da experiência religiosa: quando cada palavra de oração sai do coração como chamas.",deep:"O Alter Rebbe (Tanya, cap. 50) explica que o Hitlahabut natural dura pouco — é dado por HaShem como presente. O Hitlahabut duradouro requer avodah — trabalho espiritual constante.",source:"Tanya, cap. 29 · Pirkei Avot 1:15"},
+  {id:67,level:3,tag:"NIGUNIM",heb:"שִׁירוּ לַיהוָה שִׁיר חָדָשׁ",title:"Os Nigunim: Melodias que Abrem os Céus",body:"Os Nigunim — melodias chassídicas sem palavras — são considerados instrumentos de elevação espiritual superior às próprias palavras. Onde as palavras param, a melodia continua.",deep:"O Baal Shem Tov ensinou que as melodias pertencem à tradição das 'almas' dos mundos superiores — e quando entoamos um Nigun com kavana, conectamos nossa neshamá a esses mundos.",source:"Tehilim 33:3 · Baal Shem Tov, Torat HaMagid"},
+  {id:68,level:3,tag:"SHVIRAT KELIM",heb:"שְׁבִירַת הַכֵּלִים",title:"A Quebra dos Vasos e a Missão do Ser Humano",body:"O Arizal ensina que antes da criação, HaShem tentou 'vasos' para conter a luz divina — mas eles quebraram, espalhando faíscas pelo mundo. A missão humana é recolher essas faíscas através das mitzvot.",deep:"Esta visão cosmológica explica o sofrimento no mundo: as faíscas de santidade estão presas na 'casca' da impureza, e cada mitzvá as libera. O mal não é real — é ausência de luz.",source:"Etz Chaim, Arizal · Tanya, cap. 37"},
+  {id:69,level:3,tag:"EREV RAV",heb:"וְגַם עֵרֶב רַב עָלָה אִתָּם",title:"A Mistura das Almas e o Teste da História",body:"A 'multidão mista' que saiu do Egito junto com Israel representa as almas que aspiram à santidade mas ainda carregam impurezas do mundo. A história judaica é também a história desta purificação.",deep:"O Zohar ensina que o Erev Rav ainda opera em nossa geração — como tendências internas de compromisso e assimilação. Cada judeu precisa identificar e corrigir seu próprio Erev Rav interior.",source:"Shemot 12:38 · Zohar, Shemot 9"},
+  {id:70,level:3,tag:"PARDES",heb:"פַּרְדֵּ\"ס",title:"PaRDeS: Os Quatro Níveis de Interpretação",body:"A Torá é lida em quatro níveis: Pshat (literal), Remez (alegórico), Drash (homilético) e Sod (secreto/místico). Cada nível revela uma camada mais profunda de verdade divina.",deep:"O Arizal ensina que a neshamá de cada judeu tem uma conexão especial com um nível específico da Torá — e o estudo do nível certo no momento certo é como encontrar a própria alma.",source:"Zohar II:99b · Arizal, Shaar HaKavanot"},
+  {id:71,level:3,tag:"EMUNAH PESHUTÁ",heb:"תָּמִים תִּהְיֶה עִם יְהוָה",title:"Emunah Peshutá: A Fé Simples e Profunda",body:"'Serás íntegro com HaShem.' A fé simples do judeu comum que não estuda filosofia mas vive sua relação com HaShem com pureza de coração pode ser mais elevada que a fé intelectual do sábio.",deep:"O Baal Shem Tov revolucionou o judaísmo ensinando que a fé simples (Emunah Peshutá) de uma avó analfabeta que acende velas do Shabat com lágrimas pode ser mais elevada que a de um grande erudito.",source:"Devarim 18:13 · Baal Shem Tov"},
+  {id:72,level:3,tag:"KAVOD",heb:"לֹא לָנוּ יְהוָה לֹא לָנוּ",title:"Toda Honra Pertence a HaShem, Não a Nós",body:"'Não para nós, HaShem, não para nós, mas ao Teu Nome dá a glória.' O judaísmo ensina que toda conquista, toda sabedoria, toda riqueza — é um presente de HaShem e a ele pertence o crédito.",deep:"O Orchot Tzadikim (Shaar HaAnavah) ensina que o orgulho espiritual é o mais perigoso de todos os vícios, pois é invisível — a pessoa está convicta de que é humilde enquanto se glorifica.",source:"Tehilim 115:1 · Orchot Tzadikim"},
+  {id:73,level:3,tag:"SHIR HASHIRIM",heb:"כִּי אַהֲבָה כַּמָּוֶת עַזָּה",title:"O Cântico dos Cânticos: O Amor Mais Alto",body:"'Pois o amor é forte como a morte.' Rabi Akiva declarou o Shir HaShirim o 'Santo dos Santos' de toda a Torá — porque é a alegoria mais profunda do amor entre HaShem e Israel.",deep:"O Ramban explica que o amor do Shir HaShirim não é metáfora do amor divino — o amor humano é metáfora do amor divino. A intimidade sagrada é o original; o amor humano é o reflexo.",source:"Shir HaShirim 8:6 · Yadayim 3:5"},
+  {id:74,level:3,tag:"OHEV YISRAEL",heb:"אֹהֵב אֶת הַבְּרִיּוֹת",title:"Amar a Todo Ser Humano é Seguir HaShem",body:"Hillel dizia: 'Sê discípulo de Aharon — ama a paz, persegue a paz, ama as criaturas e as aproxima da Torá.' Amar as criaturas não é sentimentalismo — é imitar HaShem que ama tudo que criou.",deep:"O Baal Shem Tov ensinou que o amor ao povo de Israel não é separado do amor a HaShem — pois HaShem, a Torá e Israel são Um. Atacar um judeu é atacar ao próprio HaShem.",source:"Pirkei Avot 1:12 · Baal Shem Tov"},
+  {id:75,level:3,tag:"TZADDIK BEEMUNATÔ",heb:"וְצַדִּיק בֶּאֱמוּנָתוֹ יִחְיֶה",title:"O Justo Vive pela sua Fé",body:"'O justo viverá pela sua fé.' O judaísmo não é uma religião de certeza intelectual absoluta — é uma vida de fé ativa. O Tzaddik não vive apesar da incerteza — vive através dela.",deep:"O Rav Nachman de Breslov ensinou que a fé mais alta é aquela que sobrevive à escuridão total — quando não há resposta, quando HaShem parece ausente, e ainda assim o judeu diz: 'Eu creio.'",source:"Havakuk 2:4 · Rav Nachman, Likutei Moharan"},
+
+  // NÍVEL 4 — MESTRIA (76–100)
+  {id:76,level:4,tag:"ARIZAL",heb:"רַבִּי יִצְחַק לוּרְיָא",title:"O Arizal: O Leão da Kabbalah de Tzfat",body:"Rav Yitzhak Luria (o Arizal, 1534–1572) revolucionou a Kabbalah com o sistema do Lurianic — Tzimtzum, Shvirat Kelim, Tikkun. Em apenas dois anos em Tzfat, transformou o pensamento místico judaico para sempre.",deep:"O Arizal dizia que recebia os ensinamentos do profeta Eliyahu. Seus ensinamentos foram registrados pelo seu discípulo Rav Chaim Vital no Etz Chaim e Shaar HaGilgulim.",source:"Etz Chaim · Rav Chaim Vital, Shevachei HaArizal"},
+  {id:77,level:4,tag:"RAMBAM",heb:"מִמֹּשֶׁה עַד מֹשֶׁה לֹא קָם כְּמֹשֶׁה",title:"O Rambam: O Maior Codificador da História",body:"Rav Moshê ben Maimon (Rambam/Maimônides, 1138–1204) codificou toda a lei judaica no Mishneh Torá e escreveu o Moreh Nevuchim (Guia dos Perplexos). Seu dizer: 'De Moshê a Moshê, não houve ninguém como Moshê.'",deep:"O Rambam foi médico do sultão Saladino, líder da comunidade judaica do Egito, e o maior filósofo judaico medieval — demonstrando que Torá e excelência mundana não apenas coexistem, mas se elevam mutuamente.",source:"Mishneh Torá · Moreh Nevuchim"},
+  {id:78,level:4,tag:"RASHBA",heb:"רַשְׁבָּ\"א",title:"O Rashbá: Autoridade Que Definiu a Halachá",body:"Rav Shlomô ben Aderet (Rashbá, 1235–1310) foi o posek (decisor) mais influente de seu tempo. Suas milhares de Teshuvot (responsa) formaram a base do sistema de decisões rabínicas.",deep:"O Rashbá liderou a comunidade judaica de Barcelona durante um dos períodos mais difíceis — e demonstrou que a grandeza na Torá não é alcançada apenas em isolamento, mas em liderança comunitária responsável.",source:"Chidushei HaRashbá · Teshuvot HaRashbá"},
+  {id:79,level:4,tag:"VILNA GAON",heb:"הַגְּאוֹן מִוִּילְנָא",title:"O Vilna Gaon: O Gênio de Vilna",body:"Rav Eliyahu de Vilna (Vilna Gaon, 1720–1797) foi o maior erudito de Torá de sua época. Dominava Torá, matemática, música e astronomia. Dormia apenas 2 horas por dia para estudar mais.",deep:"O Vilna Gaon opôs-se ao Chassidismo nascente por razões teológicas sérias — mas suas críticas purificaram o movimento. Sua própria dedicação ao estudo serviu como modelo de santificação pelo intelecto.",source:"Biur HaGra · Toldot HaGra"},
+  {id:80,level:4,tag:"BAAL SHEM TOV",heb:"בַּעַל שֵׁם טוֹב",title:"O Baal Shem Tov: A Revolução da Alegria",body:"Rav Yisrael ben Eliezer (Baal Shem Tov, 1700–1760) fundou o movimento Chassídico. Ele ensinou que todo judeu — sábio ou simples — pode alcançar HaShem através da alegria, da oração fervorosa e do amor.",deep:"O Baal Shem Tov revolucionou o judaísmo dando acesso à espiritualidade ao judeu comum. Antes do Chassidismo, a rota para HaShem parecia reservada aos grandes eruditos. O Baal Shem Tov abriu uma porta nova.",source:"Toledot Yaakov Yosef · Keter Shem Tov"},
+  {id:81,level:4,tag:"ALTER REBBE",heb:"אַלְטֶר רֶבִּי",title:"O Alter Rebbe e o Tanya: A Torah do Cérebro",body:"Rav Schneur Zalman de Liadi (1745–1812) fundou o Chabad e escreveu o Tanya — 'o livro escrito para todo judeu'. Ele sintetizou a Kabbalah do Arizal com o Chassidismo do Baal Shem Tov numa linguagem filosófica rigorosa.",deep:"O Tanya ensina que toda alma judaica tem uma 'neshamá elokit' — uma alma divina — e uma 'nefesh habehamit' — alma animal. A vida espiritual é a batalha constante entre as duas, e o objetivo é que a alma divina governe.",source:"Tanya · Shulchan Aruch HaRav"},
+  {id:82,level:4,tag:"RAV KOOK",heb:"רַב קוּק",title:"Rav Kook: O Profeta da Renascença Judaica",body:"Rav Avraham Yitzhak Kook (1865–1935), primeiro Rabino-Chefe da Terra de Israel, uniu a Torá ao sionismo, a Kabbalah à modernidade. Via na renascença da Terra de Israel o início da Geulá.",deep:"Rav Kook ensinou que todo judeu — mesmo o que viola o Shabat, mesmo o ateu — carrega uma faísca de santidade. Seu amor ao povo judeu era incondicional. 'Meu amor ao povo de Israel é mais forte que meu amor à Torá.'",source:"Orot · Orot HaTeshuvá"},
+  {id:83,level:4,tag:"HAFETZ CHAIM",heb:"חָפֵץ חַיִּים",title:"O Chofetz Chaim: O Santo da Língua",body:"Rav Yisrael Meir Kagan (1838–1933) era chamado de 'Chofetz Chaim' — que deseja a vida. Dedicou-se principalmente às leis da fala proibida. Sua obra Mishnah Berurah tornou-se o código halachico padrão dos Ashkenazim.",deep:"Conta-se que o Chofetz Chaim era tão cuidadoso com a Tzedaká que separava imediatamente qualquer ganho. E quando lhe perguntavam se uma determinada prática era obrigatória, respondia: 'Não, mas HaShem fica feliz.'",source:"Chofetz Chaim · Mishnah Berurah"},
+  {id:84,level:4,tag:"LUBAVITCHER REBBE",heb:"הָרֶבִּי מִלּוּבָּוִויטְשׁ",title:"O Rebbe de Lubavitch: O Líder do Judaísmo Moderno",body:"Rav Menachem Mendel Schneerson (1902–1994), sétimo Rebbe de Chabad-Lubavitch, transformou o judaísmo moderno com a visão de que cada judeu é um emissário — um Shaliach. Seus emissários chegaram a 100+ países.",deep:"O Rebbe ensinava: 'Um pouquinho de luz expulsa muita escuridão.' Cada judeu tem o poder de iluminar seu entorno. Não se desanime com o próprio estado espiritual — aja, e a luz seguirá a ação.",source:"Likutei Sichot · Igrot Kodesh"},
+  {id:85,level:4,tag:"RAV SOLOVEITCHIK",heb:"הָרַב",title:"Rav Soloveitchik: O Homem da Halachá",body:"Rav Yosef Dov Soloveitchik (1903–1993), conhecido como 'The Rav', uniu o rigor halachico com a profundidade filosófica. Seu ensaio 'Halakhic Man' revolucionou a compreensão do judaísmo moderno.",deep:"O Rav Soloveitchik ensinou que 'o Homem da Halachá' não foge do mundo — ele o transforma. A Halachá é o instrumento pelo qual o judeu 'cria' um mundo de kedusha dentro do mundo profano.",source:"Ish HaHalachá · Kol Dodi Dofek"},
+  {id:86,level:4,tag:"EMES VEEMUNÁ",heb:"אֱמֶת וֶאֱמוּנָה",title:"Verdade e Fé Não São Opostos — São Um",body:"Um dos pilares da filosofia judaica: a Emunah (fé) e a Emet (verdade intelectual) não estão em conflito. A Torá exige que ambas sejam cultivadas simultaneamente — não uma às custas da outra.",deep:"O Rambam dedicou o Moreh Nevuchim exatamente a este tema: mostrar que a verdade filosófica e a fé judaica são compatíveis. Um judeu não precisa escolher entre pensar e crer.",source:"Moreh Nevuchim I · Rambam, Treze Princípios"},
+  {id:87,level:4,tag:"RESHIT CHOCHMA",heb:"רֵאשִׁית חָכְמָה יִרְאַת יְהוָה",title:"O Temor a HaShem é o Início da Sabedoria",body:"'O início da sabedoria é o temor a HaShem.' O Yirat Shamayim — temor dos Céus — não é medo de punição, mas reverência à majestade infinita de HaShem. É a postura espiritual que precede todo crescimento.",deep:"O Reshit Chochma (Rav Eliyahu de Vidas, séc. XVI) ensina que o Yirat Shamayim é como as raízes de uma árvore — invisível mas essencial. Sem ela, todo crescimento espiritual é frágil.",source:"Tehilim 111:10 · Reshit Chochma"},
+  {id:88,level:4,tag:"YICHUD",heb:"יִחוּד",title:"O Yichud: Meditação na Unidade Absoluta",body:"A prática do Yichud — meditação na unidade absoluta de HaShem — é o coração da vida espiritual chassídica. Antes de qualquer mitzvá, o chassid medita: 'Estou prestes a unir o Santo, Bendito Seja, com Sua Shechiná.'",deep:"O Tanya (Shaar HaYichud) explica que meditação no Yichud dissolve a ilusão de separação entre o ser humano e HaShem — revelando que a separação nunca foi real, apenas percebida.",source:"Tanya, Shaar HaYichud · Siddur Admur HaZaken"},
+  {id:89,level:4,tag:"TESTEMUNHO HISTÓRICO",heb:"זְכֹר אֵת אֲשֶׁר עָשָׂה לְךָ עֲמָלֵק",title:"A Memória como Ato Espiritual",body:"'Lembra o que Amalek te fez.' A Torá ordena a memória ativa — não apenas recordar, mas incorporar as lições da história na consciência presente. A memória judaica é resistência espiritual.",deep:"O Rav Yosef Albo (Sefer HaIkkarim) ensina que a memória coletiva do povo judeu é um de seus maiores instrumentos de identidade — e que apagar a memória é a primeira estratégia de cada inimigo.",source:"Devarim 25:17 · Sefer HaIkkarim III"},
+  {id:90,level:4,tag:"ERETZ ISRAEL",heb:"כִּי אֶרֶץ אֲשֶׁר יְהוָה אֱלֹהֶיךָ דֹּרֵשׁ אֹתָהּ",title:"A Terra de Israel: A Terra que HaShem Procura",body:"'Pois é uma terra que HaShem teu Deus busca constantemente.' Eretz Israel não é um detalhe geográfico — é o centro espiritual da criação. A Torá pode ser cumprida em qualquer lugar, mas tem seu cumprimento perfeito apenas em Israel.",deep:"O Ramban (Sefer HaMitzvot) lista o habitar em Eretz Israel como uma mitzvá positiva da Torá. O Rav Kook ensina que a terra tem uma santidade que literalmente eleva a alma de quem a habita.",source:"Devarim 11:12 · Ramban, Sefer HaMitzvot"},
+  {id:91,level:4,tag:"SINAÍ",heb:"מֹשֶׁה קִבֵּל תּוֹרָה מִסִּינַי",title:"A Cadeia de Tradição Ininterrupta",body:"'Moshê recebeu a Torá no Sinai e a transmitiu a Yehoshua; Yehoshua aos Zekenim; os Zekenim aos Profetas; os Profetas à Grande Assembleia.' A cadeia é ininterrupta — e cada anel é sagrado.",deep:"O Rav Chaim de Volozhin (Ruach Chaim) explica que a cadeia de transmissão não é apenas histórica — é metafísica. O Rebe que ensina ao discípulo transfere algo de sua própria neshamá, criando uma ligação eterna.",source:"Pirkei Avot 1:1 · Ruach Chaim"},
+  {id:92,level:4,tag:"ANAVAH",heb:"לֹא מֵרֻבְּכֶם מִכָּל הָעַמִּים",title:"A Humildade de Israel é sua Grandeza",body:"'Não por serdes mais numerosos do que todos os povos HaShem se afeiçoou a vós — pois sois o menor de todos os povos.' A escolha de Israel não foi por grandeza, mas por humildade.",deep:"O Rav Shimshon Rafael Hirsch ensina que a missão de Israel é precisamente ser 'pequeno' no sentido de estar sempre disponível, sempre receptivo à vontade divina — sem agenda própria.",source:"Devarim 7:7 · Rav S. R. Hirsch"},
+  {id:93,level:4,tag:"TEVILÁH",heb:"וְטָבַל בַּמַּיִם",title:"A Mikvê: Imersão e Renascimento Espiritual",body:"A imersão na Mikvê é mais do que higiene — é transformação espiritual. Quem emerge da Mikvê é, em certo sentido, uma nova pessoa. É um renascimento — uma forma de morte e ressurreição simbólica.",deep:"O Rav Kook ensina que a água da Mikvê conecta à primordialidade — às 'águas primordiais' sobre as quais o Espírito de HaShem pairava antes da criação. A imersão é retorno à origem.",source:"Levítico 15:16 · Rav Kook, Ein Aya"},
+  {id:94,level:4,tag:"HORA DERUTA",heb:"עֵת לַעֲשׂוֹת לַיהוָה",title:"Há Tempos em que é Preciso Agir por HaShem",body:"'Tempo de agir por HaShem.' Há momentos na história onde a passividade é traição. A Torá tem seus momentos de hora deruta — situações de emergência espiritual que exigem ação imediata.",deep:"O Vilna Gaon usou este versículo para justificar sua oposição ao Chassidismo nascente — por mais controversa que fosse sua decisão, demonstrou que um gadol hador deve agir quando vê perigo espiritual.",source:"Tehilim 119:126 · Berachot 54a"},
+  {id:95,level:4,tag:"NISTAR",heb:"הַנִּסְתָּרֹת לַיהוָה אֱלֹהֵינוּ",title:"O Oculto Pertence a HaShem",body:"'As coisas ocultas pertencem a HaShem nosso Deus, mas as reveladas pertencem a nós e a nossos filhos.' Nem tudo foi revelado. Há mistérios que estão além do alcance humano — e a humildade intelectual exige reconhecê-los.",deep:"O Chatam Sofer ensina que a frase 'nistar la'Hashem' é um aviso: quando você não entende algo da Torá ou dos caminhos de HaShem — não é porque está errado, é porque pertence ao domínio do oculto.",source:"Devarim 29:28 · Chatam Sofer"},
+  {id:96,level:4,tag:"ZECHIUT AVOT",heb:"זְכוּת אָבוֹת",title:"O Mérito dos Ancestrais nos Protege",body:"'Zekhut Avot' — o mérito dos patriarcas — é um conceito fundamental da Teologia Judaica. Os atos de Avraham, Yitzhak e Yaakov criaram reservas de mérito que protegem suas gerações.",deep:"O Talmud (Rosh HaShaná 11a) ensina que HaShem 'lembra' os patriarcas durante as orações. Por isso o Amidá começa com 'Elohei Avraham, Elohei Yitzhak, v'Elohei Yaakov' — invocando o mérito deles.",source:"Rosh HaShaná 11a · Bereshit Rabah 70"},
+  {id:97,level:4,tag:"PIRKEI AVOT",heb:"אֵיזֶהוּ חָכָם הַלּוֹמֵד מִכָּל אָדָם",title:"Quem é Sábio? Aquele que Aprende de Todos",body:"'Quem é sábio? Aquele que aprende de todo ser humano.' A sabedoria judaica é radicalmente inclusiva — cada pessoa tem algo a ensinar. A arrogância intelectual é o maior inimigo do crescimento.",deep:"Ben Zoma (Pirkei Avot 4:1) diz quatro definições de grandeza que subvertem a sabedoria do mundo: o sábio aprende de todos, o forte domina a si mesmo, o rico está satisfeito, o honrado honra aos outros.",source:"Pirkei Avot 4:1 · Ben Zoma"},
+  {id:98,level:4,tag:"ADAM KADMON",heb:"אָדָם קַדְמוֹן",title:"Adam Kadmon: O Homem Primordial como Mapa da Criação",body:"Na Kabbalah Luriânica, Adam Kadmon é o primeiro ser espiritual a emergir após o Tzimtzum — um mapa de toda a estrutura da criação. O ser humano físico é o espelho mais denso deste arquétipo.",deep:"O Arizal ensina que o objetivo final da criação é que Adam Kadmon — a estrutura arquetípica — seja 'reparado' através das ações de todos os seres humanos ao longo da história. O Tikkun Olam é literalmente reconstruir o Adam Kadmon.",source:"Etz Chaim, Drush Agulim v'Yosher · Arizal"},
+  {id:99,level:4,tag:"BRIT MILÁ",heb:"וְנִמַּלְתֶּם אֵת בְּשַׂר עָרְלַתְכֶם",title:"A Brit Milá: Sinal da Aliança no Corpo",body:"A circumcisão é o sinal físico da aliança entre HaShem e Avraham — e através dele, com todo o povo judeu. É impressa no corpo para que seja sempre lembrada.",deep:"O Zohar ensina que a Brit Milá remove a 'casca' (klipa) que cobre o aspecto mais sagrado do ser humano — e é por isso que quem tem Brit Milá tem acesso a dimensões espirituais que outros não têm.",source:"Bereshit 17:11 · Zohar, Lech Lecha"},
+  {id:100,level:4,tag:"AM ISRAEL CHAI",heb:"עַם יִשְׂרָאֵל חַי",title:"Am Israel Chai: O Povo de Israel Vive",body:"'O povo de Israel vive.' Esta não é apenas uma declaração política — é uma afirmação teológica. O povo judeu sobreviveu ao impossível porque HaShem não abandona Sua aliança. Esta sobrevivência é a maior prova da Torá.",deep:"O Rav Nachman de Breslov disse: 'Sou que está no mundo inteiro.' O ser humano que tem emunah verdadeira não pode desesperar — porque HaShem está em todo lugar, e onde HaShem está, há esperança infinita.",source:"Bereshit Rabah 78 · Am Israel Chai"}
+];
+
+// ─── QUIZ QUESTIONS ───────────────────────────────────────────
+const QUIZ_QUESTIONS = [
+  {level:1,q:"Qual é a primeira palavra da Torá e seu significado?",opts:["Shemá — Ouve","Bereshit — No princípio","Emet — Verdade","Baruch — Bendito"],ans:1,exp:"Bereshit (בְּרֵאשִׁית) significa 'No princípio' — é com essa palavra que começa o livro de Gênesis."},
+  {level:1,q:"O que significa 'Tselem Elohim'?",opts:["Lei da Torá","Imagem de Deus","Aliança sagrada","Serviço do coração"],ans:1,exp:"Tselem Elohim significa 'imagem de Deus' — todo ser humano foi criado à imagem divina (Bereshit 1:27)."},
+  {level:1,q:"Quantas mitzvot existem na Torá?",opts:["365","248","613","770"],ans:2,exp:"A Torá possui 613 mitzvot — 248 positivas e 365 negativas (Makkot 23b)."},
+  {level:1,q:"O que Hillel disse ao gentio que pediu para aprender a Torá em um pé?",opts:["Vai estudar por 7 anos","O que é odioso para ti, não faças ao próximo","Shemá Israel","Ama a HaShem"],ans:1,exp:"Hillel respondeu: 'O que é odioso para ti, não faças ao teu próximo — isso é toda a Torá. O resto é comentário, vai aprender.' (Shabat 31a)"},
+  {level:1,q:"Qual a raiz da palavra 'Teshuvá'?",opts:["Shuv — retornar","Shav — pagar","Shema — ouvir","Shalom — paz"],ans:0,exp:"Teshuvá vem da raiz 'shuv' — retornar. É o retorno da alma à sua origem e ao seu Criador."},
+  {level:2,q:"O que é 'Loshon HaRá'?",opts:["Oração do mal","Fala maliciosa ou calúnia","Um pecado de roubo","Violação do Shabat"],ans:1,exp:"Loshon HaRá é a fala maliciosa — falar verdades negativas sobre alguém sem necessidade. O Chofetz Chaim ensina que viola dezenas de mitzvot."},
+  {level:2,q:"Qual é o significado de 'Tzedaká'?",opts:["Caridade voluntária","Piedade religiosa","Justiça — dar o que é justo","Oração especial"],ans:2,exp:"Tzedaká vem de 'tzedek' — justiça. Não é caridade opcional, mas obrigação de devolver ao pobre o que lhe pertence por direito divino."},
+  {level:2,q:"Qual festividade comemora a entrega da Torá no Sinai?",opts:["Pessach","Rosh HaShaná","Sukot","Shavuot"],ans:3,exp:"Shavuot comemora a entrega da Torá no Monte Sinai — 50 dias após a saída do Egito."},
+  {level:3,q:"O que é 'Dveikut' no pensamento chassídico?",opts:["Estudo intensivo","União íntima e constante com HaShem","Jejum espiritual","Separação do mundo"],ans:1,exp:"Dveikut (דְּבֵקוּת) significa apego ou união a HaShem — o estado de estar sempre ligado ao Criador em cada ato e pensamento."},
+  {level:3,q:"O que ensina o conceito de 'Tzimtzum' do Arizal?",opts:["HaShem criou anjos antes dos humanos","HaShem se 'contraiu' para criar espaço para o mundo","A Torá foi escrita antes do mundo","O Shabat precede a criação"],ans:1,exp:"O Tzimtzum (צִמְצוּם) é a 'contração' do Ein Sof para criar espaço para a existência do mundo — conceito central do sistema cabalístico luriânico."},
+  {level:4,q:"Qual obra foi escrita pelo Alter Rebbe, fundador do Chabad?",opts:["Mishneh Torá","Moreh Nevuchim","Tanya","Zohar"],ans:2,exp:"O Tanya foi escrito por Rav Schneur Zalman de Liadi, o Alter Rebbe — fundador do movimento Chabad-Lubavitch."},
+  {level:4,q:"Qual é o 'selo de HaShem' segundo o Talmud?",opts:["Shalom — Paz","Emet — Verdade","Chessed — Bondade","Kedusha — Santidade"],ans:1,exp:"'Choteimo shel HaKadosh Baruch Hu — emet' — o selo de HaShem é a Emet, a Verdade (Shabat 55a)."},
+];
+
+// ─── STATE ────────────────────────────────────────────────────
+const ADMIN_EMAIL = "orhatorabrasil@gmail.com";
+const navAccountLink = document.getElementById('navAccountLink');
+
+let state = {
+  readIds: new Set(),
+  points: 0,
+  streak: 0,
+  lastDate: null,
+  quizScores: [],
+  currentLevel: 1,
+  quizLevel: 0,
+  uid: null,
+  loaded: false
+};
+let quizState = {active:false,questions:[],current:0,score:0,answers:[]};
+
+function updateAccountLink(user) {
+  if (!navAccountLink) return;
+  if (!user) {
+    navAccountLink.textContent = 'ENTRAR';
+    navAccountLink.href = 'login.html';
+    return;
+  }
+  const email = (user.email || '').toLowerCase();
+  navAccountLink.textContent = email === ADMIN_EMAIL ? 'ADMIN' : 'PERFIL';
+  navAccountLink.href = 'perfil.html';
+}
+
+// ─── FIREBASE SYNC ────────────────────────────────────────────
+function getTodayISO() {
+  return new Date().toISOString().split('T')[0];
+}
+
+async function saveToFirestore(extraGlobalPoints = 0) {
+  if (!state.uid) return;
+  const payload = {
+    email: auth.currentUser?.email || '',
+    progress: {
+      torah: {
+        readIds: [...state.readIds],
+        points: state.points,
+        streak: state.streak,
+        lastDate: state.lastDate,
+        quizScores: state.quizScores,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }
+    }
+  };
+
+  const ref = db.collection('users').doc(state.uid);
+  const ops = [ref.set(payload, { merge: true })];
+  if (extraGlobalPoints > 0) {
+    ops.push(ref.set({ score: firebase.firestore.FieldValue.increment(extraGlobalPoints) }, { merge: true }));
+  }
+  await Promise.all(ops);
+}
+
+async function loadFromFirestore(uid) {
+  state.uid = uid;
+  try {
+    const ref = db.collection('users').doc(uid);
+    const doc = await ref.get();
+    if (doc.exists) {
+      const data = doc.data() || {};
+      const torah = data.progress?.torah || {};
+      state.readIds = new Set(torah.readIds || []);
+      state.points = Number(torah.points || 0);
+      state.streak = Number(torah.streak || 0);
+      state.lastDate = torah.lastDate || null;
+      state.quizScores = Array.isArray(torah.quizScores) ? torah.quizScores : [];
+    }
+    state.loaded = true;
+    renderUI();
+  } catch (e) {
+    state.loaded = true;
+    renderUI();
+  }
+}
+
+auth.onAuthStateChanged(async user => {
+  updateAccountLink(user);
+  if (!user) {
+    sessionStorage.setItem('ohr_return_after_login', 'torah.html');
+    window.location.href = 'login.html';
+    return;
+  }
+  await loadFromFirestore(user.uid);
+});
+
+// ─── STREAK ───────────────────────────────────────────────────
+function updateStreak() {
+  const today = getTodayISO();
+  if (!state.lastDate) {
+    state.lastDate = today;
+    state.streak = Math.max(1, state.streak || 0);
+    return;
+  }
+  if (state.lastDate === today) {
+    state.streak = Math.max(1, state.streak || 0);
+    return;
+  }
+  const last = new Date(state.lastDate + 'T00:00:00');
+  const now = new Date(today + 'T00:00:00');
+  const diff = Math.floor((now - last) / 86400000);
+  if (diff === 1) state.streak = Math.max(1, state.streak || 0) + 1;
+  else state.streak = 1;
+  state.lastDate = today;
+}
+
+// ─── LEVEL COMPUTATION ───────────────────────────────────────
+function computeLevel() {
+  const p = state.points;
+  if (p < 100) return 'Talmid';
+  if (p < 300) return 'Ben Torá';
+  if (p < 600) return 'Talmid Chacham';
+  if (p < 1000) return 'Morenu';
+  return 'Gaon';
+}
+
+// ─── RENDER UI ────────────────────────────────────────────────
+function renderUI() {
+  const total = TEACHINGS.length;
+  const read = state.readIds.size;
+  document.getElementById('readCount').textContent = `${read} / ${total}`;
+  document.getElementById('pointsDisplay').textContent = state.points;
+  document.getElementById('levelDisplay').textContent = computeLevel();
+  document.getElementById('streakDisplay').textContent = `${state.streak} dia${state.streak !== 1 ? 's' : ''}`;
+  document.getElementById('progressBar').style.width = `${(read/total)*100}%`;
+
+  const scores = state.quizScores;
+  document.getElementById('qTotalDone').textContent = scores.length;
+  document.getElementById('qBestScore').textContent = scores.length ? Math.max(...scores) + '%' : '0%';
+  document.getElementById('qAvgScore').textContent = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) + '%' : '0%';
+
+  renderTeachings();
+  updateLevelCards();
+}
+
+function updateLevelCards() {
+  [1,2,3,4].forEach(l => {
+    const card = document.querySelector(`.level-card[data-level="${l}"]`);
+    if (!card) return;
+    card.classList.toggle('active', state.currentLevel === l);
+    const inLevel = TEACHINGS.filter(t => t.level === l).map(t => t.id);
+    const allRead = inLevel.length && inLevel.every(id => state.readIds.has(id));
+    card.classList.toggle('done', !!allRead);
+  });
+}
+
+function renderTeachings() {
+  const grid = document.getElementById('teachingsGrid');
+  const filtered = TEACHINGS.filter(t => t.level === state.currentLevel);
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state"><div class="empty-heb">אֵין</div>Nenhum ensinamento neste nível.</div>'; return; }
+
+  grid.innerHTML = filtered.map(t => `
+    <div class="teaching-card ${state.readIds.has(t.id) ? 'read' : ''}" onclick="openTeaching(${t.id})">
+      <div class="tc-header">
+        <span class="tc-num">Nº ${String(t.id).padStart(2,'0')}</span>
+        <span class="tc-tag">${t.tag}</span>
+      </div>
+      <div class="tc-hebrew">${t.heb}</div>
+      <div class="tc-title">${t.title}</div>
+      <div class="tc-body">${t.body.substring(0,110)}…</div>
+      <div class="tc-source">${t.source}</div>
+      <div class="tc-read-mark">✓ LIDO</div>
+    </div>
+  `).join('');
+}
+
+function selectLevel(l) {
+  state.currentLevel = l;
+  renderTeachings();
+  updateLevelCards();
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function openTeaching(id) {
+  const t = TEACHINGS.find(x => x.id === id);
+  if (!t) return;
+  const isRead = state.readIds.has(id);
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-num">ENSINAMENTO Nº ${String(t.id).padStart(2,'0')} — NÍVEL ${t.level} — ${t.tag}</div>
+    <div class="modal-hebrew">${t.heb}</div>
+    <div class="modal-title">${t.title}</div>
+    <div class="modal-line"></div>
+    <div class="modal-text">${t.body}</div>
+    <div class="modal-deep">${t.deep}</div>
+    <div class="modal-source">Fonte: ${t.source}</div>
+    <div class="modal-actions">
+      <button class="btn-mark" onclick="markRead(${id})">${isRead ? '✓ JÁ LIDO' : 'MARCAR COMO LIDO (+10 pts)'}</button>
+      <button class="btn-quiz-now" onclick="goToRavFromTeaching(${id})">PERGUNTAR AO RAV</button>
+      <button class="btn-quiz-now" onclick="closeModal();switchTab('quiz',document.querySelectorAll('.tab-btn')[1]);startQuiz()">FAZER QUIZ AGORA</button>
+    </div>
+  `;
+  document.getElementById('teachingModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('teachingModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) { if (e.target === document.getElementById('teachingModal')) closeModal(); }
+
+function goToRavFromTeaching(id) {
+  const t = TEACHINGS.find(x => x.id === id);
+  if (!t) return;
+  const context = `Explique com profundidade este ensinamento da Torá: ${t.title}. Trecho principal: ${t.body}. Aprofundamento: ${t.deep}`;
+  localStorage.setItem('rav_context', context);
+  window.location.href = 'rav.html';
+}
+
+async function markRead(id) {
+  if (state.readIds.has(id)) return;
+  state.readIds.add(id);
+  state.points += 10;
+  updateStreak();
+  await saveToFirestore(10);
+  renderUI();
+  openTeaching(id);
+}
+
+function setQuizLevel(l, btn) {
+  state.quizLevel = l;
+  document.querySelectorAll('.qlf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startQuiz() {
+  let pool = state.quizLevel === 0 ? [...QUIZ_QUESTIONS] : QUIZ_QUESTIONS.filter(q => q.level === state.quizLevel);
+  if (!pool.length) pool = [...QUIZ_QUESTIONS];
+  const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, Math.min(10, pool.length));
+  quizState = {active:true, questions:shuffled, current:0, score:0, answers:[]};
+  document.getElementById('quizHome').style.display = 'none';
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizPlay').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const {questions, current, answers} = quizState;
+  if (current >= questions.length) { showResult(); return; }
+  const q = questions[current];
+  const LETTERS = ['A','B','C','D'];
+
+  const dots = questions.map((_, i) => {
+    let cls = 'qpm-dot';
+    if (i < current) cls += answers[i] ? ' done-c' : ' done-w';
+    else if (i === current) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  document.getElementById('quizPlay').innerHTML = `
+    <div class="quiz-question-wrap">
+      <div class="quiz-progress-mini">${dots}</div>
+      <div class="quiz-q-num">QUESTÃO ${current+1} DE ${questions.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((o,i) => `
+          <div class="quiz-opt" data-i="${i}" onclick="answerQuiz(${i})">
+            <span class="opt-letter">${LETTERS[i]}</span>${o}
+          </div>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qFeedback"></div>
+      <button class="btn-next-q" id="btnNext" onclick="nextQuestion()">PRÓXIMA →</button>
+    </div>
+  `;
+}
+
+function answerQuiz(i) {
+  const q = quizState.questions[quizState.current];
+  const opts = document.querySelectorAll('.quiz-opt');
+  const correct = i === q.ans;
+  opts.forEach((o, idx) => {
+    o.style.pointerEvents = 'none';
+    if (idx === q.ans) o.classList.add('correct');
+    else if (idx === i && !correct) o.classList.add('wrong');
+  });
+  if (correct) quizState.score++;
+  quizState.answers.push(correct);
+  const fb = document.getElementById('qFeedback');
+  fb.textContent = (correct ? '✓ Correto! — ' : '✗ Incorreto — ') + q.exp;
+  fb.classList.add('show');
+  document.getElementById('btnNext').classList.add('show');
+}
+
+function nextQuestion() {
+  quizState.current++;
+  renderQuestion();
+}
+
+async function showResult() {
+  const {score, questions} = quizState;
+  const pct = Math.round((score/questions.length)*100);
+  state.quizScores.push(pct);
+  const gained = score * 5;
+  state.points += gained;
+  updateStreak();
+  await saveToFirestore(gained);
+  renderUI();
+
+  const msgs = [
+    [0,40,"Não desanime! A Torá é um oceano — cada tentativa te aprofunda nela. Volte e estude."],
+    [41,70,"Bom esforço! Continue estudando os ensinamentos e tente novamente."],
+    [71,89,"Muito bom! Sua dedicação à Torá está crescendo."],
+    [90,100,"Excepcional! 'De Moshê a Moshê, não houve ninguém como Moshê.' Continue neste caminho!"]
+  ];
+  const msg = msgs.find(m => pct >= m[0] && pct <= m[1]);
+  const stars = pct >= 90 ? '✡✡✡' : pct >= 70 ? '✡✡' : '✡';
+
+  document.getElementById('quizPlay').style.display = 'none';
+  const res = document.getElementById('quizResult');
+  res.style.display = 'block';
+  res.innerHTML = `
+    <div class="quiz-result">
+      <div class="result-star">${stars}</div>
+      <div class="result-score">${score} / ${questions.length}</div>
+      <div class="result-label">${pct}% de acerto · +${gained} pontos</div>
+      <div class="result-msg">${msg[2]}</div>
+      <button class="btn-retry" onclick="retryQuiz()">TENTAR NOVAMENTE</button>
+      <button class="btn-mark" style="margin-left:1rem;margin-top:1rem;" onclick="goStudy()">VOLTAR AO ESTUDO</button>
+    </div>
+  `;
+}
+
+function retryQuiz() {
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizHome').style.display = 'block';
+}
+function goStudy() {
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizHome').style.display = 'block';
+  switchTab('study', document.querySelectorAll('.tab-btn')[0]);
+}
+
+renderUI();
+</script>
+</body>
+</html>
