@@ -194,7 +194,8 @@
     const db = firebase.firestore();
     const ADMIN_EMAIL = "orhatorabrasil@gmail.com";
     const params = new URLSearchParams(window.location.search);
-    const nextPage = params.get("next") || "perfil.html";
+    const rawNextPage = params.get("next") || sessionStorage.getItem("ohr_return_after_login") || "perfil.html";
+    const nextPage = rawNextPage && !/^https?:/i.test(rawNextPage) ? rawNextPage : "perfil.html";
 
     function switchTab(tab) {
       document.querySelectorAll('.tab').forEach((t,i) =>
@@ -251,6 +252,7 @@
     }
 
     function goNext() {
+      try { sessionStorage.removeItem("ohr_return_after_login"); } catch(e) {}
       window.location.href = nextPage;
     }
 
