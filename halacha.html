@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Halachá — Ohr Beit Midrash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- ============================================================
+       CSS — ORGANIZADO POR BLOCOS
+       1. Variáveis e Reset
+       2. Layout Base / Nav / Hero
+       3. Barra de Progresso
+       4. Navegação de Níveis
+       5. Cards de Ensinamento
+       6. Modal de Ensinamento
+       7. Seção de Quiz
+       8. Estados e Animações
+       9. Footer / Responsivo
+  ============================================================ -->
+  <style>
+
+    /* ── 1. VARIÁVEIS E RESET ─────────────────────────────── */
+    :root {
+      --gold:           #C8A84B;
+      --gold-light:     #E8CC7A;
+      --gold-dim:       #8A6F2E;
+      --gold-faint:     rgba(200,168,75,0.07);
+      --gold-border:    rgba(200,168,75,0.25);
+      --gold-border-hi: rgba(200,168,75,0.50);
+      --parchment:      #F5EDD6;
+      --parchment-mid:  #E8D9B5;
+      --parchment-dim:  rgba(245,237,214,0.6);
+      --ink:            #1A1208;
+      --deep:           #0D0A04;
+      --deep2:          #110D05;
+      --deep3:          #0A0803;
+      --correct:        #4CAF50;
+      --wrong:          #E53935;
+      --correct-bg:     rgba(76,175,80,0.10);
+      --wrong-bg:       rgba(229,57,53,0.10);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--parchment);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* Textura de fundo */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.6;
+    }
+
+    /* ── 2. NAV ───────────────────────────────────────────── */
+    .ohr-nav {
+      position: fixed; top:0; left:0; right:0; z-index: 300;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 3rem;
+      background: linear-gradient(180deg, rgba(13,10,4,0.98) 0%, rgba(13,10,4,0.88) 100%);
+      border-bottom: 1px solid var(--gold-border);
+      backdrop-filter: blur(14px);
+    }
+
+    .ohr-nav__logo { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+    .ohr-nav__logo-heb { font-family:'Frank Ruhl Libre',serif; font-size:1.6rem; color:var(--gold); line-height:1; }
+    .ohr-nav__logo-name { font-family:'Cinzel',serif; font-size:.95rem; letter-spacing:.15em; color:var(--parchment); font-weight:600; }
+
+    .ohr-nav__links { display:flex; align-items:center; gap:1.5rem; }
+    .ohr-nav__link {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.12em;
+      color:var(--parchment-mid); text-decoration:none;
+      transition:color .3s; position:relative;
+    }
+    .ohr-nav__link::after {
+      content:''; position:absolute; bottom:-3px; left:0;
+      width:0; height:1px; background:var(--gold); transition:width .3s;
+    }
+    .ohr-nav__link:hover { color:var(--gold-light); }
+    .ohr-nav__link:hover::after { width:100%; }
+    .ohr-nav__link--rav { color:var(--gold-light) !important; }
+
+    .ohr-nav__back {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.12em;
+      color:var(--gold-light); text-decoration:none;
+      border:1px solid var(--gold-border-hi); padding:.45rem 1.2rem;
+      transition:all .3s;
+    }
+    .ohr-nav__back:hover { background:var(--gold-faint); }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .ohr-hero {
+      min-height: 38vh;
+      display: flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align: center;
+      padding: 8rem 2rem 3rem;
+      position: relative; overflow:hidden;
+    }
+    .ohr-hero__bg {
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(200,168,75,0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 15% 80%, rgba(200,168,75,0.04) 0%, transparent 60%);
+    }
+    .ohr-hero__float {
+      position:absolute; top:10%;
+      font-family:'Frank Ruhl Libre',serif;
+      font-size: clamp(4rem,12vw,9rem);
+      color:var(--gold); opacity:.05; letter-spacing:.3em;
+      user-select:none; pointer-events:none;
+      animation: hero-breathe 7s ease-in-out infinite;
+    }
+    .ohr-hero__content { position:relative; z-index:1; }
+    .ohr-hero__label {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.3em;
+      color:var(--gold-dim); text-transform:uppercase; margin-bottom:.9rem;
+      animation: anim-fadedown .8s ease both;
+    }
+    .ohr-hero__title {
+      font-family:'Cinzel',serif; font-size:clamp(2.2rem,5vw,4rem);
+      font-weight:700; color:var(--parchment); letter-spacing:.08em; line-height:1.1;
+      animation: anim-fadedown .8s .1s ease both;
+    }
+    .ohr-hero__title span { color:var(--gold); display:block; }
+    .ohr-hero__line {
+      width:100px; height:1px;
+      background: linear-gradient(90deg,transparent,var(--gold),transparent);
+      margin:1.5rem auto; animation:anim-fadein .8s .3s ease both;
+    }
+    .ohr-hero__desc {
+      font-style:italic; color:var(--parchment-mid); opacity:.85;
+      max-width:520px; font-size:1.05rem; margin:0 auto;
+      animation: anim-fadedown .8s .4s ease both;
+    }
+
+    /* ── 3. BARRA DE PROGRESSO ─────────────────────────────── */
+    .ohr-progress {
+      position: sticky; top:72px; z-index: 200;
+      background: rgba(13,10,4,0.97);
+      border-top:1px solid var(--gold-border); border-bottom:1px solid var(--gold-border);
+      backdrop-filter: blur(10px);
+      padding: .8rem 3rem;
+      display: flex; align-items:center; gap:2.5rem; flex-wrap:wrap;
+    }
+    .ohr-progress__item { display:flex; flex-direction:column; gap:.1rem; }
+    .ohr-progress__label {
+      font-family:'Cinzel',serif; font-size:.60rem; letter-spacing:.2em;
+      color:var(--gold-dim); text-transform:uppercase;
+    }
+    .ohr-progress__value {
+      font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700;
+      color:var(--gold-light);
+    }
+    .ohr-progress__bar-wrap { flex:1; min-width:140px; }
+    .ohr-progress__bar-bg  { height:3px; background:rgba(200,168,75,0.12); border-radius:2px; }
+    .ohr-progress__bar-fill {
+      height:3px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light));
+      border-radius:2px; width:0%;
+      transition: width .7s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── 4. NAVEGAÇÃO DE NÍVEIS ────────────────────────────── */
+    .ohr-main { max-width:1120px; margin:0 auto; padding:3rem 2rem 4rem; position:relative; z-index:1; }
+
+    .ohr-tabs {
+      display:flex; gap:.4rem; flex-wrap:wrap;
+      border-bottom:1px solid var(--gold-border); margin-bottom:2.5rem;
+    }
+    .ohr-tab {
+      font-family:'Cinzel',serif; font-size:.70rem; letter-spacing:.14em;
+      text-transform:uppercase; padding:.65rem 1.5rem;
+      background:transparent; border:none; cursor:pointer;
+      color:var(--parchment-mid);
+      position:relative; margin-bottom:-1px; transition:color .3s;
+    }
+    .ohr-tab::after {
+      content:''; position:absolute; bottom:-1px; left:0; right:0;
+      height:2px; background:var(--gold);
+      transform:scaleX(0); transition:transform .3s;
+    }
+    .ohr-tab:hover { color:var(--gold-light); }
+    .ohr-tab.is-active { color:var(--gold); }
+    .ohr-tab.is-active::after { transform:scaleX(1); }
+
+    /* Painéis */
+    .ohr-panel { display:none; }
+    .ohr-panel.is-active { display:block; animation:anim-fadein .35s ease; }
+
+    /* Seletor de nível */
+    .halacha-level-grid {
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+      gap:1rem; margin-bottom:2.5rem;
+    }
+    .halacha-level-card {
+      border:1px solid var(--gold-border);
+      background: rgba(17,13,5,0.75);
+      padding:1.3rem 1.4rem; cursor:pointer;
+      transition:all .3s; position:relative; overflow:hidden;
+    }
+    .halacha-level-card::before {
+      content:''; position:absolute; inset:0;
+      background:var(--gold); opacity:0; transition:opacity .3s;
+    }
+    .halacha-level-card:hover::before { opacity:.05; }
+    .halacha-level-card.is-active { border-color:var(--gold); }
+    .halacha-level-card.is-active::before { opacity:.07; }
+    .halacha-level-card__num {
+      font-family:'Frank Ruhl Libre',serif; font-size:2rem; line-height:1;
+      color:var(--gold); opacity:.7; margin-bottom:.4rem;
+    }
+    .halacha-level-card__title {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.12em;
+      color:var(--parchment); font-weight:600;
+    }
+    .halacha-level-card__range {
+      font-size:.78rem; color:var(--parchment-mid); opacity:.55; margin-top:.25rem;
+    }
+    .halacha-level-card__badge {
+      position:absolute; top:.7rem; right:.8rem;
+      font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.1em;
+      color:var(--gold); opacity:0; transition:opacity .3s;
+    }
+    .halacha-level-card.is-complete .halacha-level-card__badge { opacity:1; }
+
+    /* ── 5. CARDS DE ENSINAMENTO ─────────────────────────── */
+    .halacha-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(310px,1fr));
+      gap:1.2rem;
+    }
+
+    /* Cada card tem id="halacha-01", etc. */
+    .halacha-card {
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.82);
+      padding:1.5rem 1.6rem;
+      cursor:pointer; position:relative; overflow:hidden;
+      transition:border-color .3s, transform .3s;
+    }
+    .halacha-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      transform:scaleX(0); transition:transform .4s;
+    }
+    .halacha-card:hover { border-color:var(--gold-border-hi); transform:translateY(-2px); }
+    .halacha-card:hover::before { transform:scaleX(1); }
+    .halacha-card.is-read { border-color:rgba(200,168,75,0.38); }
+
+    .halacha-card__header {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:1rem; margin-bottom:.7rem;
+    }
+    .halacha-card__num {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.15em;
+      color:var(--gold-dim); flex-shrink:0;
+    }
+    .halacha-card__tag {
+      font-family:'Cinzel',serif; font-size:.60rem; letter-spacing:.1em;
+      padding:.18rem .65rem; border:1px solid var(--gold-border);
+      color:var(--parchment-mid); opacity:.7;
+    }
+    .halacha-card__heb {
+      font-family:'Frank Ruhl Libre',serif; font-size:1.05rem;
+      color:var(--gold-light); text-align:right;
+      line-height:1.4; margin-bottom:.45rem;
+    }
+    .halacha-card__title {
+      font-family:'Cinzel',serif; font-size:.88rem; letter-spacing:.04em;
+      color:var(--parchment); font-weight:600; margin-bottom:.5rem;
+    }
+    .halacha-card__body {
+      font-size:.88rem; color:var(--parchment-mid);
+      opacity:.82; line-height:1.6;
+    }
+    .halacha-card__source {
+      margin-top:.75rem; font-size:.75rem; font-style:italic;
+      color:var(--gold-dim); border-top:1px solid var(--gold-border);
+      padding-top:.55rem;
+    }
+    .halacha-card__read {
+      position:absolute; bottom:.7rem; right:.8rem;
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em;
+      color:var(--gold); opacity:0; transition:opacity .3s;
+    }
+    .halacha-card.is-read .halacha-card__read { opacity:.75; }
+
+    /* ── 6. MODAL ─────────────────────────────────────────── */
+    .halacha-modal {
+      position:fixed; inset:0; z-index:500;
+      background:rgba(13,10,4,0.93);
+      display:none; align-items:center; justify-content:center;
+      padding:2rem; backdrop-filter:blur(5px);
+    }
+    .halacha-modal.is-open { display:flex; animation:anim-fadein .3s ease; }
+
+    .halacha-modal__box {
+      background:var(--deep2); border:1px solid var(--gold-border-hi);
+      max-width:680px; width:100%; max-height:88vh; overflow-y:auto;
+      padding:2.4rem; position:relative;
+      animation:anim-fadeup .3s ease;
+    }
+    .halacha-modal__box::-webkit-scrollbar { width:3px; }
+    .halacha-modal__box::-webkit-scrollbar-thumb { background:var(--gold-dim); }
+
+    .halacha-modal__close {
+      position:absolute; top:1rem; right:1.2rem;
+      background:none; border:none; color:var(--parchment-mid);
+      font-size:1.3rem; cursor:pointer; opacity:.55; transition:opacity .3s;
+    }
+    .halacha-modal__close:hover { opacity:1; }
+
+    .halacha-modal__meta {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.2em;
+      color:var(--gold-dim); margin-bottom:.5rem;
+    }
+    .halacha-modal__heb {
+      font-family:'Frank Ruhl Libre',serif; font-size:1.6rem;
+      color:var(--gold-light); text-align:right; line-height:1.4; margin-bottom:.7rem;
+    }
+    .halacha-modal__title {
+      font-family:'Cinzel',serif; font-size:1.25rem;
+      color:var(--parchment); font-weight:700; margin-bottom:1rem;
+    }
+    .halacha-modal__divider {
+      height:1px;
+      background:linear-gradient(90deg,var(--gold),rgba(200,168,75,0.1));
+      margin:1rem 0;
+    }
+    .halacha-modal__text {
+      font-size:1rem; color:var(--parchment-mid);
+      line-height:1.85; margin-bottom:.9rem;
+    }
+    .halacha-modal__practical {
+      background:rgba(200,168,75,0.07);
+      border-left:2px solid var(--gold);
+      padding:.9rem 1.1rem; margin:1rem 0;
+      font-size:.93rem; color:var(--parchment-mid); line-height:1.7;
+    }
+    .halacha-modal__practical strong {
+      font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.12em;
+      color:var(--gold-dim); display:block; margin-bottom:.35rem;
+    }
+    .halacha-modal__source {
+      font-size:.80rem; font-style:italic;
+      color:var(--gold-dim); margin-top:.9rem;
+    }
+    .halacha-modal__actions {
+      display:flex; gap:.9rem; margin-top:1.6rem; flex-wrap:wrap;
+    }
+
+    /* Botões */
+    .btn-primary {
+      font-family:'Cinzel',serif; font-size:.70rem; letter-spacing:.12em;
+      padding:.6rem 1.5rem; background:var(--gold); color:var(--ink);
+      border:none; cursor:pointer; transition:all .3s; text-decoration:none;
+      display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-primary:hover { background:var(--gold-light); transform:translateY(-1px); }
+
+    .btn-secondary {
+      font-family:'Cinzel',serif; font-size:.70rem; letter-spacing:.12em;
+      padding:.6rem 1.5rem; background:transparent; color:var(--gold-light);
+      border:1px solid var(--gold-border-hi); cursor:pointer; transition:all .3s;
+      text-decoration:none; display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-secondary:hover { background:var(--gold-faint); }
+
+    /* ── 7. QUIZ ──────────────────────────────────────────── */
+    .halacha-quiz { max-width:680px; margin:0 auto; }
+
+    /* Painel inicial do quiz */
+    .halacha-quiz__home { }
+    .halacha-quiz__header {
+      text-align:center; padding:2.4rem 2rem;
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.8); margin-bottom:1.8rem; position:relative; overflow:hidden;
+    }
+    .halacha-quiz__header::before {
+      content:'הֲלָכָה'; position:absolute;
+      font-family:'Frank Ruhl Libre',serif; font-size:5rem;
+      color:var(--gold); opacity:.04;
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      pointer-events:none; user-select:none;
+    }
+    .halacha-quiz__header-title {
+      font-family:'Cinzel',serif; font-size:1.4rem;
+      color:var(--parchment); font-weight:700; margin-bottom:.4rem;
+    }
+    .halacha-quiz__header-sub {
+      font-style:italic; color:var(--parchment-mid); opacity:.8; font-size:.95rem;
+    }
+
+    /* Estatísticas do quiz */
+    .halacha-quiz__stats {
+      display:flex; gap:2rem; justify-content:center;
+      margin-top:1.4rem; flex-wrap:wrap;
+    }
+    .halacha-quiz__stat { text-align:center; }
+    .halacha-quiz__stat-val {
+      font-family:'Cinzel',serif; font-size:1.35rem;
+      color:var(--gold); font-weight:700; display:block;
+    }
+    .halacha-quiz__stat-lbl {
+      font-family:'Cinzel',serif; font-size:.60rem; letter-spacing:.1em;
+      color:var(--parchment-mid); opacity:.6;
+    }
+
+    /* Filtros de nível */
+    .halacha-quiz__filters {
+      display:flex; gap:.5rem; flex-wrap:wrap;
+      justify-content:center; margin-bottom:1.4rem;
+    }
+    .halacha-quiz__filter {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.1em;
+      padding:.38rem 1rem; background:transparent;
+      border:1px solid var(--gold-border); color:var(--parchment-mid);
+      cursor:pointer; transition:all .3s;
+    }
+    .halacha-quiz__filter:hover,
+    .halacha-quiz__filter.is-active { border-color:var(--gold); color:var(--gold); }
+
+    /* Questão ativa */
+    .halacha-quiz__question-wrap { animation:anim-fadeup .35s ease; }
+    .halacha-quiz__progress-dots { display:flex; gap:.3rem; flex-wrap:wrap; margin-bottom:1.4rem; }
+    .halacha-quiz__dot { width:8px; height:8px; border-radius:50%; background:var(--gold-border); transition:all .3s; }
+    .halacha-quiz__dot.is-correct  { background:var(--correct); }
+    .halacha-quiz__dot.is-wrong    { background:var(--wrong); }
+    .halacha-quiz__dot.is-current  { background:var(--gold); animation:dot-pulse 1s infinite; }
+
+    .halacha-quiz__q-label {
+      font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.2em;
+      color:var(--gold-dim); margin-bottom:.4rem;
+    }
+    .halacha-quiz__q-text {
+      font-family:'EB Garamond',serif; font-size:1.2rem;
+      color:var(--parchment); line-height:1.65;
+      border-left:2px solid var(--gold); padding-left:1rem;
+      margin-bottom:1.4rem;
+    }
+
+    .halacha-quiz__options { display:flex; flex-direction:column; gap:.7rem; margin-bottom:1.3rem; }
+    .halacha-quiz__option {
+      padding:.9rem 1.2rem;
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.8);
+      cursor:pointer; transition:all .3s;
+      display:flex; align-items:center; gap:1rem;
+      font-size:.93rem; color:var(--parchment-mid);
+    }
+    .halacha-quiz__option:hover { border-color:var(--gold-border-hi); background:var(--gold-faint); }
+    .halacha-quiz__option.is-correct { border-color:var(--correct); background:var(--correct-bg); color:#a5d6a7; }
+    .halacha-quiz__option.is-wrong   { border-color:var(--wrong);   background:var(--wrong-bg);   color:#ef9a9a; }
+    .halacha-quiz__option-letter {
+      font-family:'Cinzel',serif; font-size:.72rem; min-width:22px; height:22px;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid var(--gold-border); color:var(--gold-dim); flex-shrink:0;
+    }
+
+    .halacha-quiz__feedback {
+      padding:.9rem 1.1rem; margin-bottom:.9rem;
+      border-left:3px solid var(--gold); background:var(--gold-faint);
+      font-size:.92rem; line-height:1.65; color:var(--parchment-mid);
+      display:none;
+    }
+    .halacha-quiz__feedback.is-shown { display:block; animation:anim-fadein .3s ease; }
+
+    /* Resultado */
+    .halacha-quiz__result {
+      text-align:center; padding:2.5rem;
+      border:1px solid var(--gold-border);
+      background:rgba(17,13,5,0.85);
+      animation:anim-fadein .5s ease;
+    }
+    .halacha-quiz__result-icon { font-size:2.8rem; margin-bottom:.8rem; }
+    .halacha-quiz__result-score {
+      font-family:'Cinzel',serif; font-size:2.4rem; color:var(--gold); font-weight:700;
+    }
+    .halacha-quiz__result-pct {
+      color:var(--parchment-mid); opacity:.75; margin-top:.3rem; font-size:.95rem;
+    }
+    .halacha-quiz__result-msg {
+      font-style:italic; color:var(--gold-light);
+      margin:1rem auto; max-width:420px; font-size:1rem;
+    }
+
+    /* ── 8. ESTADOS E ANIMAÇÕES ──────────────────────────── */
+    @keyframes hero-breathe {
+      0%,100% { opacity:.04; transform:scale(1); }
+      50%      { opacity:.09; transform:scale(1.02); }
+    }
+    @keyframes anim-fadein  { from{opacity:0;} to{opacity:1;} }
+    @keyframes anim-fadedown { from{opacity:0;transform:translateY(-14px);} to{opacity:1;transform:none;} }
+    @keyframes anim-fadeup   { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:none;} }
+    @keyframes dot-pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+    /* ── 9. FOOTER / RESPONSIVO ──────────────────────────── */
+    .ohr-footer {
+      border-top:1px solid var(--gold-border);
+      padding:2rem 3rem; text-align:center;
+      position:relative; z-index:1; margin-top:5rem;
+    }
+    .ohr-footer__copy {
+      font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:.08em;
+      color:var(--parchment-mid); opacity:.38;
+    }
+
+    @media(max-width:768px) {
+      .ohr-nav  { padding:1rem 1.5rem; }
+      .ohr-nav__links { display:none; }
+      .ohr-progress { padding:.7rem 1.5rem; gap:1rem; }
+      .ohr-main { padding:2rem 1rem 3rem; }
+      .halacha-grid { grid-template-columns:1fr; }
+      .halacha-modal__box { padding:1.5rem; }
+      .halacha-quiz { max-width:100%; }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     HTML — ESTRUTURA
+============================================================ -->
+
+<!-- NAV -->
+<nav class="ohr-nav">
+  <a href="index.html" class="ohr-nav__logo">
+    <span class="ohr-nav__logo-heb">אוֹר</span>
+    <span class="ohr-nav__logo-name">OHR BEIT MIDRASH</span>
+  </a>
+  <div class="ohr-nav__links">
+    <a href="torah.html"   class="ohr-nav__link">Torá</a>
+    <a href="mussar.html"  class="ohr-nav__link">Mussar</a>
+    <a href="bnei-noach.html" class="ohr-nav__link">Bnei Noach</a>
+    <a href="giyur.html"   class="ohr-nav__link">Giyur</a>
+    <a href="rav.html"     class="ohr-nav__link ohr-nav__link--rav">✦ Rav HaOhr</a>
+  </div>
+  <a href="index.html" class="ohr-nav__back">← INÍCIO</a>
+</nav>
+
+<!-- HERO -->
+<section class="ohr-hero">
+  <div class="ohr-hero__bg"></div>
+  <div class="ohr-hero__float">הֲלָכָה</div>
+  <div class="ohr-hero__content">
+    <div class="ohr-hero__label">Ohr Beit Midrash · Módulo II</div>
+    <h1 class="ohr-hero__title">Estudo da<span>Halachá</span></h1>
+    <div class="ohr-hero__line"></div>
+    <p class="ohr-hero__desc">"A Halachá não é uma gaiola — é o mapa para a liberdade verdadeira." — Rav Soloveitchik</p>
+  </div>
+</section>
+
+<!-- BARRA DE PROGRESSO -->
+<div class="ohr-progress" id="halacha-progress-bar">
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">Lições Lidas</span>
+    <span class="ohr-progress__value" id="halacha-read-count">0 / 100</span>
+  </div>
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">Pontos</span>
+    <span class="ohr-progress__value" id="halacha-points">0</span>
+  </div>
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">Nível</span>
+    <span class="ohr-progress__value" id="halacha-level-title">Talmid</span>
+  </div>
+  <div class="ohr-progress__item">
+    <span class="ohr-progress__label">🔥 Sequência</span>
+    <span class="ohr-progress__value" id="halacha-streak">0 dias</span>
+  </div>
+  <div class="ohr-progress__bar-wrap">
+    <div class="ohr-progress__label" style="margin-bottom:.28rem;">Progresso Geral</div>
+    <div class="ohr-progress__bar-bg">
+      <div class="ohr-progress__bar-fill" id="halacha-bar-fill"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<main class="ohr-main">
+
+  <!-- ABAS: Estudo | Quiz -->
+  <div class="ohr-tabs">
+    <button class="ohr-tab is-active" id="halacha-tab-study" onclick="UI.switchTab('study')">📖 ESTUDO</button>
+    <button class="ohr-tab" id="halacha-tab-quiz"  onclick="UI.switchTab('quiz')">✦ QUIZ</button>
+  </div>
+
+  <!-- PAINEL: ESTUDO -->
+  <div class="ohr-panel is-active" id="halacha-panel-study">
+    <!-- Seletor de Nível -->
+    <div class="halacha-level-grid" id="halacha-level-selector"></div>
+    <!-- Grid de Cards -->
+    <div class="halacha-grid" id="halacha-grid"></div>
+  </div>
+
+  <!-- PAINEL: QUIZ -->
+  <div class="ohr-panel" id="halacha-panel-quiz">
+    <div class="halacha-quiz">
+      <!-- Estado: Início -->
+      <div id="halacha-quiz-home">
+        <div class="halacha-quiz__header">
+          <div class="halacha-quiz__header-title">Quiz de Halachá</div>
+          <div class="halacha-quiz__header-sub">Teste seu conhecimento da Lei Judaica</div>
+          <div class="halacha-quiz__stats">
+            <div class="halacha-quiz__stat">
+              <span class="halacha-quiz__stat-val" id="halacha-quiz-total">0</span>
+              <span class="halacha-quiz__stat-lbl">REALIZADOS</span>
+            </div>
+            <div class="halacha-quiz__stat">
+              <span class="halacha-quiz__stat-val" id="halacha-quiz-best">—</span>
+              <span class="halacha-quiz__stat-lbl">MELHOR QUIZ</span>
+            </div>
+            <div class="halacha-quiz__stat">
+              <span class="halacha-quiz__stat-val" id="halacha-quiz-avg">—</span>
+              <span class="halacha-quiz__stat-lbl">MÉDIA GERAL</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-bottom:1.2rem;">
+          <div style="font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.18em;color:var(--gold-dim);margin-bottom:.7rem;">FILTRAR POR NÍVEL</div>
+          <div class="halacha-quiz__filters" id="halacha-quiz-filters">
+            <button class="halacha-quiz__filter is-active" data-level="0" onclick="Quiz.setLevel(0,this)">TODOS</button>
+            <button class="halacha-quiz__filter" data-level="1" onclick="Quiz.setLevel(1,this)">NÍVEL 1</button>
+            <button class="halacha-quiz__filter" data-level="2" onclick="Quiz.setLevel(2,this)">NÍVEL 2</button>
+            <button class="halacha-quiz__filter" data-level="3" onclick="Quiz.setLevel(3,this)">NÍVEL 3</button>
+            <button class="halacha-quiz__filter" data-level="4" onclick="Quiz.setLevel(4,this)">NÍVEL 4</button>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <button class="btn-primary" onclick="Quiz.start()" style="font-size:.78rem;padding:.85rem 2.4rem;">
+            INICIAR QUIZ — 10 QUESTÕES
+          </button>
+        </div>
+      </div>
+      <!-- Estado: Questão Ativa -->
+      <div id="halacha-quiz-play" style="display:none;"></div>
+      <!-- Estado: Resultado -->
+      <div id="halacha-quiz-result" style="display:none;"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL DE ENSINAMENTO -->
+<div class="halacha-modal" id="halacha-modal" onclick="Modal.closeOutside(event)">
+  <div class="halacha-modal__box">
+    <button class="halacha-modal__close" onclick="Modal.close()">✕</button>
+    <div id="halacha-modal-content"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="ohr-footer">
+  <p class="ohr-footer__copy">© 2025 OHR BEIT MIDRASH — לשם שמים · Construído com amor por Yisrael Yehuda</p>
+</footer>
+
+
+<!-- ============================================================
+     SCRIPTS — FIREBASE + LÓGICA
+     Ordem:
+     1. Firebase init
+     2. Dados (ensinamentos + questões de quiz)
+     3. Estado da aplicação (AppState)
+     4. Sincronização com Firestore (FireSync)
+     5. Funções de progresso (Progress)
+     6. Funções de UI (UI)
+     7. Modal (Modal)
+     8. Quiz (Quiz)
+     9. Inicialização
+============================================================ -->
+
+<!-- 1. FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  /* ── 1. FIREBASE INIT ─────────────────────────────────── */
+  const FB_CONFIG = {
+    apiKey:            "AIzaSyBh6ZP--La4IBwsdCoZtm-sRu88UxaFDqM",
+    authDomain:        "ohr-beit-midrash.firebaseapp.com",
+    projectId:         "ohr-beit-midrash",
+    storageBucket:     "ohr-beit-midrash.firebasestorage.app",
+    messagingSenderId: "173478100824",
+    appId:             "1:173478100824:web:56e32e06f300bf28ccef2d"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+  const db   = firebase.firestore();
+  const auth = firebase.auth();
+
+  /* ── 2. DADOS — ENSINAMENTOS ──────────────────────────── */
+  /*
+   * Estrutura de cada ensinamento:
+   *   id:        "halacha-01" … "halacha-100"  (único, para Firestore e RavHaOhr)
+   *   level:     1 | 2 | 3 | 4
+   *   tag:       categoria curta (ex: "SHABAT")
+   *   heb:       texto em hebraico
+   *   title:     título em português
+   *   body:      explicação principal
+   *   practical: aplicação prática ("Na vida real…")
+   *   source:    fonte halachica
+   *
+   * O campo `id` e `title` são usados pelo botão "Perguntar ao Rav"
+   * para pré-preencher o contexto no rav.html via URL param.
+   */
+  const TEACHINGS = [
+    /* ── NÍVEL 1: FUNDAMENTOS DO DIA A DIA (01–25) ── */
+    { id:"halacha-01", level:1, tag:"MODEH ANI", heb:"מוֹדֶה אֲנִי לְפָנֶיךָ", title:"Modeh Ani: A Primeira Palavra do Dia", body:"Ao acordar, antes de qualquer coisa, o judeu recita o Modeh Ani — 'Sou grato diante de Ti, Rei vivo e eterno, por teres devolvido a minha alma com misericórdia.' Este ato transforma o despertar num momento de fé.", practical:"Recite imediatamente ao abrir os olhos, ainda na cama. Não é necessário lavar as mãos antes, pois o Modeh Ani não contém nenhum dos Nomes divinos.", source:"Shulchan Aruch, OC 1:1 · Mishnah Berurah 1:8" },
+    { id:"halacha-02", level:1, tag:"NETILAT YADAIM", heb:"נְטִילַת יָדַיִם שַׁחֲרִית", title:"Lavagem das Mãos ao Acordar", body:"Ao acordar, existe uma obrigação de lavar as mãos com um recipiente, alternando três vezes em cada mão. Os sábios ensinam que uma 'ruach ra' (espírito impuro) pousa sobre as mãos durante o sono.", practical:"Use um kli (recipiente com alça), despeje água 3x na direita, 3x na esquerda. Antes de caminhar 4 côvados, não toque olhos, boca ou nariz.", source:"Shulchan Aruch, OC 4:2 · Mishnah Berurah 4:14" },
+    { id:"halacha-03", level:1, tag:"BERACHOT", heb:"בִּרְכוֹת הַשַּׁחַר", title:"As Bircot HaShachar: Bênçãos da Manhã", body:"As Bircot HaShachar são um conjunto de bênçãos recitadas pela manhã que reconhecem os presentes básicos da existência: visão, movimento, liberdade, força. Cada bênção é um ato de consciência sagrada.", practical:"Recitam-se mesmo que não se tenham dormido. A ordem é importante: seguir o Siddur de acordo com seu nusach (Ashkenaz, Sefard/Ari, Sefaradi).", source:"Shulchan Aruch, OC 46 · Mishnah Berurah 46:1" },
+    { id:"halacha-04", level:1, tag:"TZITZIT", heb:"וְעָשׂוּ לָהֶם צִיצִת", title:"Tzitzit: Os Fios da Memória", body:"Todo garment de quatro cantos usado por um homem requer Tzitzit. O Tallit Katan é usado diariamente, sob a roupa, para cumprir esta mitzvá constantemente.", practical:"Os Tzitzit devem ser verificados antes do uso. Se um fio cortou ou desfez, consulte um Rav. A bênção é recitada ao vestir o Tallit Gadol (manhã) ou ao inspecionar o Tallit Katan.", source:"Shulchan Aruch, OC 8–17 · Mishnah Berurah 8:1" },
+    { id:"halacha-05", level:1, tag:"TEFILÁ", heb:"שַׁחֲרִית מִנְחָה מַעֲרִיב", title:"As Três Tefilot Diárias", body:"Shacharit (manhã), Minchá (tarde) e Maariv (noite) são obrigações diárias. As Tefilot foram instituídas pelos patriarcas: Avraham — Shacharit; Yitzhak — Minchá; Yaakov — Maariv.", practical:"Os horários variam por local e estação. Use um Luach (calendário judaico) ou app de horários. A tefilá bidieuria (em hora errada) não cumpre a obrigação retroativamente.", source:"Shulchan Aruch, OC 89 · Berachot 26b" },
+    { id:"halacha-06", level:1, tag:"AMIDÁ", heb:"תְּפִלַּת שְׁמוֹנֶה עֶשְׂרֵה", title:"A Amidá: O Coração da Tefilá", body:"A Amidá (também chamada Shmoneh Esrei) é a oração central do judaísmo — 18 (hoje 19) bênçãos recitadas três vezes ao dia de pé, em silêncio. Estrutura: louvores → pedidos → agradecimentos.", practical:"Durante a Amidá: pés juntos, não interromper por nada. Se errou uma bênção essencial, há regras específicas sobre correção. Consulte o Mishnah Berurah capítulo 119.", source:"Shulchan Aruch, OC 98–127 · Berachot 28b" },
+    { id:"halacha-07", level:1, tag:"KERIÁT SHEMÁ", heb:"קְרִיאַת שְׁמַע", title:"Keriát Shemá: Obrigação Bíblica Diária", body:"A recitação do Shemá é uma mitzvá da Torá, obrigatória duas vezes ao dia — na manhã (antes de um terço do dia) e à noite (após o anoitecer). Deve ser recitada com kavana (intenção) na primeira frase.", practical:"O Shemá matutino deve ser recitado antes de 'sof zman keriát Shemá' (calculado pelo seu Luach). Perder este horário sem justificativa é transgressão de uma mitzvá bíblica.", source:"Shulchan Aruch, OC 58–70 · Devarim 6:7" },
+    { id:"halacha-08", level:1, tag:"KASHRUT", heb:"כָּשְׁרוּת הַמָּזוֹן", title:"Kashrut: Os Fundamentos da Alimentação Kosher", body:"A Kashrut proíbe: carne de animais não-kosher, mistura de carne e leite, insetos, e exige abate ritual (shechitá) correto. Estas leis santificam o ato físico de comer.", practical:"Separar utensílios de carne (basar) e leite (chalav) é obrigatório. O tempo de espera entre carne e leite varia: 6 horas (Ashkenaz padrão), 1 hora (algumas comunidades), 72 minutos (outras).", source:"Shulchan Aruch, YD 87–97 · Levítico 11" },
+    { id:"halacha-09", level:1, tag:"BERACHOT ALIMENTOS", heb:"בְּרָכוֹת עַל הַמָּזוֹן", title:"Bênçãos sobre os Alimentos", body:"Cada alimento tem uma bênção específica antes de consumi-lo. As categorias são: HaMotzi (pão), Mezonot (grãos), HaGafen (vinho/suco de uva), HaEtz (frutas de árvore), HaAdama (vegetais), Shehakol (demais).", practical:"O princípio: a bênção mais específica tem prioridade. Pão (HaMotzi) cobre todos os alimentos da refeição. Esquecer a bênção antes? Recite-a mesmo após o início, se ainda não terminou.", source:"Shulchan Aruch, OC 202–215 · Berachot 35a" },
+    { id:"halacha-10", level:1, tag:"BIRKAT HAMAZON", heb:"בִּרְכַּת הַמָּזוֹן", title:"Birkat HaMazon: Agradecer Após Comer",body:"Após comer pão (uma quantidade mínima de kazayit — tamanho de azeitona), é obrigatório pela Torá recitar o Birkat HaMazon (Bentching). É uma das poucas bênçãos pós-ato ordenadas explicitamente na Torá.", practical:"A obrigação de Birkat HaMazon é bíblica. A de Beracha Achat Me'ein Shalosh (depois de Mezonot/uvas/frutas dos sete) é rabínica. Mulheres também são obrigadas no Birkat HaMazon.", source:"Shulchan Aruch, OC 185–200 · Devarim 8:10" },
+    { id:"halacha-11", level:1, tag:"SHABAT — INÍCIO", heb:"כָּבוֹד שַׁבָּת", title:"Preparação e Início do Shabat", body:"O Shabat começa no pôr do sol de sexta-feira. É obrigação honrá-lo com banho, roupas especiais e lar preparado antes do início. A mulher (ou o homem quando sozinho) acende as velas 18 minutos antes do pôr do sol.", practical:"Após acender as velas, a mulher recita a bênção e aceita o Shabat. Homens aceitam o Shabat ao recitar Barchu na sinagoga (Kabbalat Shabat). Após a aceitação, todas as melachot (trabalhos) são proibidas.", source:"Shulchan Aruch, OC 250–264 · Shemot 20:8" },
+    { id:"halacha-12", level:1, tag:"SHABAT — MELACHOT", heb:"לֹא תַעֲשֶׂה כָל מְלָאכָה", title:"As 39 Melachot: Categorias de Trabalho Proibido", body:"O Shabat proíbe 39 categorias de melacha (trabalho criativo), derivadas das atividades do Mishkan (Tabernáculo). O conceito central não é 'esforço' — mas 'criação intencional de resultado'.", practical:"Exemplos: escrever, acender fogo, cozinhar, carregar em domínio público, apertar botão elétrico (trabalho indireto). O Shulchan Aruch (OC 302–340) detalha cada categoria.", source:"Shulchan Aruch, OC 302–340 · Shabat 73a" },
+    { id:"halacha-13", level:1, tag:"SHABAT — ONEG", heb:"וְקָרָאתָ לַשַּׁבָּת עֹנֶג", title:"Oneg Shabat: A Obrigação de Desfrutar",body:"Além das proibições, o Shabat tem obrigações positivas: oneg (prazer), kavod (honra) e menucha (descanso). As três refeições do Shabat (com Kiddush, dois pães, etc.) são obrigatórias.", practical:"Kiddush do Shabat: recitado na sexta à noite sobre uma taça de vinho (ou suco de uva). Kiddush do dia: recitado Shabat de manhã, após os serviços. Sem Kiddush, não se começa a refeição de Shabat.", source:"Shulchan Aruch, OC 271–291 · Yeshayahu 58:13" },
+    { id:"halacha-14", level:1, tag:"TEFILIN", heb:"וְקָשַׁרְתָּם לְאוֹת עַל יָדֶךָ", title:"Tefilin: Procedimento Correto de Colocação", body:"Tefilin são colocados em dias de semana (não Shabat, não Yom Tov). O Tefilin do braço é colocado primeiro, no braço esquerdo (diestro) ou direito (canhoto), depois o da cabeça.", practical:"Ordem: Tefilin do braço (shel yad) → bênção → Tefilin da cabeça (shel rosh) → segunda bênção. Não conversar entre as duas bênçãos. Enrolar a correia no braço: 7 voltas ao redor do antebraço.", source:"Shulchan Aruch, OC 25–45 · Devarim 6:8" },
+    { id:"halacha-15", level:1, tag:"MEZUZÁ", heb:"וּכְתַבְתָּם עַל מְזוּזֹת בֵּיתֶךָ", title:"Mezuzá: Onde e Como Afixar", body:"É mitzvá da Torá afixar uma Mezuzá na entrada de cada quarto habitável da casa. A Mezuzá deve ser escrita por um sofer qualificado em pergaminho kosher.", practical:"Afixar no terço superior do lado direito da entrada, inclinada para dentro (Ashkenaz) ou verticalmente (Sefaradi). Verificar a Mezuzá 2x em 7 anos. Bênção: 'Al keviat mezuzá'.", source:"Shulchan Aruch, YD 285–291 · Devarim 6:9" },
+    { id:"halacha-16", level:1, tag:"KAVOD HABRIYOt", heb:"כְּבוֹד הַבְּרִיּוֹת", title:"Cavod HaBriot: Dignidade Humana na Halachá", body:"A dignidade humana (Cavod HaBriot) é um valor tão grande na Halachá que pode suspender certas proibições rabínicas. Envergonhar alguém em público é considerado equivalente a derramar sangue.", practical:"Na prática: mesmo em disputas halachicas, preservar a dignidade do oponente é obrigatório. Questões de luto, necropsia e enterro refletem este princípio: o corpo humano é sagrado mesmo após a morte.", source:"Berachot 19b · Shulchan Aruch, OC 13:3" },
+    { id:"halacha-17", level:1, tag:"TZNIUT", heb:"הַצְנֵעַ לֶכֶת", title:"Tzniut: Leis de Modéstia na Roupa e Comportamento", body:"Tzniut (modéstia) aplica-se tanto a homens quanto a mulheres. Para a mulher: cobrir coxas, braços até o cotovelo, e colar-bone. Para homens casados: cobrir a cabeça (Kipa). Ambos: comportamento reservado.", practical:"Braços descobertos de uma mulher constituem 'erva' (nudez) que impede a recitação de bênçãos ou Torá na presença delas. Um homem não pode rezar com camisa sem manga.", source:"Shulchan Aruch, OC 75 · Micha 6:8" },
+    { id:"halacha-18", level:1, tag:"KIBBUD AV VA'EM", heb:"כַּבֵּד אֶת אָבִיךָ", title:"Honrar Pai e Mãe: Detalhes Práticos", body:"A mitzvá tem duas dimensões: Kibbud (honra ativa: prover comida, ajudar, falar bem) e Mora (reverência: não sentar em seu lugar, não contradizer, não humilhar).", practical:"Conflito pai/mãe vs. Shabat: Shabat prevalece. Conflito pai vs. Torá: a Torá prevalece. Pai que ordena transgressão: não obedecer. Pai falecido: se ele pediria, cumprir seu desejo é mitzvá.", source:"Shulchan Aruch, YD 240 · Kidushin 30b" },
+    { id:"halacha-19", level:1, tag:"BEIN ADAM LECHAVERO", heb:"בֵּין אָדָם לַחֲבֵרוֹ", title:"Leis Entre Pessoa e Próximo", body:"As mitzvot entre pessoa e pessoa (Bein Adam LeChavero) são tão severas quanto as entre pessoa e HaShem — em certo sentido mais, pois Yom Kippur não expia transgressões interpessoais sem pedido de perdão.", practical:"Dano financeiro: deve ser reparado integralmente. Difamação: pedir perdão ao ofendido. HaShem não perdoa pelo Yom Kippur transgressões contra o próximo que não foram resolvidas entre as partes.", source:"Yoma 85b · Shulchan Aruch, CM 420" },
+    { id:"halacha-20", level:1, tag:"TZEDAKÁ", heb:"עָשֵׂר תְּעַשֵּׂר", title:"Tzedaká: Valores Mínimos e Máximos", body:"A obrigação de separar Tzedaká é da Torá (ma'aser — dízimo). O mínimo obrigatório é 10% da renda líquida. O máximo recomendado é 20% (para não ficar dependente de Tzedaká si mesmo).", practical:"A quem dar primeiro? Ordem de prioridade: 1) família pobre, 2) pobres da mesma cidade, 3) pobres de outras cidades. Dar em segredo (sem o pobre saber de quem veio) é nível mais alto.", source:"Shulchan Aruch, YD 247–257 · Devarim 14:22" },
+    { id:"halacha-21", level:1, tag:"EMET BADIN", heb:"מִדְּבַר שֶׁקֶר תִּרְחָק", title:"Proibição de Mentira na Halachá", body:"A Torá proíbe a mentira de forma categórica. Mais do que 'não mentirás' — 'afaste-te da falsidade.' O nível de proibição é mais severo do que apenas proibir: exige distância ativa.", practical:"Exceções permitidas pela Halachá: 1) para preservar a paz entre pessoas (shalom bayit), 2) para preservar a modéstia (não revelar dons recebidos), 3) para salvar uma vida. Mas estas são exceções estreitas.", source:"Shulchan Aruch, CM 228 · Shemot 23:7" },
+    { id:"halacha-22", level:1, tag:"RIBBIT", heb:"לֹא תַשִּׁיךְ לְאָחִיךָ", title:"Ribbit: A Proibição de Juros entre Judeus", body:"A Torá proíbe cobrar ou pagar juros entre judeus. Esta proibição se aplica ao credor, ao devedor, às testemunhas e ao notário que formalizam tal empréstimo.", practical:"Para transações comerciais que necessitam de crédito, existe o instrumento do 'Heter Iska' — um contrato halachicamente aprovado que transforma o empréstimo em parceria comercial.", source:"Shulchan Aruch, YD 159–177 · Levítico 25:37" },
+    { id:"halacha-23", level:1, tag:"GEZEL", heb:"לֹא תִגְנֹב", title:"Gezel: Roubo e Restituição na Halachá", body:"O roubo (Gezel) e o furto (Geneivá) diferem: Gezel é em público (com força), Geneivá é em segredo. Curiosamente, o furto secreto tem penalidade maior — o furtador teme os humanos mais que HaShem.", practical:"A restituição deve ser do valor exato roubado. Se roubou e o objeto se depreciou: paga valor no momento do roubo. Se valorizou: paga valor atual. Objetos consagrados pela vítima: regras específicas.", source:"Shulchan Aruch, CM 348–365 · Bava Kama 62b" },
+    { id:"halacha-24", level:1, tag:"LASHON HARÁ", heb:"לֹא תֵלֵךְ רָכִיל", title:"Lashon HaRá: As Regras Fundamentais", body:"Lashon HaRá (fala maliciosa) é proibido mesmo quando verdadeiro. É permitido apenas para: proteger alguém de dano real, fins de casamento (informar defeitos sérios), ou repreensão direta (toachecha).", practical:"Também proibido: 'avak lashon hará' — poeira de fala maliciosa — como insinuações, histórias de 'como X passou por algo difícil' que implicitamente prejudicam X.", source:"Chofetz Chaim, Hilchot Lashon Hará · Levítico 19:16" },
+    { id:"halacha-25", level:1, tag:"MEZUZÁ / SHABBAT", heb:"עֵרוּב חֲצֵרוֹת", title:"Eruv: Carregar no Shabat em Domínio Público", body:"Em domínio público bíblico (Reshut HaRabim), carregar qualquer objeto é proibido no Shabat. Um Eruv Chatzerot ou Eruv Techumin permite carregar em domínios privados e semi-públicos dentro de limites estabelecidos.", practical:"A existência de um Eruv válido na cidade deve ser verificada semanalmente (pode cair). Consulte uma autoridade rabínica local para saber se o Eruv da sua comunidade é considerado válido.", source:"Shulchan Aruch, OC 345–395 · Eruvin 17b" },
+
+    /* ── NÍVEL 2: CICLO DE VIDA E CALENDÁRIO (26–50) ── */
+    { id:"halacha-26", level:2, tag:"ROSH HASHANÁ", heb:"יוֹם תְּרוּעָה", title:"Rosh HaShaná: Halachot Essenciais", body:"Rosh HaShaná é Yom HaDin (Dia do Julgamento). A mitzvá central é ouvir as 100 tekiot de Shofar. As tefilot especiais (Musaf, Malkuyot, Zichronot, Shofarot) têm elementos únicos.", practical:"O Shofar não é soprado se Rosh HaShaná cai no Shabat. A mulher não é obrigada (mitzvá de tempo — zemanit), mas o costume é ouvir. Quem não ouviu não deve soprar sozinho sem orientação.", source:"Shulchan Aruch, OC 581–600 · Bamidbar 29:1" },
+    { id:"halacha-27", level:2, tag:"YOM KIPPUR", heb:"עִנּוּי נֶפֶשׁ", title:"Yom Kippur: As Cinco Iniyyim (Privações)", body:"Yom Kippur proíbe cinco 'inuyim' (aflições): comer/beber, banho de prazer, uso de cosméticos/perfume, calçados de couro, e relações conjugais.", practical:"Crianças menores de 13 (meninos) / 12 (meninas) não jejuam por obrigação. Doentes graves: o Rav deve ser consultado — a vida prevalece sobre o jejum. Obrigatório completar o jejum (25 horas).", source:"Shulchan Aruch, OC 610–624 · Levítico 16:29" },
+    { id:"halacha-28", level:2, tag:"SUCÁ", heb:"בַּסֻּכֹּת תֵּשְׁבוּ", title:"Sucá: Construção e Obrigações", body:"A Sucá deve ter: mínimo de 3 paredes, Schach (cobertura de material vegetal cortado) que filtra luz/sombra adequadamente, altura entre 10 tefachim e 20 amot.", practical:"É mitzvá comer todas as refeições principais na Sucá 7 dias. A obrigação é de homens adultos — mulheres são parnassot (isentas, mas merecem recompensa se cumprem). Se chove forte: pode sair.", source:"Shulchan Aruch, OC 625–669 · Levítico 23:42" },
+    { id:"halacha-29", level:2, tag:"ARBA MINIM", heb:"פְּרִי עֵץ הָדָר", title:"As Quatro Espécies: Leis Detalhadas", body:"As quatro espécies são: Etrog (cidra), Lulav (palmeira), Hadassim (murta) e Aravot (salgueiro). Cada uma tem requisitos específicos de beleza e validade (kashrut) estabelecidos no Shulchan Aruch.", practical:"Verificar o Lulav: deve estar reto, não partido. Etrog: sem manchas na parte inferior, pittom (ponta) intacto. Hadassim: 3 folhas por nó (meshulash). Aravot: folhas ovais, sem dentes. Uma espécie inválida invalida a mitzvá.", source:"Shulchan Aruch, OC 645–660 · Levítico 23:40" },
+    { id:"halacha-30", level:2, tag:"CHANUCÁ", heb:"נֵר חֲנֻכָּה", title:"Chanucá: Acensão da Chanukiá", body:"A mitzvá é acender velas durante 8 noites. A posição ideal: na entrada da casa, do lado esquerdo entrando (Mezuzá à direita), ou na janela voltada para rua pública — para publicar o milagre (pirsumei nisa).", practical:"Quantidade: Shamash + 1 vela (1ª noite), acrescendo 1 por noite. Hora: após anoitecer (Tzet HaKochavim). Duração mínima: 30 minutos. Mulheres também são obrigadas (pois estavam no milagre).", source:"Shulchan Aruch, OC 670–684 · Shabat 21b" },
+    { id:"halacha-31", level:2, tag:"PURIM", heb:"אַרְבַּע מִצְווֹת פּוּרִים", title:"Purim: As Quatro Mitzvot", body:"As quatro mitzvot de Purim: 1) Mikrá Meguilá (ouvir a leitura do Meguilá — noite e dia); 2) Mishloach Manot (enviar porções a amigos); 3) Matanot LaEvyonim (dar presentes a pobres); 4) Seudát Purim (refeição festiva).", practical:"Mikrá Meguilá: ouvir cada palavra. Mishloach Manot: min. 2 porções prontas para comer a 1 pessoa. Matanot LaEvyonim: dinheiro a min. 2 pobres. Seudát Purim: deve ser durante o dia.", source:"Shulchan Aruch, OC 687–697 · Esther 9:22" },
+    { id:"halacha-32", level:2, tag:"PESSACH — BEDIKAT", heb:"בְּדִיקַת חָמֵץ", title:"Bedikat Chametz: A Busca do Pão Fermentado", body:"Na véspera do 14 de Nissan à noite, é obrigação verificar a casa inteira em busca de Chametz (levedado). A busca é feita com vela/lanterna, pena e saco de papel.", practical:"Antes da busca: recitar bênção. Após: recitar Bitul (anulação de qualquer Chametz não encontrado). No dia 14, queimar o Chametz restante e recitar Bitul completo antes do fim do tempo permitido.", source:"Shulchan Aruch, OC 431–445 · Shemot 12:15" },
+    { id:"halacha-33", level:2, tag:"PESSACH — SEDER", heb:"וְהִגַּדְתָּ לְבִנְךָ", title:"Seder de Pessach: Os 15 Passos", body:"O Seder tem 15 passos ordenados: Kadesh, Urchatz, Karpas, Yachatz, Maguid, Rachtzah, Motzi, Matza, Maror, Koreich, Shulchan Oreich, Tzafun, Bareich, Hallel, Nirtzah.", practical:"Comer Matza: mitzvá bíblica na primeira noite. Comer Maror: mitzvá rabínica atualmente. Quatro taças de vinho: obrigação para homens e mulheres. Aafikoman: deve ser comido antes da meia-noite.", source:"Shulchan Aruch, OC 472–490 · Haggadah shel Pessach" },
+    { id:"halacha-34", level:2, tag:"SEFIRAT HAOMER", heb:"וּסְפַרְתֶּם לָכֶם", title:"Sefirat HaOmer: Contagem dos 49 Dias", body:"Entre Pessach e Shavuot conta-se 49 dias (7 semanas). A contagem deve ser feita à noite, imediatamente após Tzet HaKochavim (surgimento das estrelas), em pé, com bênção.", practical:"Se esqueceu de contar uma noite inteira (sem contar durante o dia seguinte): perde o direito de recitar a bênção nos dias seguintes, mas continua contando sem bênção. Há opinião leniante — consulte seu Rav.", source:"Shulchan Aruch, OC 489 · Levítico 23:15" },
+    { id:"halacha-35", level:2, tag:"SHAVUOT", heb:"יוֹם הַבִּכּוּרִים", title:"Shavuot: Costumes e Halachot", body:"Shavuot celebra a entrega da Torá. Costumes: ficar acordado a noite toda estudando Torá (Tikun Leil Shavuot), ler o Meguilat Rut, decorar a sinagoga com flores e plantas.", practical:"É costume comer laticínios em Shavuot — várias razões são dadas. Se comer queijo e depois carne: lavar a boca, comer pão (palate cleanser), mas não é necessário esperar 6 horas.", source:"Shulchan Aruch, OC 494 · Magen Avraham 494" },
+    { id:"halacha-36", level:2, tag:"BRIT MILÁ", heb:"וּנְמַלְתֶּם", title:"Brit Milá: A Aliança no Oitavo Dia", body:"A Brit Milá é realizada no oitavo dia de vida do menino, mesmo em Shabat ou Yom Tov — o único caso em que uma operação cirúrgica 'empurra' o Shabat. O Mohel deve ser qualificado e temente a HaShem.", practical:"O pai tem a mitzvá primária de circuncidar seu filho. Na prática, delega ao Mohel. Se não foi feito no oitavo dia (doença), realiza-se o mais cedo possível, mas não em Shabat.", source:"Shulchan Aruch, YD 260–268 · Bereshit 17:12" },
+    { id:"halacha-37", level:2, tag:"PIDYON HABEN", heb:"פִּדְיוֹן הַבֵּן", title:"Pidyon HaBen: Resgate do Primogênito", body:"O filho primogênito de pai (não Levi nem Kohen) que abriu o ventre da mãe deve ser 'resgatado' no 31º dia de vida, pagando 5 Shekel (moedas de prata equivalentes) ao Kohen.", practical:"Não se aplica se o pai ou mãe é descendente de Levi ou Kohen. Também não se aplica se houve aborto anterior (verificar com Rav). O bebê deve estar vivo e saudável no 31º dia.", source:"Shulchan Aruch, YD 305 · Shemot 13:2" },
+    { id:"halacha-38", level:2, tag:"KIDUSHIN", heb:"קִדּוּשִׁין", title:"Kiddushin: A Santificação do Casamento", body:"O casamento judaico (Kiddushin) é realizado em dois estágios históricos (hoje unidos): Erusin (noivado halachico) e Nissuim (entrada sob o Chupá). Requer: anel kosher, Rav autorizado, duas testemunhas válidas.", practical:"O anel deve ser de ouro maciço (sem pedra) para que a noiva possa avaliar seu valor. A Ketubbá (contrato matrimonial) deve ser lida e entregue antes do Yichud (momento a sós pós-casamento).", source:"Shulchan Aruch, EH 26–65 · Kiddushin 2a" },
+    { id:"halacha-39", level:2, tag:"GUET", heb:"וְכָתַב לָהּ סֵפֶר כְּרִיתֻת", title:"Guet: O Divórcio Judaico", body:"O casamento judaico só é dissolvido halachicamente através de um Guet (documento de divórcio). Sem Guet, a mulher é 'Aguná' — não pode casar novamente. O Guet deve ser escrito especificamente para este casal.", practical:"O Guet é uma área extremamente complexa — requer Rav especializado em Gittin. Divórcio civil sem Guet não dissolve o casamento judaico. Filhos de um segundo casamento sem Guet são Mamzerim.", source:"Shulchan Aruch, EH 120–154 · Devarim 24:1" },
+    { id:"halacha-40", level:2, tag:"AVELUT", heb:"אֲבֵלוּת", title:"Avelut: Leis do Luto", body:"O luto judaico tem estágios: Aninnuut (entre morte e enterro), Shiva (7 dias), Shloshim (30 dias), 12 meses para pai/mãe. Em cada fase há práticas diferentes.", practical:"Na Shiva: não trabalhar, não usar couro, não banhar por prazer, não estudar Torá (exceto assuntos de luto), sentar baixo. Visitas de consolo (nichum aveilim) é grande mitzvá — não falar antes do enlutado.", source:"Shulchan Aruch, YD 335–403 · Moed Katan 27b" },
+    { id:"halacha-41", level:2, tag:"KVURÁ", heb:"קְבוּרַת הַמֵּת", title:"Kvurá: O Enterro e a Dignidade dos Mortos", body:"O enterro deve ser na terra (direto, sem caixão quando possível — conforme costume israelense e algumas comunidades). A autópsia é geralmente proibida, salvo necessidade médica urgente ou ordem legal.", practical:"Chevra Kadisha (sociedade de enterro) é obrigação comunitária. Taharah (purificação do corpo) deve ser feita. O corpo não deve ficar sozinho (Shmirah). O enterro deve ocorrer o mais rápido possível.", source:"Shulchan Aruch, YD 357–403 · Devarim 21:23" },
+    { id:"halacha-42", level:2, tag:"TEFILA BETZIBUR", heb:"תְּפִלָּה בְּצִבּוּר", title:"Tefila BeTzibur: Orar em Comunidade", body:"Orar em minyan (10 homens adultos) é obrigação rabínica e preferida à oração individual. Apenas em minyan se recita: Kaddish, Kedusha, Leitura da Torá, Barchu.", practical:"Se chegou tarde ao minyan: prefira começar a Amidá com o minyan mesmo que isso signifique perdê-la com o chazan. Se o minyan está na repetição da Amidá, junte-se e responda Kedusha.", source:"Shulchan Aruch, OC 55–90 · Berachot 6a" },
+    { id:"halacha-43", level:2, tag:"SIFREI TORÁ", heb:"כְּבוֹד סֵפֶר תּוֹרָה", title:"Kavod Sefer Torá: Respeito Pelo Rolo Sagrado", body:"Quando um Sefer Torá passa, é obrigação levantar-se. Não se pode virar as costas para o Sefer Torá quando ele passa. É proibido descansar o Sefer Torá no chão.", practical:"Um Sefer Torá que caiu ao chão: todos que presenciaram jejuam (costume). Verificação (hagahá) de Sefer Torá deve ser feita periodicamente por sofer qualificado. Sefer Torá inválido: enterrar em genizá.", source:"Shulchan Aruch, OC 149 · Magen Avraham 149" },
+    { id:"halacha-44", level:2, tag:"KILAAYIM", heb:"שַׁעַטְנֵז", title:"Shatnez: A Proibição de Mistura de Fios", body:"A Torá proíbe usar uma roupa que contenha juntos lã (tzemer) e linho (pishtan) — esta mistura se chama Shatnez. Aplica-se à roupa usada, não a cobertores ou outros objetos.", practical:"Ternos e casacos importados frequentemente contêm Shatnez (lã no tecido externo + linho na entretela). Verificar em laboratório de Shatnez antes de usar. Muitas cidades têm este serviço.", source:"Shulchan Aruch, YD 298–304 · Levítico 19:19" },
+    { id:"halacha-45", level:2, tag:"EREV PESACH", heb:"מְכִירַת חָמֵץ", title:"Mechirat Chametz: A Venda do Chametz", body:"Possuir Chametz durante Pessach é proibido pela Torá — até mesmo um grão de farinha fermentada. A solução halachica é vender o Chametz a um não-judeu antes de Pessach, através do Rav.", practical:"A venda (Mechirat Chametz) deve ser feita com o Rav antes do horário de Biur Chametz. A venda é legalmente real — o Chametz vendido pertence ao não-judeu durante Pessach.", source:"Shulchan Aruch, OC 448 · Pessachim 21a" },
+    { id:"halacha-46", level:2, tag:"BAAL TIGRA", heb:"לֹא תַעֲשֹׁק אֶת רֵעֲךָ", title:"Geneivat Daat: Proibição de Enganar a Mente", body:"Além de proibir mentiras explícitas, a Halachá proíbe Geneivat Daat — criar uma impressão falsa na mente de outrem, mesmo sem mentir diretamente. Ex: convidar alguém que sabe que não virá, apenas para parecer gentil.", practical:"Aplicações modernas: propaganda enganosa, preços disfarçados, currículos com exageros. A lei judaica é mais rigorosa que a lei civil em muitos casos. A honestidade no comércio é mitzvá bíblica.", source:"Shulchan Aruch, CM 228 · Chulin 94a" },
+    { id:"halacha-47", level:2, tag:"NEDER", heb:"נֶדֶר וּשְׁבוּעָה", title:"Neder e Shvuá: Votos e Juramentos", body:"A Torá leva muito a sério os votos (Nedarim) e juramentos (Shvuot). Uma vez feitos, têm força de lei bíblica. Cumprir um voto é obrigatório. Não cumprir é grave transgressão.", practical:"Hatatat Nedarim: anulação de votos com 3 homens, feita na véspera de Rosh HaShaná e em outros momentos. Não faça votos desnecessariamente — os sábios aconselham evitar Nedarim ao máximo.", source:"Shulchan Aruch, YD 203–239 · Bamidbar 30:3" },
+    { id:"halacha-48", level:2, tag:"TESHUVÁ", heb:"תְּשׁוּבָה", title:"Teshuvá: O Processo Halachico de Retorno", body:"A Teshuvá halachica completa inclui 4 elementos: Hakarah (reconhecimento do pecado), Charatá (arrependimento genuíno), Vidui (confissão verbal), Kabbalá LeAtid (resolução de não repetir).", practical:"Para pecados contra o próximo: deve-se pedir perdão ao ofendido até 3 vezes. Se o ofendido recusa 3 vezes, o pecador está isento. Para pecados contra HaShem: Yom Kippur expia após Teshuvá sincera.", source:"Rambam, Hilchot Teshuvá 2:1 · Yoma 85b" },
+    { id:"halacha-49", level:2, tag:"TOACHECHA", heb:"הוֹכֵחַ תּוֹכִיחַ", title:"Toachecha: A Obrigação de Repreender", body:"É mitzvá positiva repreender um irmão que peca — mas apenas de forma privada, gentil, e quando há probabilidade de ser ouvido. Envergonhar publicamente é proibido, mesmo durante a repreensão.", practical:"Quem vê alguém pecar: repreender com amor. Se o outro não ouve: repreender até 3x. Se certamente não será ouvido ou causará hostilidade pior: alguns possuem que não se repreende (para não causar ódio).", source:"Shulchan Aruch, OC 608 · Levítico 19:17" },
+    { id:"halacha-50", level:2, tag:"EMUNA", heb:"יְסוֹדוֹת הָאֱמוּנָה", title:"Yesodot HaEmunah: Os Fundamentos da Fé na Halachá", body:"O Rambam codificou os 13 Princípios da Fé. Negar qualquer um deles é considerado heresia (Apikorsut). O Shulchan Aruch baseia várias decisões práticas nestes fundamentos.", practical:"Leitura de livros heréticos que negam a divindade da Torá ou a autoria divina é proibida. Ouvir música que blasfema HaShem em público deve ser evitado. A identidade judaica inclui Emunah como base.", source:"Rambam, Treze Princípios · Shulchan Aruch, OC 156" },
+
+    /* ── NÍVEL 3: HALACHÁ AVANÇADA (51–75) ── */
+    { id:"halacha-51", level:3, tag:"POSEK", heb:"שְׁאַל אֶת הָרַב", title:"A Obrigação de Consultar o Rav", body:"Uma das regras mais importantes da Halachá prática: em caso de dúvida (safek), consulte um Rav competente. A máxima 'safek d'oraita lechumra' (dúvida em lei bíblica — ser rigoroso) guia decisões práticas.", practical:"Para dúvidas em: kashrut, Nidá, Shabat, doenças — sempre consulte. Não dependa de memória ou 'parece que vi' algo. Um Rav não pode ser substituído por buscas na internet sem critério.", source:"Shulchan Aruch, YD 1:1 · Devarim 17:9" },
+    { id:"halacha-52", level:3, tag:"PIKUACH NEFESH", heb:"פִּיקּוּחַ נֶפֶשׁ", title:"Pikuach Nefesh: A Vida Empurra Tudo", body:"Salvar uma vida (Pikuach Nefesh) empurra todas as proibições da Torá — exceto os três yehareg ve'al yaavor (idolatria, imoralidade sexual, assassinato). Em caso de perigo de vida, violam-se Shabat, jejuns, Kashrut.", practical:"Se há risco de vida real: age primeiro, pergunte depois. O Shulchan Aruch é explícito: quem hesita por escrúpulos numa emergência real comete pecado, não mérito.", source:"Shulchan Aruch, OC 328 · Yoma 85a" },
+    { id:"halacha-53", level:3, tag:"NIDÁ", heb:"טְהָרַת הַמִּשְׁפָּחָה", title:"Taharat HaMishpachá: Pureza Familiar", body:"As leis de Nidá regulam a vida conjugal. Após a menstruação, a mulher conta 7 dias limpos e realiza imersão na Mikvê antes de retornar à vida conjugal. Este sistema é pilar da família judaica.", practical:"A contagem dos 7 Nekiim (dias limpos) começa após verificação de limpeza. A imersão na Mikvê deve ser à noite. As leis de Nidá são complexas — um Rav especializado (ou Rabbanit) deve ser consultado.", source:"Shulchan Aruch, YD 183–200 · Levítico 15:19" },
+    { id:"halacha-54", level:3, tag:"MIKVEH", heb:"טְבִילָה", title:"Tevila na Mikvê: Quando é Obrigatória", body:"A imersão na Mikvê é obrigatória para: 1) mulher após Nidá, 2) conversão ao judaísmo (Giyur), 3) utensílios novos adquiridos de não-judeus (Tevilat Kelim), 4) baal teshuvá em certas tradições.", practical:"Tevilat Kelim: utensílios de metal e vidro de não-judeu requerem imersão sem bênção (se dúvida sobre material). Porcelana e plástico: discussão entre posskim. Consulte seu Rav antes de usar.", source:"Shulchan Aruch, YD 120 · Bamidbar 31:23" },
+    { id:"halacha-55", level:3, tag:"DINA DMALCHUTA", heb:"דִּינָא דְּמַלְכוּתָא דִּינָא", title:"Dina DeMalchuta Dina: A Lei do País é Lei", body:"'A lei do país é lei.' Este princípio talmúdico estabelece que as leis civis de um país onde judeus vivem têm validade halachica em questões comerciais, contratuais e fiscais.", practical:"Implicações: pagar impostos é obrigação halachica. Falsificar documentos é proibido. Contratos civis legais têm validade halachica. Limite: a lei do país não pode anular mitzvot da Torá.", source:"Bava Kama 113b · Shulchan Aruch, CM 369" },
+    { id:"halacha-56", level:3, tag:"EMES BEMASEH", heb:"אֱמֶת בְּמַשָּׂא וּמַתָּן", title:"Honestidade no Comércio: Midot Tzedek", body:"A Torá ordena pesos e medidas justos — e o Talmud expande para toda negociação. Cobrar mais que o valor de mercado em mais de 1/6 é Ona'ah (fraude) e o contrato pode ser anulado.", practical:"Aplicações modernas: preço excessivo em medicamento essencial é proibido halachicamente. Ocultar defeitos de produto é Geneivat Daat. Propaganda enganosa viola múltiplas proibições.", source:"Shulchan Aruch, CM 227–234 · Levítico 25:14" },
+    { id:"halacha-57", level:3, tag:"SHILUACH HAKEN", heb:"שִׁלּוּחַ הַקֵּן", title:"Shiluach HaKen: Mandar a Mãe Antes de Pegar os Filhotes", body:"Se encontrar um ninho com ovos ou filhotes com a mãe presente, é proibido pegar a mãe junto — deve-se afastá-la primeiro. Esta mitzvá promete longevidade e demonstra sensibilidade a todo ser vivo.", practical:"A mitzvá se aplica a pássaros silvestres (não domésticos). Se não quer os ovos/filhotes, não é obrigado a afastar a mãe. Afastar sem motivo para simplesmente cumprir a mitzvá: debate entre poskim.", source:"Shulchan Aruch, YD 292 · Devarim 22:6" },
+    { id:"halacha-58", level:3, tag:"TZNIYUT — SEFARDI", heb:"הִלְכוֹת צְנִיעוּת", title:"Tzniut Avançada: Kol Isha e Outros Detalhes", body:"Kol Isha: um homem não pode ouvir uma mulher cantando (solo) em situação que possa causar pensamentos proibidos. Esta proibição tem nuances significativas: tipo de música, relação entre os, contexto.", practical:"Em concertos mistos, ópera, rádio: debate entre poskim. Rav Moshe Feinstein permite em certos contextos. Rav Ovadia Yosef é mais restritivo. Sempre consulte o Rav de sua comunidade sobre casos específicos.", source:"Shulchan Aruch, OC 75:3 · Berachot 24a" },
+    { id:"halacha-59", level:3, tag:"BITUL CHAMETZ", heb:"בִּיטּוּל חָמֵץ", title:"Bitul Chametz: Anulação e Seus Limites", body:"O Bitul (anulação) de Chametz antes de Pessach é eficaz apenas quando feito genuinamente — declarando o Chametz como 'pó da terra' no coração, não apenas verbalmente.", practical:"Se encontrou Chametz durante Pessach: se é Shabat ou Yom Tov, cobrir e anular. Se é dia de semana: queimar. Menos de um kezayit: pode anular. Mais de kezayit em Pessach: envolve proibição bíblica.", source:"Shulchan Aruch, OC 434–436 · Pessachim 6b" },
+    { id:"halacha-60", level:3, tag:"CHOL HAMOED", heb:"חֹל הַמּוֹעֵד", title:"Chol HaMoed: Os Dias Intermediários", body:"Os dias intermediários de Pessach e Sukkot têm status especial de Chol HaMoed — semi-sagrados. Trabalho (Melacha) é proibido na maioria dos casos, mas com mais flexibilidade que Yom Tov pleno.", practical:"Trabalho permitido em Chol HaMoed: necessidade para a festa, perda financeira irreparável (Davar HaAved), trabalho de um operário pobre. Trabalho claramente proibido: não há diferença de Yom Tov.", source:"Shulchan Aruch, OC 530–548 · Moed Katan 2a" },
+    { id:"halacha-61", level:3, tag:"SHABBAT — AMIRÁ LENACHRI", heb:"אֲמִירָה לְנָכְרִי", title:"Amirá LeNochri: Pedir a um Não-Judeu no Shabat", body:"É proibido rabinicamente pedir a um não-judeu para fazer uma melacha (trabalho proibido) por você no Shabat. Esta proibição é chamada Amirá LeNochri.", practical:"Exceção principal: necessidade de mitzvá (para aquecer sinagoga no inverno) ou Grande Necessidade + Rabínica (não bíblica). O 'Goy de Shabat' que age por iniciativa própria: debate. Consultar Rav.", source:"Shulchan Aruch, OC 276, 307 · Shabat 150a" },
+    { id:"halacha-62", level:3, tag:"BISHUL AKUM", heb:"בִּשּׁוּל עַכּוּ\"ם", title:"Bishul Akum e Bishul Yisrael", body:"É proibido comer comida cozida inteiramente por não-judeu, mesmo que todos os ingredientes sejam kosher — esta proibição se chama Bishul Akum. Para ser Bishul Yisrael, o judeu precisa participar do cozimento.", practical:"Participação mínima suficiente: acender o fogo, ou adicionar lenha significativa ao fogo. A proibição se aplica apenas a alimentos servidos em mesa real (não petiscos como biscoitos). Nuances: consultar Rav.", source:"Shulchan Aruch, YD 113 · Avodah Zara 38a" },
+    { id:"halacha-63", level:3, tag:"MAARIV NACH SHABAT", heb:"הַבְדָּלָה", title:"Havdalá: A Separação do Sagrado do Profano", body:"Ao fim do Shabat, recita-se a Havdalá sobre vinho, vela de fio entrelaçado e especiarias. A Havdalá separa o Sagrado (kodesh) do Profano (chol), o Shabat da semana, Israel das outras nações.", practical:"Mulheres: opinião majoritária que são obrigadas na Havdalá. Se não tem vinho: pode usar cerveja ou outro chamar bevanda importante da região. Não se come após o Shabat até Havdalá.", source:"Shulchan Aruch, OC 296–299 · Berachot 33a" },
+    { id:"halacha-64", level:3, tag:"TALMUD TORÁ", heb:"תַּלְמוּד תּוֹרָה כְּנֶגֶד כֻּלָּם", title:"Talmud Torá: A Obrigação e Seus Detalhes", body:"Todo homem judeu é obrigado a estudar Torá dia e noite — desde o despertar até antes do sono. Quem não pode estudar muito, deve estabelecer horários fixos (Keva). O mínimo: uma halachá pela manhã e uma à noite.", practical:"A obrigação de ensinar filhos Torá recai no pai. Se o pai não pode, a comunidade é responsável. Estabelecer horários fixos de estudo (Keva) é altamente recomendado e praticamente obrigatório.", source:"Shulchan Aruch, YD 246 · Yehoshua 1:8" },
+    { id:"halacha-65", level:3, tag:"ZMANIM", heb:"זְמַנִּים הֲלָכָתִיִּים", title:"Zmanim: Os Horários Halachicos do Dia", body:"O dia halachico é calculado de forma diferente do civil. As 12 horas halachicas são calculadas dividindo o dia (nascer do sol ao pôr do sol) em 12 partes iguais, variando com as estações.", practical:"Ferramentas: MyZmanim.com, Chabad.org, OU.org — calculam os zmanim exatos por localização. Zmanim importantes: Alot HaShachar, Hanetz HaChama, Sof Zman Keriát Shemá, Chatzot, Shkia, Tzet.", source:"Shulchan Aruch, OC 58, 89 · Mishnah Berurah" },
+    { id:"halacha-66", level:3, tag:"KAVOD SEFER", heb:"כְּבוֹד כִּתְבֵי הַקֹּדֶשׁ", title:"Respeito pelos Livros Sagrados", body:"Livros sagrados (Sefarim) que contêm Nomes de HaShem não podem ser destruídos — devem ser enterrados em Genizá (lugar sagrado de armazenamento antes do enterro).", practical:"Jornais com conteúdo de Torá ou Nomes de HaShem: não descartar no lixo comum. Fotocopias de texto sagrado: debate. Arquivos digitais: geralmente não têm status de Sefer (objeto físico sagrado).", source:"Shulchan Aruch, YD 282 · Shabat 115a" },
+    { id:"halacha-67", level:3, tag:"BEIN ADAM LAMAKOM", heb:"בֵּין אָדָם לַמָּקוֹם", title:"Mitzvot Entre o Ser Humano e HaShem", body:"As mitzvot Bein Adam LaMakom (entre a pessoa e HaShem) são expiadas no Yom Kippur após Teshuvá sincera. Diferem das interpessoais: HaShem perdoa diretamente, sem necessidade de intermediário humano.", practical:"Categoria especialmente sensível: violação de Shabat (grave), proibições sexuais, idolatria. Em casos de dúvida se pecou: na lei bíblica — ser rigoroso; na lei rabínica — ser leniente (kal).", source:"Yoma 85b · Shulchan Aruch, OC 606" },
+    { id:"halacha-68", level:3, tag:"KIBBUD TALMID CHACHAM", heb:"כְּבוֹד תַּלְמִיד חֲכָמִים", title:"Respeito ao Talmid Chacham", body:"É mitzvá positiva levantar-se diante de um Talmid Chacham (sábio da Torá) e de um ancião (zakein). Esta obrigação reflete o valor supremo do estudo e da sabedoria no judaísmo.", practical:"Levantar-se quando o Talmid Chacham entra no cômodo, mesmo que não esteja se dirigindo a você. Idoso com 70 anos: levantar-se parcialmente. Talmid Chacham: levantar-se completamente.", source:"Shulchan Aruch, YD 244 · Levítico 19:32" },
+    { id:"halacha-69", level:3, tag:"CHAZAKA", heb:"חֲזָקָה", title:"Chazaká: O Princípio da Presunção na Halachá", body:"Chazaká é o princípio de que o status quo estabelecido é presumido válido até prova em contrário. É usado amplamente em Kashrut, pessoas (um judeu é presumidamente kasher até prova contrária) e objetos.", practical:"Exemplo em Kashrut: se uma panela foi usada e há dúvida se foi com carne ou leite — vai pelo último uso estabelecido (chazaka). Em dúvidas de Nidá: a Halachá presume o último estado conhecido.", source:"Shulchan Aruch, YD 1:1 · Chullin 10b" },
+    { id:"halacha-70", level:3, tag:"LIFNEI IVER", heb:"לִפְנֵי עִוֵּר לֹא תִתֵּן מִכְשֹׁל", title:"Lifnei Iver: Não Colocar Obstáculo Diante do Cego", body:"Esta proibição vai muito além do literal: é proibido dar conselho prejudicial, vender algo proibido para alguém, ou ajudar alguém a pecar. Facilitar o pecado de outra pessoa é proibido.", practical:"Exemplos práticos: oferecer comida não-kosher a um judeu observante é proibido mesmo que a transgressão seja dele. Emprestar um objeto que será usado para pecado é proibido.", source:"Shulchan Aruch, YD 151 · Levítico 19:14" },
+    { id:"halacha-71", level:3, tag:"RIBUI NOSHIM", heb:"אַחַת אֵשֶׁת חַיִל", title:"A Lei de Uma Esposa", body:"O judaísmo bíblico permitia múltiplas esposas. O Cherem deRabeinu Gershom (Decreto do Rabino Gershom, ~1000 EC) proibiu a poligamia para os Ashkenazim. Comunidades Sefaraditas seguiram a proibição posteriormente.", practical:"Hoje, para todos os judeus sob autoridade rabínica moderna, a monogamia é a norma halachica. Casamento com segunda mulher sem Guet da primeira é inválido e pode configurar bigamia civil.", source:"Cherem DeRabbeinu Gershom · Shulchan Aruch, EH 1" },
+    { id:"halacha-72", level:3, tag:"MATNOT KEHUNA", heb:"תְּרוּמָה וּמַעֲשֵׂר", title:"Trumá e Maasser: Separar dos Frutos", body:"Produtos agrícolas crescidos em Israel requerem separação de Trumá (para o Kohen) e Maasser (dízimo). Hoje, como não podemos dar Trumá pura a Kohanim, ela é separada e descartada.", practical:"Em Israel: qualquer produto comprado de mercado não-supervisionado pode ter problemas de Trumot UMaasrot. Fora de Israel: frutas e vegetais de Israel importados — há debate. Consulte seu Rav.", source:"Shulchan Aruch, YD 331 · Bamidbar 18:12" },
+    { id:"halacha-73", level:3, tag:"MECHILA", heb:"מְחִילָה", title:"Mechilá: O Perdão na Halachá", body:"Mechilá é o ato de renunciar a um direito — como perdoar uma dívida ou um insulto. Na Halachá, a Mechilá verbal genuína tem força legal. Antes de Yom Kippur é costume pedir Mechilá a todos que ofendemos.", practical:"Mechilá em dinheiro: deve ser clara e intencional. 'Não importa' dito por raiva não é Mechilá. Mechilá deve ser pedida até 3 vezes. Se o ofendido recusa 3 vezes, o ofensor está isento perante HaShem.", source:"Yoma 87a · Shulchan Aruch, OC 606:1" },
+    { id:"halacha-74", level:3, tag:"AVEIDA", heb:"הֲשָׁבַת אֲבֵדָה", title:"Hashaváh: Devolver Objetos Perdidos", body:"A Torá ordena devolver objetos perdidos ao seu dono. A obrigação inclui: anunciar a perda, guardar o objeto até o dono aparecer, e devolvê-lo mesmo com custo pessoal.", practical:"Se o objeto tem marca identificadora (siman): obrigado a devolver. Sem siman, em área pública, após maioria desperar de encontrar: objeto é hefker (abandonado). Em caso de dúvida: consulte Rav.", source:"Shulchan Aruch, CM 259–270 · Devarim 22:1" },
+    { id:"halacha-75", level:3, tag:"SHEMITAT KESAFIM", heb:"שְׁמִטַּת כְּסָפִים", title:"Shemitat Kesafim e o Pruzbul", body:"No ano sabático (Shemitá — a cada 7 anos), as dívidas são canceladas. Para evitar que as pessoas deixassem de emprestar aos pobres perto da Shemitá, Hillel instituiu o Pruzbul — transferência legal da dívida ao tribunal.", practical:"O Pruzbul é um documento assinado antes da Shemitá. Na diáspora: o Cherem deRabeinu Gershom e outros institutos suspendem a aplicação plena da Shemitat Kesafim fora de Israel.", source:"Shulchan Aruch, CM 67 · Gittin 36a" },
+
+    /* ── NÍVEL 4: HALACHÁ DOS SÁBIOS (76–100) ── */
+    { id:"halacha-76", level:4, tag:"MACHLÓKET LESHEM SHAMAIM", heb:"מַחֲלֹקֶת לְשֵׁם שָׁמַיִם", title:"Machlóket: A Disputa pela Causa do Céu", body:"A Torá reconhece que há disputas legítimas na Halachá — e as distingue das disputas egocêntricas. A disputa de Hillel e Shammai é o modelo: ambas as opiniões têm validade, pois ambas buscam a verdade.", practical:"A Halachá segue Beit Hillel em quase todos os casos. Mas a regra é: 'Elu v'elu divrei Elohim chayyim' — 'tanto estas quanto estas são palavras do Deus vivo.' O pluralismo halachico tem limites — não anula a prática.", source:"Pirkei Avot 5:17 · Eruvin 13b" },
+    { id:"halacha-77", level:4, tag:"SEVARAH", heb:"סְבָרָה", title:"Sevará: A Razão como Fonte da Halachá", body:"A Sevará (raciocínio lógico) é uma das fontes da Halachá. Certas leis derivam-se não de versículos específicos, mas da lógica intrínseca da Torá. O Talmud usa frequentemente 'peshita' — 'é óbvio' — para fundamentar decisões.", practical:"Exemplos de Sevará: a proibição de matar com palavras (mortificação pública) é derivada da lógica moral. O Rambam usa Sevará extensivamente para sistematizar a Halachá no Mishneh Torá.", source:"Eruvin 100b · Rambam, Moreh Nevuchim III:26" },
+    { id:"halacha-78", level:4, tag:"TAKKANÁ", heb:"תַּקָּנוֹת רַבָּנִיִּים", title:"Takkanot: Decretos Rabínicos com Força de Lei", body:"Os sábios têm poder de emitir Takkanot (decretos) e Gezerot (salvaguardas) que têm força de lei halachica. Violá-las é proibido rabinicamente, o que é também proibido pela Torá ('não te afastes do que te disserem').", practical:"Exemplos de grandes Takkanot: a Ktubá (Shimon ben Shetach), o Pruzbul (Hillel), a proibição de poligamia (Rabbeinu Gershom). Cada geração pode emitir Takkanot para suas necessidades específicas.", source:"Devarim 17:11 · Gittin 36a" },
+    { id:"halacha-79", level:4, tag:"HORA'AT SHA'A", heb:"הוֹרָאַת שָׁעָה", title:"Hora'at Sha'ah: Decisão de Emergência Temporária", body:"Em situações de emergência espiritual grave, os grandes líderes da Torá têm poder de emitir uma Hora'at Sha'ah — decisão temporária que viola uma lei normalmente — para salvar o espírito do povo.", practical:"Exemplo bíblico: Eliyahu HaNavi ofereceu sacrifício fora do Templo no Monte Carmel para combater a idolatria — violação temporária de uma lei, justificada pela emergência. Este poder não está disponível a qualquer Rav.", source:"Sanhedrin 46a · I Reis 18" },
+    { id:"halacha-80", level:4, tag:"POSEK HADOR", heb:"גָּדוֹל הַדּוֹר", title:"O Posek HaDor: A Autoridade Máxima de Cada Geração", body:"Cada geração tem seu Posek HaDor — o maior decisor de Halachá de sua época. Sua palavra em áreas de dúvida tem peso especial. Exemplos recentes: Rav Moshe Feinstein, Rav Ovadia Yosef, Chazon Ish.", practical:"Quando há conflito entre posskim: siga o Minhag (costume) da sua comunidade. Em dúvida sem Rav: siga a opinião mais rigorosa em lei bíblica, mais leniente em lei rabínica.", source:"Shulchan Aruch, YD 242 · Sotá 47b" },
+    { id:"halacha-81", level:4, tag:"MINHAG", heb:"מִנְהַג יִשְׂרָאֵל תּוֹרָה הִיא", title:"Minhag: O Costume de Israel tem Força de Torá", body:"'O costume de Israel é Torá.' Minhagim (costumes) estabelecidos por comunidades têm força de lei halachica. Mudar de costume sem permissão rabínica pode ser problemático.", practical:"Minhag de pais: obrigatório manter (a menos que mudou de comunidade com Rav que autorizou a mudança). Minhag Ashkenaz vs. Sefarad: não misturar livremente. Primeiro ano de casamento: combinar costumes com orientação de Rav.", source:"Shulchan Aruch, YD 376 · Menachot 20b" },
+    { id:"halacha-82", level:4, tag:"ISSUR VECHECHUTAR", heb:"אִסּוּר וְהֶתֵּר", title:"A Arte do Issur VeHeter: Proibido e Permitido", body:"A maior parte da Halachá prática lida com a linha entre o proibido (issur) e o permitido (heter). O Posek não busca apenas proibir ou permitir — busca encontrar a verdade da Torá.", practical:"Princípio: em casos duvidosos reais, o Posek muitas vezes pode encontrar um Heter (permissão) que preserva a observância sem causar sofrimento desnecessário. 'HaTorah chasah al mamonam shel Yisrael.'", source:"Shulchan Aruch, YD 1 · Beitzah 29b" },
+    { id:"halacha-83", level:4, tag:"CHEZKAT KASHRUT", heb:"חֶזְקַת כַּשְׁרוּת", title:"Chezkat Kashrut: Presunção de Kashrut de um Judeu", body:"Um judeu observante tem Chezkat Kashrut — presunção de credibilidade. Sua palavra sobre Kashrut, testemunho sobre fatos halachicos, e prática religiosa são presumidos válidos sem prova adicional.", practical:"Esta presunção pode ser perdida se a pessoa foi visto violando Kashrut publicamente. Um Ba'al Teshuva que mudou seus caminhos: recupera sua Chezkat Kashrut após demonstração consistente.", source:"Shulchan Aruch, YD 1:1 · Avodah Zara 27a" },
+    { id:"halacha-84", level:4, tag:"TIRCHA DETZIBURA", heb:"טִרְחָא דְצִבּוּרָא", title:"Tircha DeTzibura: Não Sobrecarregar a Comunidade", body:"Um princípio da Halachá: não impor fardo desnecessário à congregação. Por isso a Torá é lida em segmentos, não toda de uma vez. Por isso certas adições à Tefila são abreviadas no Shabat.", practical:"Aplicação prática: um chazan que prolonga demasiado o serviço quando o público está cansado ou com frio pode estar violando este princípio. O bem da congregação é consideração halachica real.", source:"Berachot 53b · Shulchan Aruch, OC 53" },
+    { id:"halacha-85", level:4, tag:"TESHUVÁ SHLEIMAH", heb:"תְּשׁוּבָה שְׁלֵמָה", title:"O Teste da Teshuvá Shelemá", body:"O Rambam define Teshuvá Shelemá (completa): quando a pessoa se encontra na mesma situação em que pecou anteriormente e, desta vez, resiste. Este é o teste que confirma que a Teshuvá foi genuína.", practical:"Implicação: a Teshuvá não exige que a pessoa nunca mais sinta atração pelo pecado — apenas que, quando confrontada com ele, escolha corretamente. HaShem sabe o estado interno do coração.", source:"Rambam, Hilchot Teshuvá 2:1 · Yoma 86b" },
+    { id:"halacha-86", level:4, tag:"GER TOSHAV", heb:"גֵּר תּוֹשָׁב", title:"Ger Toshav: O Não-Judeu Justo entre as Nações", body:"Um não-judeu que aceita as Sheva Mitzvot de Noé diante de um Beit Din de 3 rabinos tem status de Ger Toshav. Tal pessoa é considerada pelos sábios como um dos Chassidei Umot HaOlam.", practical:"O conceito de Ger Toshav tem aplicações em: 1) salvar sua vida no Shabat como judeu (Pikuach Nefesh), 2) obrigação de assistência, 3) permissão de trabalhar para ele em certas situações.", source:"Rambam, Hilchot Melachim 8:11 · Avodah Zara 64b" },
+    { id:"halacha-87", level:4, tag:"KIDDUSH HASHEM", heb:"וְנִקְדַּשְׁתִּי בְּתוֹךְ בְּנֵי יִשְׂרָאֵל", title:"Kidush HaShem e Chilul HaShem na Prática", body:"O Chilul HaShem (profanação do Nome) pode ocorrer através de comportamentos que causam maus comentários sobre judeus e sobre o judaísmo. A responsabilidade é proporcional ao conhecimento religioso da pessoa.", practical:"Um Talmid Chacham que se comporta de forma desonesta em negócios — mesmo legalmente — comete grave Chilul HaShem. Um judeu que age com honestidade exemplar: grandes Kidush HaShem.", source:"Rambam, Yesodei HaTorá 5:11 · Yoma 86a" },
+    { id:"halacha-88", level:4, tag:"ANAVAH BADIN", heb:"הֱוֵי שָׁפָל רוּחַ", title:"Humildade do Posek ao Decidir", body:"Um posek deve decidir com humildade — reconhecendo a gravidade de sua responsabilidade. A máxima: 'Yiyara rabba' — 'grande o é o medo.' Decisões halachicas afetam vidas, famílias e almas.", practical:"Um Rav que decide com pressa e arrogância pode errar gravemente. Por isso existe o costume de consultar outros rabinos em casos complexos (She'elat Chaver). A humildade intelectual é qualificação necessária.", source:"Pirkei Avot 4:1 · Sanhedrin 6b" },
+    { id:"halacha-89", level:4, tag:"SHEV VEAL TAASE", heb:"שֵׁב וְאַל תַּעֲשֶׂה", title:"Shev VeAl Taase: A Passividade como Decisão", body:"Em casos de dúvida halachica onde tanto agir quanto não agir tem implicações, o princípio 'shev veal taase' (senta e não aja) geralmente se aplica — a passividade é preferida quando a ação pode ser errada.", practical:"Exemplo: encontrou objeto de dúvida se é kosher. Em dúvida? Não coma — 'shev veal taase'. Este princípio tem exceções: quando a inação causa dano certo maior que a ação duvidosa.", source:"Eruvin 100a · Shulchan Aruch, OC 328" },
+    { id:"halacha-90", level:4, tag:"DARCHE SHALOM", heb:"דַּרְכֵי שָׁלוֹם", title:"Darchei Shalom: Os Caminhos da Paz", body:"Para manter a paz entre judeus e entre judeus e não-judeus, os sábios permitiram certos atos que normalmente seriam proibidos ou simplesmente não obrigatórios — baseados no princípio dos 'Caminhos da Paz'.", practical:"Exemplos: presentear um pobre não-judeu junto com o pobre judeu, visitar doentes não-judeus, enterrar seus mortos junto aos judeus — tudo 'mipnei darchei shalom' (por causa dos caminhos da paz).", source:"Gittin 61a · Shulchan Aruch, YD 251:1" },
+    { id:"halacha-91", level:4, tag:"ISUR MECHZI", heb:"מַרְאִית הָעַיִן", title:"Marat Ayin: A Aparência do Pecado", body:"Mesmo um ato permitido é proibido se parece proibido para o observador. Este princípio (Marat Ayin) protege a santidade pública da Halachá.", practical:"Exemplo: comer salsichas kosher de aparência não-kosher na rua pode ser problemático. Cozinhar carne em leite de coco num pote que parece carne com leite: proibido em público sem explicação.", source:"Shulchan Aruch, YD 87:3 · Betzah 9a" },
+    { id:"halacha-92", level:4, tag:"SHINUI", heb:"שִׁנּוּי", title:"Shinui: A Mudança que Torna Rabínico", body:"Em certos casos, fazer uma melacha de Shabat de forma incomum (Shinui — mudança) pode reduzir a transgressão de bíblica para rabínica. Isso é relevante em casos de grande necessidade.", practical:"Exemplo: escrever com a mão não-dominante em caso de necessidade. Carregar de forma incomum em local público em caso de grande necessidade. O Shinui não cria permissão — apenas reduz a gravidade em casos extremos.", source:"Shulchan Aruch, OC 340 · Shabat 92a" },
+    { id:"halacha-93", level:4, tag:"PSIK REISHA", heb:"פְּסִיק רֵישֵׁהּ", title:"Psik Reisha: A Consequência Inevitável", body:"Um ato que inevitavelmente causa uma melacha (trabalho proibido), mesmo sem intenção, é proibido no Shabat — chamado Psik Reisha (cortar a cabeça). Diferente do melacha intencional, mas ainda proibido.", practical:"Exemplo: arrastar uma cadeira pesada em chão de areia no Shabat — inevitavelmente criará um sulco (Choresh). Isso é proibido mesmo sem intenção de sulcar.", source:"Shulchan Aruch, OC 316 · Shabat 75a" },
+    { id:"halacha-94", level:4, tag:"DEORAITA DERABANAN", heb:"דְּאוֹרַיְיתָא וְדְרַבָּנָן", title:"D'oraita vs. D'rabanan: A Distinção Fundamental", body:"As leis se dividem em duas categorias: D'oraita (bíblica — da Torá) e D'rabanan (rabínica — dos sábios). Em caso de dúvida: numa D'oraita — ser rigoroso; numa D'rabanan — pode ser leniente.", practical:"Esta distinção é fundamental para a prática: a gravidade da transgressão, as consequências halachicas, e os princípios de dúvida (Safek) são aplicados diferentemente às duas categorias.", source:"Shulchan Aruch, YD 110 · Beitzah 3a" },
+    { id:"halacha-95", level:4, tag:"MESIRAH", heb:"מְסִירָה", title:"Mesirat Yisrael: A Proibição de Denunciar Judeus", body:"É proibido entregar um judeu às autoridades gentias que possam punir injustamente ou desproporcionalmente. Esta proibição grave (Mesirah) reflete a solidariedade interna do povo de Israel.", practical:"Exceção importante: quando a vida de outros judeus está em risco, e em sistemas jurídicos democráticos modernos com proteções legais. Consulte sempre um Rav antes de agir em casos que envolvem autoridades externas.", source:"Shulchan Aruch, CM 388 · Bava Kama 117a" },
+    { id:"halacha-96", level:4, tag:"KAVOD MEIT", heb:"כְּבוֹד הַמֵּת", title:"Kavod HaMet: A Dignidade do Morto", body:"A dignidade do morto é protegida pela Halachá. O corpo deve ser tratado com máximo respeito. Autopsia é geralmente proibida. O enterro deve ser rápido. A família não deve ser incomodada durante a Shiva.", practical:"O corpo não deve ser deixado sozinho (Shmirah). O corpo não deve ser exposto desnecessariamente. A Chevra Kadisha deve seguir procedimentos precisos de Taharah. O rosto do morto não deve ser descoberto sem necessidade.", source:"Shulchan Aruch, YD 357 · Sanhedrin 47a" },
+    { id:"halacha-97", level:4, tag:"NIDCHE MITZVAH", heb:"מִצְוָה דּוֹחָה", title:"Mitzvá Dochah: Uma Mitzvá Empurra Outra", body:"Quando duas mitzvot entram em conflito, há regras para determinar qual prevalece. Em geral: Mitzvot de tempo (zemaniot) não empurram Shabat. Mitzvá ativa empurra proibição passiva em certos casos.", practical:"Exemplos clássicos: Brit Milá empurra o Shabat (zemanit — 8º dia). Sacrifício de Pessach empurra Shabat. Estudo da Torá — geralmente não empurra Shabat, mas é cumprido dentro dos limites do Shabat.", source:"Shulchan Aruch, OC 306 · Shabat 132a" },
+    { id:"halacha-98", level:4, tag:"LIFNIM MISHURAT HADIN", heb:"לִפְנִים מִשּׁוּרַת הַדִּין", title:"Lifnim Mishurat HaDin: Além da Letra da Lei", body:"'Dentro da fronteira da lei' — os sábios ensinam que um judeu de caráter deve frequentemente agir além do estritamente exigido pela lei, com bondade e generosidade adicionais.", practical:"Exemplo: a lei permite abandonar bens para evitar perdas — mas um judeu de caráter compensa mesmo quando não é obrigado. Este princípio é a base ética que transforma o legal no verdadeiramente sagrado.", source:"Bava Metzia 30b · Shulchan Aruch, CM 12:2" },
+    { id:"halacha-99", level:4, tag:"SHULCHAN ARUCH", heb:"שֻׁלְחָן עָרוּךְ", title:"O Shulchan Aruch: A Mesa Preparada da Halachá", body:"O Shulchan Aruch (Mesa Preparada) foi escrito por Rav Yosef Karo (1488–1575) e tornou-se o código de lei judaica padrão. O Rama (Rav Moshê Isserles) adicionou o Mapa HaMantzoal — as notas Ashkenazitas.", practical:"O Shulchan Aruch tem quatro partes: Orach Chaim (vida cotidiana, Shabat, feriados), Yoreh Deah (kashrut, nidá, luto), Even HaEzer (casamento, divórcio), Choshen Mishpat (leis civis e penais).", source:"Shulchan Aruch (1565) · Rama (1572)" },
+    { id:"halacha-100", level:4, tag:"EILU V'EILU", heb:"אֵלּוּ וָאֵלּוּ דִּבְרֵי אֱלֹהִים חַיִּים", title:"Eilu VeEilu: A Pluralidade da Verdade Divina", body:"'Tanto estas quanto estas são palavras do Deus vivo.' Este princípio talmúdico radical reconhece que opiniões halachicas divergentes — como Beit Hillel e Beit Shammai — podem ambas ser expressões válidas da vontade divina.", practical:"Na prática: siga o Minhag de sua comunidade. Mas respeite que outras comunidades que seguem outros posskim também seguem a vontade de HaShem. O pluralismo halachico é real — mas tem limites precisos.", source:"Eruvin 13b · Yevamot 13b" }
+  ];
+
+  /* ── QUESTÕES DO QUIZ ─────────────────────────────────── */
+  const QUIZ_QUESTIONS = [
+    { level:1, q:"Qual é a primeira ação obrigatória ao acordar, antes de caminhar?", opts:["Recitar o Shemá","Lavar as mãos (Netilat Yadaim)","Recitar o Modeh Ani","Vestir o Tallit Katan"], ans:1, exp:"Netilat Yadaim (lavagem das mãos) deve ser feita antes de caminhar 4 côvados ao acordar, usando um kli com alça." },
+    { level:1, q:"Quantas horas de espera o costume Ashkenaz padrão exige entre carne e leite?", opts:["1 hora","3 horas","6 horas","12 horas"], ans:2, exp:"O costume Ashkenaz padrão é de 6 horas entre carne e leite. Outras comunidades têm costumes diferentes (1h, 72min). Siga o costume de sua comunidade." },
+    { level:1, q:"O Birkat HaMazon (Bentching) depois de comer pão é obrigação de qual nível?", opts:["Costume rabínico","Obrigação bíblica","Obrigação rabínica","Recomendação dos sábios"], ans:1, exp:"O Birkat HaMazon após comer pão é uma mitzvá bíblica, baseada em Devarim 8:10." },
+    { level:1, q:"Quando começa o Shabat segundo a Halachá?", opts:["Meia-noite de quinta para sexta","No pôr do sol de sexta-feira","Às 18h de sexta-feira sempre","Na entrada das estrelas de sexta"], ans:1, exp:"O Shabat começa no pôr do sol (shkia) de sexta-feira. As velas são acesas 18 minutos antes para criar uma 'zona de segurança'." },
+    { level:1, q:"Qual é a mitzvá central de Rosh HaShaná?", opts:["Jejuar 25 horas","Ouvir as tekiot do Shofar","Comer maçã com mel","Acender velas especiais"], ans:1, exp:"A mitzvá central de Rosh HaShaná é ouvir as 100 tekiot do Shofar. As outros costumes (maçã com mel etc.) são enriquecimentos, não a mitzvá central." },
+    { level:2, q:"Quais são os estágios do luto judaico em ordem?", opts:["Shiva → Shloshim → 12 meses → Aninnuut","Aninnuut → Shiva → Shloshim → 12 meses","Shloshim → Shiva → Aninnuut → 12 meses","12 meses → Shloshim → Shiva → Aninnuut"], ans:1, exp:"Aninnuut (entre morte e enterro) → Shiva (7 dias) → Shloshim (30 dias) → 12 meses para pai/mãe." },
+    { level:2, q:"O que é o 'Heter Iska'?", opts:["Permissão para trabalhar no Shabat","Contrato que converte empréstimo com juros em parceria legal","Autorização para comer alimento duvidoso","Contrato de casamento judaico"], ans:1, exp:"O Heter Iska é um contrato halachicamente aprovado que transforma um empréstimo com juros em parceria comercial, contornando a proibição de Ribbit." },
+    { level:2, q:"Quantas mitzvot tem Purim?", opts:["Uma (Meguilá)","Duas (Meguilá e Seudá)","Quatro (Meguilá, Mishloach Manot, Matanot LaEvyonim, Seudá)","Três (Meguilá, Matanot, Seudá)"], ans:2, exp:"Purim tem quatro mitzvot: Mikrá Meguilá, Mishloach Manot, Matanot LaEvyonim e Seudát Purim." },
+    { level:3, q:"O que significa 'Pikuach Nefesh' na Halachá?", opts:["Resgate espiritual da alma","Salvar uma vida — que empurra todas as proibições da Torá (exceto 3)","Proteção contra forças espirituais","Oração especial por doentes"], ans:1, exp:"Pikuach Nefesh — salvar uma vida — suspende todas as proibições da Torá exceto três: idolatria, imoralidade sexual e assassinato." },
+    { level:3, q:"Qual é a diferença entre D'oraita e D'rabanan?", opts:["D'oraita é em hebraico, D'rabanan em aramaico","D'oraita é lei bíblica, D'rabanan é lei rabínica","D'oraita é para Ashkenaz, D'rabanan para Sefaradim","D'oraita é para homens, D'rabanan para mulheres"], ans:1, exp:"D'oraita são leis de nível bíblico (da Torá). D'rabanan são leis instituídas pelos rabinos. Em dúvida: rigoroso na D'oraita, leniente na D'rabanan." },
+    { level:4, q:"O que é 'Eilu VeEilu Divrei Elohim Chayyim'?", opts:["Nome de uma das 39 Melachot","Princípio de que opiniões halachicas divergentes podem ser ambas válidas","Decreto do Cherem de Rabbeinu Gershom","Título do Shulchan Aruch"], ans:1, exp:"'Tanto estas quanto estas são palavras do Deus vivo.' Este princípio reconhece que opiniões divergentes entre grandes autoridades (como Beit Hillel e Beit Shammai) podem ambas ser expressões válidas." },
+    { level:4, q:"Quais são as quatro seções do Shulchan Aruch?", opts:["Orach Chaim, Yoreh Deah, Even HaEzer, Choshen Mishpat","Bereshit, Shemot, Vayikrá, Bamidbar","Moed, Nashim, Nezikin, Kodashim","Pesachim, Yoma, Sukká, Rosh HaShaná"], ans:0, exp:"O Shulchan Aruch está dividido em: Orach Chaim (vida cotidiana), Yoreh Deah (kashrut/nidá), Even HaEzer (casamento/divórcio), Choshen Mishpat (leis civis)." }
+  ];
+
+  /* ── 3. ESTADO DA APLICAÇÃO ───────────────────────────── */
+  /*
+   * AppState centraliza TUDO que é salvo/carregado.
+   * Campos salvos no Firestore (coleção: halacha_progress, doc: uid):
+   *   readIds        — Set de ids lidos ("halacha-01", ...)
+   *   points         — pontuação total acumulada
+   *   streak         — dias consecutivos de estudo
+   *   lastStudyDate  — última data de estudo (YYYY-MM-DD)
+   *   quiz.total     — total de quizzes realizados
+   *   quiz.best      — melhor pontuação (%)
+   *   quiz.scores    — array de {date, score, level}
+   *   quiz.byLevel   — {1: melhor%, 2: melhor%, 3: melhor%, 4: melhor%}
+   */
+  const AppState = {
+    uid:          null,
+    readIds:      new Set(),
+    points:       0,
+    streak:       0,
+    lastStudyDate: null,
+    activeLevel:  1,
+    quizFilter:   0,
+
+    quiz: {
+      total:    0,
+      best:     null,
+      scores:   [],
+      byLevel:  { 1: null, 2: null, 3: null, 4: null }
+    },
+
+    /* Nível de título baseado em pontos */
+    levelTitle() {
+      const p = this.points;
+      if (p <  100) return 'Talmid';
+      if (p <  300) return 'Estudante';
+      if (p <  600) return 'Ben Torá';
+      if (p < 1000) return 'Talmid Chacham';
+      return 'Morenu';
+    },
+
+    /* Serialização para Firestore */
+    toFirestore() {
+      return {
+        readIds:       [...this.readIds],
+        points:        this.points,
+        streak:        this.streak,
+        lastStudyDate: this.lastStudyDate,
+        quiz: {
+          total:   this.quiz.total,
+          best:    this.quiz.best,
+          scores:  this.quiz.scores,
+          byLevel: this.quiz.byLevel
+        }
+      };
+    },
+
+    /* Desserialização do Firestore */
+    fromFirestore(data) {
+      this.readIds       = new Set(data.readIds || []);
+      this.points        = data.points || 0;
+      this.streak        = data.streak || 0;
+      this.lastStudyDate = data.lastStudyDate || null;
+      if (data.quiz) {
+        this.quiz.total   = data.quiz.total   || 0;
+        this.quiz.best    = data.quiz.best    || null;
+        this.quiz.scores  = data.quiz.scores  || [];
+        this.quiz.byLevel = data.quiz.byLevel || { 1:null, 2:null, 3:null, 4:null };
+      }
+    }
+  };
+
+  /* ── 4. SINCRONIZAÇÃO FIRESTORE ───────────────────────── */
+  const FireSync = {
+    async save(extraGlobalPoints = 0) {
+      if (!AppState.uid) return;
+      try {
+        const payload = {
+          email: auth.currentUser?.email || '',
+          progress: {
+            halacha: {
+              ...AppState.toFirestore(),
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }
+          }
+        };
+
+        const ref = db.collection('users').doc(AppState.uid);
+        const ops = [ref.set(payload, { merge: true })];
+
+        if (extraGlobalPoints > 0) {
+          ops.push(
+            ref.set({
+              score: firebase.firestore.FieldValue.increment(extraGlobalPoints)
+            }, { merge: true })
+          );
+        }
+
+        await Promise.all(ops);
+      } catch (err) {
+        console.warn('[FireSync] save error:', err);
+      }
+    },
+
+    async load(uid) {
+      AppState.uid = uid;
+      try {
+        const doc = await db.collection('users').doc(uid).get();
+        if (doc.exists) {
+          const data = doc.data() || {};
+          const halacha = data.progress?.halacha || {};
+          AppState.fromFirestore(halacha);
+        }
+      } catch (err) {
+        console.warn('[FireSync] load error:', err);
+      }
+      Progress.checkStreak();
+      UI.render();
+    }
+  };
+
+  /* ── 5. PROGRESSO ─────────────────────────────────────── */
+  const Progress = {
+    checkStreak() {
+      const today = new Date().toISOString().split('T')[0];
+      if (!AppState.lastStudyDate) {
+        AppState.lastStudyDate = today;
+        return;
+      }
+      const last = new Date(AppState.lastStudyDate);
+      const now  = new Date(today);
+      const diff = Math.floor((now - last) / 86400000);
+      if (diff === 1)    { AppState.streak++; AppState.lastStudyDate = today; }
+      else if (diff > 1) { AppState.streak = 1; AppState.lastStudyDate = today; }
+    },
+
+    markRead(id) {
+      if (AppState.readIds.has(id)) return false;
+      AppState.readIds.add(id);
+      AppState.points += 10;
+      Progress.checkStreak();
+      FireSync.save();
+      UI.render();
+      return true;
+    },
+
+    recordQuiz(score, pct, levelFilter) {
+      AppState.quiz.total++;
+      AppState.quiz.scores.push({
+        date:  new Date().toISOString().split('T')[0],
+        score: pct,
+        level: levelFilter
+      });
+      if (AppState.quiz.best === null || pct > AppState.quiz.best) AppState.quiz.best = pct;
+      if (levelFilter > 0) {
+        const prev = AppState.quiz.byLevel[levelFilter];
+        if (prev === null || pct > prev) AppState.quiz.byLevel[levelFilter] = pct;
+      }
+      const gained = score * 5;
+      AppState.points += gained;
+      FireSync.save(gained);
+      UI.render();
+    }
+  };
+
+  /* ── 6. UI ────────────────────────────────────────────── */
+  const UI = {
+    render() {
+      this.renderProgress();
+      this.renderLevelSelector();
+      this.renderCards();
+      this.renderQuizStats();
+    },
+
+    renderProgress() {
+      const total = TEACHINGS.length;
+      const read  = AppState.readIds.size;
+      const pct   = total > 0 ? (read / total) * 100 : 0;
+      document.getElementById('halacha-read-count').textContent = `${read} / ${total}`;
+      document.getElementById('halacha-points').textContent     = AppState.points;
+      document.getElementById('halacha-level-title').textContent = AppState.levelTitle();
+      document.getElementById('halacha-streak').textContent     = `${AppState.streak} dia${AppState.streak !== 1 ? 's' : ''}`;
+      document.getElementById('halacha-bar-fill').style.width   = `${pct}%`;
+    },
+
+    renderLevelSelector() {
+      const sel = document.getElementById('halacha-level-selector');
+      const levels = [
+        { num:'א', id:1, title:'FUNDAMENTOS DO DIA A DIA', range:'Halachot 01–25' },
+        { num:'ב', id:2, title:'CICLO DE VIDA E CALENDÁRIO', range:'Halachot 26–50' },
+        { num:'ג', id:3, title:'HALACHÁ AVANÇADA', range:'Halachot 51–75' },
+        { num:'ד', id:4, title:'HALACHÁ DOS SÁBIOS', range:'Halachot 76–100' }
+      ];
+      sel.innerHTML = levels.map(l => {
+        const inLevel  = TEACHINGS.filter(t => t.level === l.id).map(t => t.id);
+        const allRead  = inLevel.every(id => AppState.readIds.has(id));
+        const isActive = AppState.activeLevel === l.id;
+        return `
+          <div class="halacha-level-card ${isActive ? 'is-active' : ''} ${allRead ? 'is-complete' : ''}"
+               onclick="UI.selectLevel(${l.id})">
+            <div class="halacha-level-card__num">${l.num}</div>
+            <div class="halacha-level-card__title">${l.title}</div>
+            <div class="halacha-level-card__range">${l.range}</div>
+            <div class="halacha-level-card__badge">✓ COMPLETO</div>
+          </div>
+        `;
+      }).join('');
+    },
+
+    renderCards() {
+      const grid    = document.getElementById('halacha-grid');
+      const items   = TEACHINGS.filter(t => t.level === AppState.activeLevel);
+      grid.innerHTML = items.map(t => {
+        const isRead = AppState.readIds.has(t.id);
+        return `
+          <div class="halacha-card ${isRead ? 'is-read' : ''}"
+               id="${t.id}"
+               onclick="Modal.open('${t.id}')">
+            <div class="halacha-card__header">
+              <span class="halacha-card__num">${t.id.replace('halacha-', 'Nº ')}</span>
+              <span class="halacha-card__tag">${t.tag}</span>
+            </div>
+            <div class="halacha-card__heb">${t.heb}</div>
+            <div class="halacha-card__title">${t.title}</div>
+            <div class="halacha-card__body">${t.body.substring(0, 110)}…</div>
+            <div class="halacha-card__source">${t.source}</div>
+            <div class="halacha-card__read">✓ LIDO</div>
+          </div>
+        `;
+      }).join('');
+    },
+
+    renderQuizStats() {
+      const q = AppState.quiz;
+      document.getElementById('halacha-quiz-total').textContent = q.total;
+      document.getElementById('halacha-quiz-best').textContent  = q.best !== null ? q.best + '%' : '—';
+      const avg = q.scores.length
+        ? Math.round(q.scores.reduce((a, b) => a + b.score, 0) / q.scores.length) + '%'
+        : '—';
+      document.getElementById('halacha-quiz-avg').textContent = avg;
+    },
+
+    selectLevel(l) {
+      AppState.activeLevel = l;
+      this.renderLevelSelector();
+      this.renderCards();
+    },
+
+    switchTab(name) {
+      document.querySelectorAll('.ohr-panel').forEach(p => p.classList.remove('is-active'));
+      document.querySelectorAll('.ohr-tab').forEach(b => b.classList.remove('is-active'));
+      document.getElementById(`halacha-panel-${name}`).classList.add('is-active');
+      document.getElementById(`halacha-tab-${name}`).classList.add('is-active');
+    }
+  };
+
+  /* Expor UI globalmente para onclick inline */
+  window.UI = UI;
+
+  /* ── 7. MODAL ─────────────────────────────────────────── */
+  const Modal = {
+    open(id) {
+      const t = TEACHINGS.find(x => x.id === id);
+      if (!t) return;
+      const isRead = AppState.readIds.has(id);
+
+      /*
+       * INTEGRAÇÃO RAV HAOHR:
+       * O botão "Perguntar ao Rav" passa o contexto via URL param:
+       * rav.html?contexto=TITULO_DO_ENSINAMENTO
+       * O rav.html pode ler este param e pré-preencher o campo de pergunta.
+       * Ex: const ctx = new URLSearchParams(window.location.search).get('contexto');
+       */
+      const ravUrl = `rav.html?contexto=${encodeURIComponent(t.title)}&modulo=halacha&id=${t.id}`;
+
+      document.getElementById('halacha-modal-content').innerHTML = `
+        <div class="halacha-modal__meta">
+          HALACHÁ ${t.id.replace('halacha-', 'Nº ')} · NÍVEL ${t.level} · ${t.tag}
+        </div>
+        <div class="halacha-modal__heb">${t.heb}</div>
+        <div class="halacha-modal__title">${t.title}</div>
+        <div class="halacha-modal__divider"></div>
+        <p class="halacha-modal__text">${t.body}</p>
+        <div class="halacha-modal__practical">
+          <strong>NA VIDA REAL — APLICAÇÃO PRÁTICA</strong>
+          ${t.practical}
+        </div>
+        <div class="halacha-modal__source">Fonte: ${t.source}</div>
+        <div class="halacha-modal__actions">
+          <button
+            class="btn-primary"
+            onclick="Modal.markRead('${t.id}')"
+            ${isRead ? 'disabled style="opacity:.5;cursor:default;"' : ''}
+          >
+            ${isRead ? '✓ LIDO' : '+ MARCAR COMO LIDO (+10 pts)'}
+          </button>
+          <a href="${ravUrl}" class="btn-secondary">
+            ✦ PERGUNTAR AO RAV HAOHR
+          </a>
+        </div>
+      `;
+
+      document.getElementById('halacha-modal').classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    },
+
+    close() {
+      document.getElementById('halacha-modal').classList.remove('is-open');
+      document.body.style.overflow = '';
+    },
+
+    closeOutside(e) {
+      if (e.target === document.getElementById('halacha-modal')) this.close();
+    },
+
+    markRead(id) {
+      const marked = Progress.markRead(id);
+      if (marked) this.open(id); // re-abre para atualizar o botão
+    }
+  };
+
+  window.Modal = Modal;
+
+  /* ── 8. QUIZ ──────────────────────────────────────────── */
+  const Quiz = {
+    _level: 0,
+    _state: { active:false, questions:[], current:0, score:0, answers:[] },
+    _LETTERS: ['A','B','C','D'],
+
+    setLevel(l, btn) {
+      this._level = l;
+      document.querySelectorAll('.halacha-quiz__filter').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    },
+
+    start() {
+      let pool = this._level === 0
+        ? QUIZ_QUESTIONS
+        : QUIZ_QUESTIONS.filter(q => q.level === this._level);
+      if (!pool.length) pool = QUIZ_QUESTIONS;
+      const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, 10);
+      this._state = { active:true, questions:shuffled, current:0, score:0, answers:[] };
+
+      document.getElementById('halacha-quiz-home').style.display   = 'none';
+      document.getElementById('halacha-quiz-result').style.display = 'none';
+      document.getElementById('halacha-quiz-play').style.display   = 'block';
+
+      this._renderQuestion();
+    },
+
+    _renderQuestion() {
+      const { questions, current } = this._state;
+      if (current >= questions.length) { this._showResult(); return; }
+      const q = questions[current];
+
+      const dots = questions.map((_, i) => {
+        let cls = 'halacha-quiz__dot';
+        if (i < current)     cls += this._state.answers[i] ? ' is-correct' : ' is-wrong';
+        else if (i === current) cls += ' is-current';
+        return `<div class="${cls}"></div>`;
+      }).join('');
+
+      document.getElementById('halacha-quiz-play').innerHTML = `
+        <div class="halacha-quiz__question-wrap">
+          <div class="halacha-quiz__progress-dots">${dots}</div>
+          <div class="halacha-quiz__q-label">QUESTÃO ${current+1} DE ${questions.length}</div>
+          <div class="halacha-quiz__q-text">${q.q}</div>
+          <div class="halacha-quiz__options">
+            ${q.opts.map((o, i) => `
+              <div class="halacha-quiz__option"
+                   data-index="${i}"
+                   onclick="Quiz._answer(${i})">
+                <span class="halacha-quiz__option-letter">${this._LETTERS[i]}</span>
+                ${o}
+              </div>
+            `).join('')}
+          </div>
+          <div class="halacha-quiz__feedback" id="halacha-quiz-feedback"></div>
+          <button class="btn-primary"
+                  id="halacha-quiz-next"
+                  style="display:none;margin-top:.5rem;"
+                  onclick="Quiz._next()">
+            PRÓXIMA →
+          </button>
+        </div>
+      `;
+    },
+
+    _answer(i) {
+      const q       = this._state.questions[this._state.current];
+      const correct = (i === q.ans);
+      const opts    = document.querySelectorAll('.halacha-quiz__option');
+
+      opts.forEach((o, idx) => {
+        o.style.pointerEvents = 'none';
+        if (idx === q.ans)           o.classList.add('is-correct');
+        else if (idx === i && !correct) o.classList.add('is-wrong');
+      });
+
+      if (correct) this._state.score++;
+      this._state.answers.push(correct);
+
+      const fb = document.getElementById('halacha-quiz-feedback');
+      fb.textContent = (correct ? '✓ Correto — ' : '✗ Incorreto — ') + q.exp;
+      fb.classList.add('is-shown');
+      document.getElementById('halacha-quiz-next').style.display = 'block';
+    },
+
+    _next() {
+      this._state.current++;
+      this._renderQuestion();
+    },
+
+    _showResult() {
+      const { score, questions } = this._state;
+      const pct = Math.round((score / questions.length) * 100);
+      Progress.recordQuiz(score, pct, this._level);
+      UI.renderQuizStats();
+
+      const MSGS = [
+        [0,  39, 'Continue estudando os ensinamentos — a Halachá se constrói tijolo a tijolo.'],
+        [40, 69, 'Bom esforço! Revise as seções e tente novamente.'],
+        [70, 89, 'Muito bem! Sua compreensão da Halachá está crescendo.'],
+        [90, 100,'Excepcional! "O estudioso da Halachá encontrou o caminho da vida." (Prov. 4:22)']
+      ];
+      const msg  = MSGS.find(m => pct >= m[0] && pct <= m[1]);
+      const icon = pct >= 90 ? '✡' : pct >= 70 ? '📜' : '🕯️';
+
+      document.getElementById('halacha-quiz-play').style.display   = 'none';
+      const res = document.getElementById('halacha-quiz-result');
+      res.style.display = 'block';
+      res.innerHTML = `
+        <div class="halacha-quiz__result">
+          <div class="halacha-quiz__result-icon">${icon}</div>
+          <div class="halacha-quiz__result-score">${score} / ${questions.length}</div>
+          <div class="halacha-quiz__result-pct">${pct}% de acerto · +${score * 5} pontos</div>
+          <div class="halacha-quiz__result-msg">${msg[2]}</div>
+          <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;">
+            <button class="btn-secondary" onclick="Quiz._retry()">TENTAR NOVAMENTE</button>
+            <button class="btn-primary"   onclick="Quiz._goStudy()">VOLTAR AO ESTUDO</button>
+          </div>
+        </div>
+      `;
+    },
+
+    _retry() {
+      document.getElementById('halacha-quiz-result').style.display = 'none';
+      document.getElementById('halacha-quiz-home').style.display   = 'block';
+    },
+
+    _goStudy() {
+      document.getElementById('halacha-quiz-result').style.display = 'none';
+      document.getElementById('halacha-quiz-home').style.display   = 'block';
+      UI.switchTab('study');
+    }
+  };
+
+  window.Quiz = Quiz;
+
+  /* ── 9. INICIALIZAÇÃO ─────────────────────────────────── */
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      FireSync.load(user.uid);
+    } else {
+      try { sessionStorage.setItem('ohr_return_after_login', 'halacha.html'); } catch(e) {}
+      window.location.href = 'login.html';
+    }
+  });
+
+})(); // IIFE — escopo protegido
+</script>
+</body>
+</html>
