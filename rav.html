@@ -192,12 +192,10 @@
       flex:1;overflow-y:auto;padding:1.5rem 0;display:none;flex-direction:column;scroll-behavior:smooth;min-height:0;
     }
     .messages-area.active { display:flex; }
-
     .msg-separator {
       font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.22em;color:var(--gold-dim);
       text-align:center;padding:.2rem 0 1rem;opacity:.75;
     }
-
     .messages-area::-webkit-scrollbar,.sidebar-sources::-webkit-scrollbar { width:4px; }
     .messages-area::-webkit-scrollbar-thumb,.sidebar-sources::-webkit-scrollbar-thumb { background:var(--border);border-radius:2px; }
     .message {
@@ -368,7 +366,7 @@
   <div class="nav-right">
     <span class="nav-badge">רַב הָאוֹר</span>
     <span id="userDisplay"></span>
-    <span class="nav-badge" id="ravEngineBadge" style="display:none;">BOTPRESS</span>
+    <span class="nav-badge" id="ravEngineBadge">RAV CORE</span>
   </div>
 </nav>
 
@@ -423,8 +421,8 @@
       <p class="intro-verse-pt">"A Torá é luz" — Mishlei 6:23</p>
       <p class="intro-desc">
         Faça sua pergunta. Sobre Halachá, Talmud, Chassidut, Mussar, Giyur —
-        o Rav HaOhr responde com rigor ortodoxo e profundidade das fontes sagradas.
-        Cada resposta nasce diretamente da tradição milenar de Israel.
+        o Rav HaOhr responde com rigor ortodoxo, linguagem de Beit Midrash e profundidade das fontes sagradas.
+        Cada resposta busca honrar a tradição milenar de Israel com clareza, reverência e orientação.
       </p>
 
       <div class="suggestions-grid">
@@ -462,9 +460,6 @@
   </main>
 </div>
 
-
-<div id="bp-hidden-mount" aria-hidden="true" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;"></div>
-
 <div class="toast" id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -483,145 +478,7 @@
   let currentUser = null;
   let conversationHistory = [];
   let isLoading = false;
-
   const WORKER_URL = 'https://rav-haohr.orhatorabrasil.workers.dev';
-  const BOTPRESS_CONFIG_URL = 'https://files.bpcontent.cloud/2026/04/01/09/20260401095148-KGCQVNPI.json';
-  const BOTPRESS_INJECT_URL = 'https://cdn.botpress.cloud/webchat/v3.6/inject.js';
-
-  let botpressInitialized = false;
-  let botpressReady = false;
-  let botpressSending = false;
-  let pendingBotpressResolver = null;
-  let pendingBotpressRejecter = null;
-  let pendingUserEcho = null;
-  let botpressInitStarted = false;
-
-  const RAV_SYSTEM_PROMPT = `Responda como um Poskim Rabi judeu ortodoxo. Mantenha uma linguagem especial judaica, convidativa e humana.
-Use um tom paternal de vez em quando.
-Evite discussões acaloradas, mas defenda rigorosamente os princípios judaicos e valores judaicos ortodoxos e ultra ortodoxos.
-Mantenha um tom Haredi de líder espiritual, com humildade e extrema educação.
-Nunca responda como robô.
-Sempre que possível, conduza o usuário a querer aprender mais Torá, Halachá, Mussar e Avodat HaShem.`;
-
-  async function initBotpressBridge() {
-    if (botpressInitStarted) return;
-    botpressInitStarted = true;
-
-    try {
-      if (!window.botpress) {
-        await new Promise((resolve, reject) => {
-          const s = document.createElement('script');
-          s.src = BOTPRESS_INJECT_URL;
-          s.async = true;
-          s.onload = resolve;
-          s.onerror = reject;
-          document.head.appendChild(s);
-        });
-      }
-
-      if (window.botpress && typeof window.botpress.init === 'function') {
-        let config = {};
-        try {
-          const r = await fetch(BOTPRESS_CONFIG_URL, { cache: 'no-store' });
-          if (r.ok) {
-            config = await r.json();
-          }
-        } catch (e) {}
-
-        const candidateClientId = config.clientId || config.clientID || config.botClientId || config.webchatClientId || '';
-        const candidateBotId = config.botId || config.botID || '';
-        const candidateConfiguration = config.configuration || config.config || {};
-
-        const initPayload = {
-          ...(candidateClientId ? { clientId: candidateClientId } : {}),
-          ...(candidateBotId ? { botId: candidateBotId } : {}),
-          configuration: {
-            botName: 'Rav HaOhr',
-            composerPlaceholder: 'Faça sua pergunta ao Rav HaOhr...',
-            showPoweredBy: false,
-            useSessionStorage: true,
-            ...candidateConfiguration
-          },
-          container: '#bp-hidden-mount'
-        };
-
-        try {
-          window.botpress.init(initPayload);
-        } catch (e) {
-          // some generated configs self-init; ignore
-        }
-
-        window.botpress.on('webchat:initialized', async () => {
-          botpressInitialized = true;
-          try {
-            if (currentUser && typeof window.botpress.updateUser === 'function') {
-              await window.botpress.updateUser({
-                data: {
-                  firstName: currentUser.displayName || 'Aluno',
-                  email: currentUser.email || '',
-                  uid: currentUser.uid || '',
-                  ravMode: 'rav_haohr',
-                  ravInstructions: RAV_SYSTEM_PROMPT
-                }
-              });
-            }
-          } catch (e) {}
-          document.getElementById('ravEngineBadge').style.display = 'inline-flex';
-          try {
-            if (typeof window.botpress.open === 'function') {
-              window.botpress.open();
-              setTimeout(() => {
-                try { window.botpress.close(); } catch (e) {}
-              }, 600);
-            }
-          } catch (e) {}
-        });
-
-        window.botpress.on('webchat:ready', () => {
-          botpressReady = true;
-          document.getElementById('ravEngineBadge').textContent = 'BOTPRESS';
-        });
-
-        window.botpress.on('message', (message) => {
-          try {
-            const text = message?.payload?.text || message?.text || '';
-            if (!text) return;
-
-            if (pendingUserEcho && text.trim() === pendingUserEcho.trim()) {
-              pendingUserEcho = null;
-              return;
-            }
-
-            // Ignore messages already rendered
-            const isDuplicate = conversationHistory.some(
-              m => m.role === 'assistant' && String(m.content || '').trim() === text.trim()
-            );
-            if (isDuplicate) return;
-
-            if (pendingBotpressResolver) {
-              const resolve = pendingBotpressResolver;
-              pendingBotpressResolver = null;
-              pendingBotpressRejecter = null;
-              pendingUserEcho = null;
-              resolve(text);
-            }
-          } catch (e) {}
-        });
-
-        window.botpress.on('error', (error) => {
-          if (pendingBotpressRejecter) {
-            const reject = pendingBotpressRejecter;
-            pendingBotpressResolver = null;
-            pendingBotpressRejecter = null;
-            pendingUserEcho = null;
-            reject(error);
-          }
-        });
-      }
-    } catch (e) {
-      console.warn('Botpress bridge init failed:', e);
-    }
-  }
 
   firebase.auth().onAuthStateChanged(function(user) {
     const gate = document.getElementById('accessGate');
@@ -630,7 +487,6 @@ Sempre que possível, conduza o usuário a querer aprender mais Torá, Halachá,
       gate.style.display = 'none';
       document.getElementById('userDisplay').textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Estudante');
       loadSavedContext();
-      initBotpressBridge();
       setTimeout(() => {
         const input = document.getElementById('messageInput');
         if (input) {
@@ -641,11 +497,18 @@ Sempre que possível, conduza o usuário a querer aprender mais Torá, Halachá,
     } else {
       currentUser = null;
       gate.style.display = 'flex';
-      initBotpressBridge();
       document.getElementById('userDisplay').textContent = '';
     }
   });
 
+  const RAV_SYSTEM_PROMPT = `Responda como um Poskim Rabi judeu ortodoxo, com linguagem especial judaica, muito educada, humana e convidativa, levando o usuário a querer aprender cada vez mais.
+Use um tom paternal de vez em quando.
+Evite discussões acaloradas, mas defenda rigorosamente os princípios judaicos e os valores judaicos ortodoxos e ultra ortodoxos.
+Mantenha um tom Haredi de líder espiritual, com humildade e extrema educação.
+Fale como um velho sábio de Torá.
+Nunca responda como robô.
+Se não souber uma fonte exata, diga isso claramente.
+Prefira profundidade, precisão e reverência a HaShem.`;
 
   function loadSavedContext() {
     const savedContext = localStorage.getItem('rav_context');
@@ -692,92 +555,36 @@ Sempre que possível, conduza o usuário a querer aprender mais Torá, Halachá,
     setLoading(true);
 
     try {
-      let reply = '';
+      const response = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1024,
+          system: RAV_SYSTEM_PROMPT,
+          messages: conversationHistory,
+          user: currentUser ? {
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            name: currentUser.displayName || ''
+          } : null
+        })
+      });
 
-      if (window.botpress && botpressInitialized && botpressReady && typeof window.botpress.sendMessage === 'function') {
-        reply = await new Promise(async (resolve, reject) => {
-          pendingBotpressResolver = resolve;
-          pendingBotpressRejecter = reject;
-          pendingUserEcho = text;
-          botpressSending = true;
-
-          const timeout = setTimeout(() => {
-            if (pendingBotpressRejecter) {
-              pendingBotpressResolver = null;
-              pendingBotpressRejecter = null;
-              pendingUserEcho = null;
-              reject(new Error('O Botpress demorou demais para responder.'));
-            }
-          }, 25000);
-
-          const wrappedResolve = (value) => {
-            clearTimeout(timeout);
-            resolve(value);
-          };
-          const wrappedReject = (error) => {
-            clearTimeout(timeout);
-            reject(error);
-          };
-          pendingBotpressResolver = wrappedResolve;
-          pendingBotpressRejecter = wrappedReject;
-
-          try {
-            if (typeof window.botpress.updateUser === 'function' && currentUser) {
-              await window.botpress.updateUser({
-                data: {
-                  firstName: currentUser.displayName || 'Aluno',
-                  email: currentUser.email || '',
-                  uid: currentUser.uid || '',
-                  ravMode: 'rav_haohr',
-                  ravInstructions: RAV_SYSTEM_PROMPT
-                }
-              });
-            }
-            await window.botpress.sendMessage(text);
-          } catch (e) {
-            clearTimeout(timeout);
-            pendingBotpressResolver = null;
-            pendingBotpressRejecter = null;
-            pendingUserEcho = null;
-            reject(e);
-          }
-        });
+      const rawText = await response.text();
+      let data = {};
+      try {
+        data = rawText ? JSON.parse(rawText) : {};
+      } catch (e) {
+        throw new Error('O Worker retornou um formato inválido.');
       }
 
-      if (!reply) {
-        // Fallback seguro para o Worker atual
-        const response = await fetch(WORKER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 1024,
-            system: RAV_SYSTEM_PROMPT,
-            messages: conversationHistory,
-            user: currentUser ? {
-              uid: currentUser.uid,
-              email: currentUser.email || '',
-              name: currentUser.displayName || ''
-            } : null
-          })
-        });
-
-        const rawText = await response.text();
-        let data = {};
-        try {
-          data = rawText ? JSON.parse(rawText) : {};
-        } catch (e) {
-          throw new Error('O retorno do Rav veio em formato inválido.');
-        }
-
-        if (!response.ok) {
-          throw new Error((data && (data.error || data.message)) || `Erro HTTP ${response.status}`);
-        }
-
-        reply = extractReply(data);
+      if (!response.ok) {
+        throw new Error((data && (data.error || data.message)) || `Erro HTTP ${response.status}`);
       }
 
-      if (!reply) throw new Error('A resposta do Rav veio vazia.');
+      const reply = extractReply(data);
+      if (!reply) throw new Error('A resposta do Rav veio vazia ou em formato não reconhecido.');
 
       conversationHistory.push({ role: 'assistant', content: reply });
       addMessage('rav', reply);
@@ -787,7 +594,6 @@ Sempre que possível, conduza o usuário a querer aprender mais Torá, Halachá,
       showToast(error.message || 'Erro ao conectar com o Rav.');
     } finally {
       setLoading(false);
-      botpressSending = false;
     }
   }
 
@@ -854,7 +660,7 @@ Sempre que possível, conduza o usuário a querer aprender mais Torá, Halachá,
     input.focus();
   }
 
-  async function clearChat() {
+  function clearChat() {
     conversationHistory = [];
     const area = document.getElementById('messagesArea');
     area.innerHTML = '<div class="msg-separator">✦ בֵּית מִדְרָשׁ ✦</div>';
@@ -863,11 +669,6 @@ Sempre que possível, conduza o usuário a querer aprender mais Torá, Halachá,
     const input = document.getElementById('messageInput');
     input.value = '';
     handleInput(input);
-    try {
-      if (window.botpress && typeof window.botpress.restartConversation === 'function' && botpressReady) {
-        await window.botpress.restartConversation();
-      }
-    } catch (e) {}
     showToast('Conversa encerrada. Que HaShem abençoe seu próximo estudo.');
   }
 
