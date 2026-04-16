@@ -204,15 +204,17 @@
       z-index: 5;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .5s;
+      transition: opacity .35s ease;
+      height: 100%;
+      overflow: hidden;
     }
     .bp-wrapper.visible {
       opacity: 1;
       pointer-events: all;
     }
     .bp-iframe {
-      flex: 1;
       width: 100%;
+      height: 100%;
       border: none;
       display: block;
       background: var(--deep);
@@ -229,31 +231,13 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 38px;
-      background: linear-gradient(0deg, var(--deep) 60%, transparent 100%);
+      height: 18px;
+      background: linear-gradient(0deg, var(--deep) 0%, rgba(13,10,4,0.92) 55%, transparent 100%);
       z-index: 20;
       pointer-events: none;
     }
-    /* Segundo layer — cobre completamente o rodapé */
     .bp-brand-cover-solid {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 28px;
-      background: var(--deep);
-      z-index: 21;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .bp-brand-cover-solid span {
-      font-family: 'Frank Ruhl Libre', serif;
-      font-size: 0.75rem;
-      color: var(--gold);
-      opacity: 0.35;
-      letter-spacing: 0.18em;
+      display: none;
     }
 
     /* ── ACCESS GATE ── */
@@ -463,9 +447,7 @@
 
       <!-- Cobre o branding/marca d'água do Botpress -->
       <div class="bp-brand-cover"></div>
-      <div class="bp-brand-cover-solid">
-        <span>✦ רַב הָאוֹר ✦</span>
-      </div>
+      <div class="bp-brand-cover-solid"></div>
     </div>
 
   </main>
@@ -513,17 +495,14 @@
       return;
     }
 
-    // Esconde a intro
     document.getElementById('introScreen').classList.add('hidden');
-
-    // Mostra o iframe
     const wrapper = document.getElementById('bpWrapper');
     wrapper.classList.add('visible');
 
-    // Se houver mensagem inicial, guarda para injetar depois que o iframe carregar
     if (initialMessage) {
       pendingMessage = initialMessage;
-      tryInjectMessage();
+      injectAttempts = 0;
+      setTimeout(tryInjectMessage, 900);
     }
   }
 
@@ -540,25 +519,36 @@
   let injectAttempts = 0;
   function tryInjectMessage() {
     if (!pendingMessage) return;
+
     const iframe = document.getElementById('bpIframe');
     if (!iframe || !iframe.contentWindow) {
-      if (++injectAttempts < 15) setTimeout(tryInjectMessage, 400);
+      if (++injectAttempts < 20) setTimeout(tryInjectMessage, 500);
       return;
     }
-    // postMessage para o webchat Botpress v3
-    iframe.contentWindow.postMessage(
-      { type: 'webchat:set-text', value: pendingMessage },
-      '*'
-    );
-    // Aguarda mais 600ms e envia
-    setTimeout(() => {
+
+    try {
       iframe.contentWindow.postMessage(
-        { type: 'webchat:send-text', value: pendingMessage },
+        { type: 'webchat:set-text', value: pendingMessage },
         '*'
       );
-      pendingMessage = null;
-      injectAttempts = 0;
-    }, 600);
+
+      setTimeout(() => {
+        try {
+          iframe.contentWindow.postMessage(
+            { type: 'webchat:send-text', value: pendingMessage },
+            '*'
+          );
+        } catch (e) {}
+        pendingMessage = null;
+        injectAttempts = 0;
+      }, 900);
+    } catch (e) {
+      if (++injectAttempts < 20) {
+        setTimeout(tryInjectMessage, 500);
+      } else {
+        showToast('Não foi possível enviar a pergunta automática agora.');
+      }
+    }
   }
 
   /* Quando o iframe carregar, tenta injetar a mensagem pendente */
